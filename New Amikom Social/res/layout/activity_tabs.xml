@@ -27,7 +27,7 @@
 			android:layout_width="fill_parent" android:layout_height="fill_parent">
 			
 			<View android:layout_width="fill_parent" android:layout_height="0.5dip"
-				android:background="#000" />
+				android:background="#FFF" />
 			
 			<TabWidget android:id="@android:id/tabs"
 				android:layout_width="fill_parent" android:layout_height="wrap_content"
