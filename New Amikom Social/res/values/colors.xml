@@ -20,4 +20,9 @@
     <color name="actionbar_background_end">#0B6B9E</color>
     <color name="actionbar_background_item_pressed_start">#5A9BBE</color>
     <color name="actionbar_background_item_pressed_end">#5A9BBE</color>
+    
+    <color name="menu_normal">#000000</color>
+	<color name="menu_focused">#333333</color>
+	<color name="menu_pressed">#666666</color>
+
 </resources>

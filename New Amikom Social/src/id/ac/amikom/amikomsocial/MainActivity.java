@@ -7,6 +7,7 @@ import com.markupartist.android.widget.ActionBar.IntentAction;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
@@ -43,7 +45,7 @@ public class MainActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu_main, menu);
-		
+		setMenuBackground();
 		return true;
 	}
 
@@ -76,6 +78,37 @@ public class MainActivity extends Activity {
 			popup.show();
 		}
 
-	}	
+	}
+
+	private void setMenuBackground() {
+
+		getLayoutInflater().setFactory(new LayoutInflater.Factory() {
+
+			public View onCreateView(final String name, final Context context,
+					final AttributeSet attributeSet) {
+
+				if (name.equalsIgnoreCase("com.android.internal.view.menu.IconMenuItemView")) {
+					try {
+
+						final LayoutInflater f = getLayoutInflater();
+						final View view = f
+								.createView(name, null, attributeSet);
+
+						new Handler().post(new Runnable() {
+							public void run() {								
+								view.setBackgroundResource(R.drawable.menu_selector);  
+                                ((TextView) view).setTextColor(Color.WHITE);
+							}
+						});
+						return view;
+					} catch (final Exception e) {
+
+					}
+				}
+				return null;
+			}
+
+		});
+	}
 
 }
