@@ -14,7 +14,7 @@
      limitations under the License.
 -->
 <resources>
-    <color name="actionbar_separator">#FFFFFF</color>
+    <color name="actionbar_separator">#333333</color>
     <color name="actionbar_title">#FFFFFF</color>
     <color name="actionbar_background_start">#15AFE2</color>
     <color name="actionbar_background_end">#0B6B9E</color>
@@ -25,7 +25,7 @@
 	<color name="menu_focused">#333333</color>
 	<color name="menu_pressed">#666666</color>
 	
-	<color name="tab_bgcolor">#FFF</color>
+	<color name="tab_bgcolor">#696969</color>
 	
 	<color name="tab_text_select">#FFF</color>
 	<color name="tab_text_unselect">#999</color>
