@@ -8,13 +8,18 @@
           http://www.apache.org/licenses/LICENSE-2.0
   
      Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
+     distributed under the License is distributed on an "AS IS" BASIS,#FF8800#FF8800#FF8800#FF8800#FF8800#FF8800<shape xmlns:android="http://schemas.android.com/apk/res/android"
+	android:shape="rectangle">
+	<gradient android:startColor="#5C5C5C" android:centerColor="#424242" 
+	android:endColor="#222222"
+		android:angle="-90" />
+</shape>
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
 <resources>
-    <color name="actionbar_separator">#DDDDDD</color>
+    <color name="actionbar_separator">#000000</color>
     <color name="actionbar_title">#FFFFFF</color>
     <color name="actionbar_background_start">#15AFE2</color>
     <color name="actionbar_background_end">#0B6B9E</color>
@@ -24,5 +29,10 @@
     <color name="menu_normal">#000000</color>
 	<color name="menu_focused">#333333</color>
 	<color name="menu_pressed">#666666</color>
+	
+	<color name="tab_bgcolor">#696969</color>
+	
+	<color name="tab_text_select">#FFF</color>
+	<color name="tab_text_unselect">#DDD</color>
 
 </resources>
