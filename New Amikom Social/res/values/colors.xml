@@ -33,6 +33,6 @@
 	<color name="tab_bgcolor">#696969</color>
 	
 	<color name="tab_text_select">#FFF</color>
-	<color name="tab_text_unselect">#DDD</color>
+	<color name="tab_text_unselect">#999</color>
 
 </resources>

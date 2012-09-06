@@ -11,7 +11,7 @@ import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.AbstractAction;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 
-import android.app.Activity;
+import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -25,14 +25,24 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.PopupMenu;
+import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.TabHost.TabSpec;
 
-public class MainActivity extends Activity {
+@SuppressWarnings("deprecation")
+public class MainActivity extends TabActivity {
+
+	private TabHost mTabHost;
+
+	private void setupTabHost() {
+		mTabHost = (TabHost) findViewById(android.R.id.tabhost);
+		mTabHost.setup();
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_tabs);
 
 		final ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
 		actionBar.setTitle(R.string.app_title);
@@ -42,18 +52,53 @@ public class MainActivity extends Activity {
 		actionBar.addAction(new IntentAction(this, MainActivity
 				.createIntent(this), R.drawable.ic_action_edit));
 
-		if (Build.VERSION.SDK_INT >= 11) {
+		if (Build.VERSION.SDK_INT >= 11)
 			actionBar.addAction(new MenuAction());
 
+		setupTabHost();
+		mTabHost.getTabWidget().setDividerDrawable(R.drawable.tab_divider);
+
+		setupTab(new TextView(this), "SHOUT", "SampleActivity.class");
+		setupTab(new TextView(this), "@YOU", "SampleActivity.class");
+		setupTab(new TextView(this), "MESSAGE", "SampleActivity.class");
+
+	}
+
+	private void setupTab(final View view, final String tag,
+			final String className) {
+		View tabview = createTabView(mTabHost.getContext(), tag);
+
+		Intent intent;
+		intent = new Intent().setClass(this, SampleActivity.class);
+		if (className.equals("SampleActivity.class")) {
+			intent = new Intent().setClass(this, SampleActivity.class);
+		}
+		if (className.equals("SampleActivity.class")) {
+			intent = new Intent().setClass(this, SampleActivity.class);
+		}
+		if (className.equals("SampleActivity.class")) {
+			intent = new Intent().setClass(this, SampleActivity.class);
 		}
 
+		TabSpec setContent = mTabHost.newTabSpec(tag).setIndicator(tabview)
+				.setContent(intent);{ };
+
+		mTabHost.addTab(setContent);
+	}
+
+	private static View createTabView(final Context context, final String text) {
+		View view = LayoutInflater.from(context)
+				.inflate(R.layout.tabs_bg, null);
+		TextView tv = (TextView) view.findViewById(R.id.tabsText);
+		tv.setText(text);
+		return view;
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu_main, menu);
-		setMenuBackground();
+		//setMenuBackground();
 		return true;
 	}
 
@@ -100,12 +145,12 @@ public class MainActivity extends Activity {
 
 						final LayoutInflater f = getLayoutInflater();
 						final View[] view = new View[1];
-						try{
+						try {
 							view[0] = f.createView(name, null, attributeSet);
-                        } catch (InflateException e) {
-                            hackAndroid23(name, attributeSet, f, view);                        
+						} catch (InflateException e) {
+							//hackAndroid23(name, attributeSet, f, view);
 						}
-								
+
 						new Handler().post(new Runnable() {
 							public void run() {
 								view[0].setBackgroundResource(R.drawable.menu_selector);
@@ -113,8 +158,9 @@ public class MainActivity extends Activity {
 							}
 						});
 						return view[0];
-						
-					} catch (final Exception e) { }
+
+					} catch (final Exception e) {
+					}
 				}
 				return null;
 			}
@@ -301,30 +347,30 @@ public class MainActivity extends Activity {
 				public void require(int arg0, String arg1, String arg2)
 						throws XmlPullParserException, IOException {
 					// TODO Auto-generated method stub
-					
+
 				}
 
 				public void setFeature(String arg0, boolean arg1)
 						throws XmlPullParserException {
 					// TODO Auto-generated method stub
-					
+
 				}
 
 				public void setInput(Reader arg0) throws XmlPullParserException {
 					// TODO Auto-generated method stub
-					
+
 				}
 
 				public void setInput(InputStream arg0, String arg1)
 						throws XmlPullParserException {
 					// TODO Auto-generated method stub
-					
+
 				}
 
 				public void setProperty(String arg0, Object arg1)
 						throws XmlPullParserException {
 					// TODO Auto-generated method stub
-					
+
 				}
 
 			}, null, false);
