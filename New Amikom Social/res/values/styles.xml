@@ -14,7 +14,10 @@
      limitations under the License.
 -->
 <resources>
-    <style name="AppTheme" parent="android:Theme.Light.NoTitleBar" />
+    <style name="AppTheme" parent="android:Theme.Light.NoTitleBar" >
+         <item name="android:background">@android:color/white</item>    
+    </style>    
+    
     <style name="ActionBar">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">@dimen/actionbar_height</item>
