@@ -24,7 +24,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" android:label="@string/app_name"></activity>
-        <activity android:name=".SampleActivity" android:label="@string/app_name"></activity>
+        <activity android:name=".ShoutActivity" android:label="@string/app_name"></activity>
+        <activity android:name=".MeActivity" android:label="@string/app_name"></activity>
+        <activity android:name=".CalendarActivity" android:label="@string/app_name"></activity>
         
     </application>
 
