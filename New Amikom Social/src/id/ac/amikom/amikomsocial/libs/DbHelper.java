@@ -14,7 +14,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "db_adem";
 
 	public DbHelper(Context context) {
-		super(context, DATABASE_NAME, null, 38);
+		super(context, DATABASE_NAME, null, 40);
 	}
 
 	@Override
@@ -25,6 +25,17 @@ public class DbHelper extends SQLiteOpenHelper {
 				+ "foto TEXT, " + "sts TEXT, "
 				+ "time TIMESTAMP NOT NULL DEFAULT current_timestamp, "
 				+ "via TEXT);");
+		
+		db.execSQL("CREATE TABLE if not exists calendar "
+				+ "(_id INTEGER PRIMARY KEY AUTOINCREMENT, " + "title TEXT, "
+				+ "start TIMESTAMP NOT NULL DEFAULT current_timestamp, "
+				+ "end TIMESTAMP NOT NULL DEFAULT current_timestamp, "
+				+ "location TEXT, " + "detail TEXT, " + "status INTEGER);");
+
+		db.execSQL("CREATE TABLE if not exists login "
+				+ "(_id INTEGER PRIMARY KEY AUTOINCREMENT, " + "usr TEXT, "
+				+ "is_mhs INTEGER, " + "name TEXT, " + "logdate DATE,"
+				+ "calendar INTEGER);");
 
 	}
 
@@ -36,6 +47,8 @@ public class DbHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS calendar");
 		db.execSQL("DROP TABLE IF EXISTS news");
 		db.execSQL("DROP TABLE IF EXISTS info");
+		
+		onCreate(db);
 	}
 
 	public void insertShout(Shout shout) {
@@ -43,7 +56,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
 
-		values.put("public_id", shout.get_id());
+		values.put("public_id", shout.get_public_id());
 		values.put("nid", shout.get_nid());
 		values.put("name", shout.get_name());
 		values.put("alias", shout.get_alias());
@@ -64,7 +77,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cur = db.rawQuery(
 				"Select _id,nid,name,alias,msg,foto,sts,time,via "
-						+ "From shout Order By time Desc Limit 50", null);
+						+ "From shout Order By time Desc Limit 100", null);
 
 		if (cur.moveToFirst()) {
 			do {
@@ -81,10 +94,30 @@ public class DbHelper extends SQLiteOpenHelper {
 				shoutList.add(shout);
 			} while (cur.moveToNext());
 		}
-
+		
+		cur.close();
+		db.close();
+		
 		return shoutList;
 	}
 	
-	
+	public int getLastShoutId() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor pub_id = db.rawQuery(
+				"Select _id,public_id From shout Order By time Desc Limit 1",
+				new String[] {});				
+
+		int lastid = 0;
+		if (pub_id.moveToFirst()) {
+			do {
+				lastid = Integer.parseInt(pub_id.getString(1).toString());
+			} while (pub_id.moveToNext());
+		}
+
+		pub_id.close();
+		db.close();
+				
+		return lastid;
+	}
 
 }

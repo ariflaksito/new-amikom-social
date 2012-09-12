@@ -9,7 +9,6 @@ import org.xmlrpc.android.XMLRPCClient;
 import org.xmlrpc.android.XMLRPCException;
 
 import android.content.Context;
-import android.util.Log;
 
 public class ServiceHelper {
 
@@ -22,21 +21,17 @@ public class ServiceHelper {
 	public boolean getShoutService(Context context) {
 
 		String text;
-		//DbHelper db = new DbHelper(context);
-
+		DbHelper db = new DbHelper(context);
+		int lastId = db.getLastShoutId();
+		
 		try {
-
-			// int lastId = db.getLastShoutId();
-
-			// Log.i("last ---- > ", ""+lastId);
-
-			text = (String) clients.call("getmsg", "10", "50");
+						
+			text = (String) clients.call("getmsg", ""+lastId, "100");
 			JSONArray jsonArray = new JSONArray(text);
 
 			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject json = jsonArray.getJSONObject(i);
-
-				/*
+				
 				Shout shout = new Shout(json.getString("id_msg"), json.getString("nid"),
 						json.getString("fullname"), json.getString("alias"),
 						json.getString("msg"), json.getString("thumb"),
@@ -44,9 +39,7 @@ public class ServiceHelper {
 						json.getString("via"));
 				
 				db.insertShout(shout);
-				*/
 				
-				Log.i("Data", json.getString("msg"));
 			}
 
 		} catch (XMLRPCException er) {
