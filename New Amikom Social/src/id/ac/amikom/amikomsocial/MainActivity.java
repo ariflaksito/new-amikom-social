@@ -48,7 +48,7 @@ public class MainActivity extends TabActivity {
 		mTabHost.getTabWidget().setDividerDrawable(R.drawable.tab_divider);
 
 		setupTab(new TextView(this), "SHOUT", "ShoutActivity.class");
-		setupTab(new TextView(this), "@ME", "Mectivity.class");
+		setupTab(new TextView(this), "@ME", "MeActivity.class");
 		setupTab(new TextView(this), "CALENDAR", "CalendarActivity.class");
 
 	}
