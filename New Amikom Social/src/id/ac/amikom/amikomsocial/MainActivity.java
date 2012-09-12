@@ -59,13 +59,13 @@ public class MainActivity extends TabActivity {
 
 		Intent intent;
 		intent = new Intent().setClass(this, ShoutActivity.class);
-		if (className.equals("Shout.class")) {
+		if (className.equals("ShoutActivity.class")) {
 			intent = new Intent().setClass(this, ShoutActivity.class);
 		}
-		if (className.equals("Me.class")) {
+		if (className.equals("MeActivity.class")) {
 			intent = new Intent().setClass(this, MeActivity.class);
 		}
-		if (className.equals("Calendar.class")) {
+		if (className.equals("CalendarActivity.class")) {
 			intent = new Intent().setClass(this, CalendarActivity.class);
 		}
 

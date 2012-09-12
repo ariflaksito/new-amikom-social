@@ -11,6 +11,7 @@ import id.ac.amikom.amikomsocial.libs.DbHelper;
 import id.ac.amikom.amikomsocial.libs.ServiceHelper;
 import id.ac.amikom.amikomsocial.libs.Shout;
 import id.ac.amikom.amikomsocial.libs.CustomAdapter;
+import id.ac.amikom.amikomsocial.libs.DateParse;
 import android.app.ListActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -67,10 +68,15 @@ public class ShoutActivity extends ListActivity {
 
 		for (Shout cn : shoutList) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
-			map.put("icon", R.drawable.none);
-			map.put("name", cn.get_name());
+			DateParse dp = new DateParse(cn.get_time());
+			
+			if (cn.get_alias().equals("null")) 
+				map.put("name", cn.get_name());
+			else map.put("name", cn.get_alias());			
+			
+			map.put("icon", R.drawable.none);			
 			map.put("msg", cn.get_msg());
-			map.put("via", cn.get_via());
+			map.put("via", "from " + cn.get_via() + ", " + dp.parseString());
 			
 			list.add(map);
 		}
