@@ -1,0 +1,33 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <com.markupartist.android.widget.ActionBar
+        android:id="@+id/actionbar_post"
+        style="@style/ActionBar" />
+    
+    <TextView android:layout_marginTop="10dip"
+        android:layout_marginLeft="15dip" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/post_title"/>
+
+    <EditText
+        android:id="@+id/post_txt"
+        android:layout_width="fill_parent"
+        android:layout_height="100dip"
+        android:layout_margin="10dip"        
+        android:inputType="text"        
+        android:gravity="fill_horizontal"
+        android:maxLength="160"
+        android:scrollHorizontally="false" />
+    
+    <Button android:id="@+id/button_post" 
+        android:width="100dip"
+        android:layout_width="wrap_content"        
+        android:layout_height="wrap_content"
+        android:text="@string/post_button"
+        android:layout_marginLeft="15dip" />
+
+</LinearLayout>

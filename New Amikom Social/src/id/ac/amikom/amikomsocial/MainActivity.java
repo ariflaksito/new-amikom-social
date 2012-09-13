@@ -38,8 +38,8 @@ public class MainActivity extends TabActivity {
 
 		actionBar.setHomeAction(new IntentAction(this, MainActivity
 				.createIntent(this), R.drawable.logo_actionbar));
-		actionBar.addAction(new IntentAction(this, MainActivity
-				.createIntent(this), R.drawable.ic_action_edit));
+		actionBar.addAction(new IntentAction(this, new Intent(this,
+				PostActivity.class), R.drawable.ic_action_edit));
 
 		if (Build.VERSION.SDK_INT >= 11)
 			actionBar.addAction(new MenuAction());
@@ -70,7 +70,10 @@ public class MainActivity extends TabActivity {
 		}
 
 		TabSpec setContent = mTabHost.newTabSpec(tag).setIndicator(tabview)
-				.setContent(intent);{ };
+				.setContent(intent);
+		{
+		}
+		;
 
 		mTabHost.addTab(setContent);
 	}
@@ -87,7 +90,7 @@ public class MainActivity extends TabActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu_main, menu);
-		
+
 		return true;
 	}
 

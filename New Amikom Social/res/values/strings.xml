@@ -2,6 +2,9 @@
 
     <string name="app_name">Amikom Social</string>
     <string name="app_title">AmikomSocial</string>
+    <string name="post_title">Write your Shout here</string>
+    <string name="post_button">Shout!!</string>
+    
 	<string name="actionbar_activity_not_found">Failed to open intent</string>
 	
 </resources>
