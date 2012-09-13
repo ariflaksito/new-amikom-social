@@ -136,7 +136,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		values.put("name", login.get_name());
 		values.put("usr", login.get_usr());
 		values.put("alias", login.get_alias());
-		values.put("logdate", login.get_logdate());
+		values.put("logdate", login.get_logdate().toString());
 		values.put("is_mhs", login.get_is_mhs());
 		values.put("calendar", login.get_calendar());
 
@@ -152,53 +152,53 @@ public class DbHelper extends SQLiteOpenHelper {
 		if (c != null)
 			c.moveToFirst();
 
-		Login login = new Login(c.getInt(0), c.getString(4), c.getString(2),
-				c.getString(1), c.getString(5), c.getString(3), c.getShort(6));
-		
+		Login login = new Login(c.getInt(0), c.getString(4), c.getInt(2),
+				c.getString(1), c.getString(5), c.getString(3),
+				c.getInt(6));
+
 		c.close();
 		db.close();
-		
+
 		return login;
 
 	}
-	
+
 	public int updateLogin(Login login) {
-        SQLiteDatabase db = this.getWritableDatabase();
- 
-        ContentValues values = new ContentValues();
-        values.put("alias", login.get_alias());
-        values.put("calendar", login.get_calendar());
- 
-        // updating row
-        return db.update("login", values, "_id = ?",
-                new String[] { String.valueOf(login.get_id()) });
-    }
-	
-	public boolean isLogin(){
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		values.put("alias", login.get_alias());
+		values.put("calendar", login.get_calendar());
+
+		// updating row
+		return db.update("login", values, "_id = ?",
+				new String[] { String.valueOf(login.get_id()) });
+	}
+
+	public boolean isLogin() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor c = db.rawQuery(
 				"Select _id,name, is_mhs, alias, usr, logdate, calendar "
 						+ "From login Limit 1", new String[] {});
 		if (c != null)
 			c.moveToFirst();
-		
+
 		int count = c.getCount();
 		c.close();
 		db.close();
-		
-		if(count>0)
+
+		if (count > 0)
 			return true;
-		else return false;
+		else
+			return false;
 	}
-	
-	public void deleteLogin(){
+
+	public void deleteLogin() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		String str = "Delete From login";
 
 		db.execSQL(str);
 		db.close();
 	}
-	
-	
 
 }

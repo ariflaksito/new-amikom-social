@@ -3,7 +3,7 @@ package id.ac.amikom.amikomsocial.libs;
 public class Login {
 	int _id;
 	String _usr;
-	String _is_mhs;
+	int _is_mhs;
 	String _name;
 	String _logdate;
 	String _alias;
@@ -13,10 +13,22 @@ public class Login {
 
 	}
 
-	public Login(int id, String usr, String is_mhs, String name, String logdate,
+	public Login(int id, String usr, int is_mhs, String name, String logdate,
 			String alias, int calendar) {
 
 		this._id = id;
+		this._usr = usr;
+		this._is_mhs = is_mhs;
+		this._name = name;
+		this._logdate = logdate;
+		this._alias = alias;
+		this._calendar = calendar;
+		
+	}
+	
+	public Login(String usr, int is_mhs, String name, String logdate,
+			String alias, int calendar) {
+		
 		this._usr = usr;
 		this._is_mhs = is_mhs;
 		this._name = name;
@@ -42,11 +54,11 @@ public class Login {
 		this._usr = _usr;
 	}
 
-	public String get_is_mhs() {
+	public int get_is_mhs() {
 		return _is_mhs;
 	}
 
-	public void set_is_mhs(String _is_mhs) {
+	public void set_is_mhs(int _is_mhs) {
 		this._is_mhs = _is_mhs;
 	}
 

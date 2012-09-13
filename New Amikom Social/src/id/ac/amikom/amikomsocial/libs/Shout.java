@@ -29,6 +29,22 @@ public class Shout {
 		this._via = via;
 
 	}
+	
+	public Shout(int id, String public_id, String nid, String name, String alias,
+			String msg, String foto, String sts, String time, String via) {
+
+		this._id = id;
+		this._public_id = Integer.parseInt(public_id);
+		this._nid = nid;
+		this._name = name;
+		this._alias = alias;
+		this._msg = msg;
+		this._foto = foto;
+		this._sts = sts;
+		this._time = time;
+		this._via = via;
+
+	}
 
 	public int get_id() {
 		return _id;

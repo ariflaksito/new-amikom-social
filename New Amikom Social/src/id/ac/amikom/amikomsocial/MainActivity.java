@@ -6,6 +6,7 @@ import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.AbstractAction;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 
+import android.app.Dialog;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -151,6 +152,11 @@ public class MainActivity extends TabActivity {
 
 			return true;	
 		case R.id.id_about:			
+			Dialog dialog = new Dialog(this);
+			dialog.setContentView(R.layout.activity_info);
+			dialog.setTitle("Amikom Social");
+			dialog.setCancelable(true);
+			dialog.show();
 
 			return true;
 		default:
