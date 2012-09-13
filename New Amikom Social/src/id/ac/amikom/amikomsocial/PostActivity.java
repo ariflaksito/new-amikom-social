@@ -18,8 +18,8 @@ public class PostActivity extends Activity{
 		
 		actionBar.setHomeAction(new IntentAction(this, MainActivity
 				.createIntent(this), R.drawable.ic_action_back));				
+			
 		
-		
-	}	
+	}
 	
 }
