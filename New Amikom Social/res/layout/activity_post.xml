@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" android:background="#e7e7e7" >
 
     <com.markupartist.android.widget.ActionBar
         android:id="@+id/actionbar_post"
@@ -18,7 +18,7 @@
         android:layout_width="fill_parent"
         android:layout_height="100dip"
         android:layout_margin="10dip"        
-        android:inputType="text"        
+        android:inputType="none"        
         android:gravity="fill_horizontal"
         android:maxLength="160"
         android:scrollHorizontally="false" />

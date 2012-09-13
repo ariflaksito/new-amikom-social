@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <com.markupartist.android.widget.ActionBar
+        android:id="@+id/actionbar_post"
+        style="@style/ActionBar" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#e7e7e7"
+        android:shrinkColumns="*"
+        android:stretchColumns="*" >
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_span="2"
+                android:padding="10dip"
+                android:text="@string/log_txt"
+                android:textColor="#000"
+                android:textSize="16dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:gravity="left"
+                android:padding="10dip"
+                android:text="@string/log_usr_txt"
+                android:textColor="#000000"
+                android:textSize="16dp" />
+
+            <EditText
+                android:id="@+id/inputId"
+                android:layout_width="130dip"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dip"
+                android:gravity="left"
+                android:inputType="phone" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:gravity="left"
+                android:padding="10dip"
+                android:text="@string/log_pwd_txt"
+                android:textColor="#000000"
+                android:textSize="16dp" />
+
+            <EditText
+                android:id="@+id/inputPwd"
+                android:layout_width="130dip"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dip"
+                android:gravity="left"
+                android:inputType="textPassword" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <Button
+                android:id="@+id/btnLog"
+                android:layout_marginTop="30dip"
+                android:text="@string/log_btn_txt" />
+        </TableRow>
+    </TableLayout>
+</LinearLayout>

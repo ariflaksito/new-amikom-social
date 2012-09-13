@@ -8,6 +8,11 @@
     <string name="list_image">Image User</string>
     <string name="list_refresh">Press to Refresh</string>
     
+    <string name="log_txt">Login as Amikom student or Amikom lecturer to get more features from AmikomSocial Application</string>
+    <string name="log_usr_txt">Nik/Npm</string>
+    <string name="log_pwd_txt">Password</string>
+    <string name="log_btn_txt">Login</string>
+    
 	<string name="actionbar_activity_not_found">Failed to open intent</string>
 	
 </resources>

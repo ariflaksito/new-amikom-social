@@ -14,7 +14,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "db_adem";
 
 	public DbHelper(Context context) {
-		super(context, DATABASE_NAME, null, 40);
+		super(context, DATABASE_NAME, null, 41);
 	}
 
 	@Override
@@ -140,7 +140,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		values.put("is_mhs", login.get_is_mhs());
 		values.put("calendar", login.get_calendar());
 
-		db.insert("shout", null, values);
+		db.insert("login", null, values);
 		db.close();
 	}
 
@@ -148,7 +148,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor c = db.rawQuery(
 				"Select _id,name, is_mhs, alias, usr, logdate, calendar "
-						+ "From shout Limit 1", new String[] {});
+						+ "From login Limit 1", new String[] {});
 		if (c != null)
 			c.moveToFirst();
 
@@ -162,11 +162,23 @@ public class DbHelper extends SQLiteOpenHelper {
 
 	}
 	
+	public int updateLogin(Login login) {
+        SQLiteDatabase db = this.getWritableDatabase();
+ 
+        ContentValues values = new ContentValues();
+        values.put("alias", login.get_alias());
+        values.put("calendar", login.get_calendar());
+ 
+        // updating row
+        return db.update("login", values, "_id = ?",
+                new String[] { String.valueOf(login.get_id()) });
+    }
+	
 	public boolean isLogin(){
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor c = db.rawQuery(
 				"Select _id,name, is_mhs, alias, usr, logdate, calendar "
-						+ "From shout Limit 1", new String[] {});
+						+ "From login Limit 1", new String[] {});
 		if (c != null)
 			c.moveToFirst();
 		

@@ -1,5 +1,7 @@
 package id.ac.amikom.amikomsocial;
 
+import id.ac.amikom.amikomsocial.libs.DbHelper;
+
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.AbstractAction;
 import com.markupartist.android.widget.ActionBar.IntentAction;
@@ -12,6 +14,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.TabHost;
@@ -22,6 +25,7 @@ import android.widget.TabHost.TabSpec;
 public class MainActivity extends TabActivity {
 
 	private TabHost mTabHost;
+	DbHelper db = null;
 
 	private void setupTabHost() {
 		mTabHost = (TabHost) findViewById(android.R.id.tabhost);
@@ -31,8 +35,10 @@ public class MainActivity extends TabActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_tabs);
+		setContentView(R.layout.activity_tabs);				
 
+		db = new DbHelper(this);
+		
 		final ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
 		actionBar.setTitle(R.string.app_title);
 
@@ -89,7 +95,10 @@ public class MainActivity extends TabActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.menu_main, menu);
+		
+		if(db.isLogin())
+			inflater.inflate(R.menu.menu_af_login, menu);
+		else inflater.inflate(R.menu.menu_bf_login, menu);
 
 		return true;
 	}
@@ -119,8 +128,33 @@ public class MainActivity extends TabActivity {
 
 			PopupMenu popup = new PopupMenu(getApplicationContext(), view);
 			MenuInflater inflater = popup.getMenuInflater();
-			inflater.inflate(R.menu.menu_main, popup.getMenu());
+			
+			if(db.isLogin())
+				inflater.inflate(R.menu.menu_af_login, popup.getMenu());
+			else inflater.inflate(R.menu.menu_bf_login, popup.getMenu());
 			popup.show();
+		}
+
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		switch (item.getItemId()) {
+		case R.id.id_profile:
+			startActivity(new Intent(MainActivity.this, LoginActivity.class));
+			return true;
+		case R.id.id_sync:
+			
+			return true;
+		case R.id.id_logout:			
+
+			return true;	
+		case R.id.id_about:			
+
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
 
 	}
