@@ -75,9 +75,18 @@ public class LoginActivity extends Activity {
 			viewLog = (TextView) findViewById(R.id.viewLog);			
 			
 			Login login = db.getLogin();
+			
+			String identity = "";
+			if (login.get_is_mhs() == 1)
+				identity = "Amikom Student";
+			else if (login.get_is_mhs() == 2)
+				identity = "Amikom Lecturer";
+			else
+				identity = "Amikom Alumni";
+			
 			viewId.setText("Id User. "+login.get_usr());
 			viewName.setText("Name User. "+login.get_name());
-			viewSts.setText("Status User. "+login.get_is_mhs());
+			viewSts.setText("Status User. "+identity);
 			viewLog.setText("Login Date. "+login.get_logdate());
 						
 
