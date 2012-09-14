@@ -1,6 +1,7 @@
 package id.ac.amikom.amikomsocial;
 
 import id.ac.amikom.amikomsocial.libs.DbHelper;
+import id.ac.amikom.amikomsocial.libs.Login;
 import id.ac.amikom.amikomsocial.libs.ServiceHelper;
 
 import com.markupartist.android.widget.ActionBar;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class LoginActivity extends Activity {
@@ -20,6 +22,7 @@ public class LoginActivity extends Activity {
 	private Button btnLogin;
 	private EditText txtId, txtPwd;
 	private String id, pwd;
+	private TextView viewId, viewName, viewSts, viewLog;
 
 	public class LoginTask extends AsyncTask<String, Void, Boolean> {
 
@@ -66,6 +69,17 @@ public class LoginActivity extends Activity {
 		DbHelper db = new DbHelper(this);
 		if (db.isLogin()) {
 			setContentView(R.layout.activity_profile);
+			viewId = (TextView) findViewById(R.id.viewId);
+			viewName = (TextView) findViewById(R.id.viewName);
+			viewSts = (TextView) findViewById(R.id.viewSts);
+			viewLog = (TextView) findViewById(R.id.viewLog);			
+			
+			Login login = db.getLogin();
+			viewId.setText("Id User. "+login.get_usr());
+			viewName.setText("Name User. "+login.get_name());
+			viewSts.setText("Status User. "+login.get_is_mhs());
+			viewLog.setText("Login Date. "+login.get_logdate());
+						
 
 		} else {
 			setContentView(R.layout.activity_login);
