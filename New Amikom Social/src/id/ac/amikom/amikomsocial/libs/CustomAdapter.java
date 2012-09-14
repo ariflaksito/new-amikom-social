@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.SimpleAdapter;
 
 public class CustomAdapter extends SimpleAdapter {
-	private int[] colors = new int[] {  0x30E5E5E5, 0x30FFFFFF };
+	private int[] colors = new int[] {  0x30E7E7E7, 0x30FFFFFF };
 
 	public CustomAdapter(Context context, List<HashMap<String, Object>> items,
 			int resource, String[] from, int[] to) {

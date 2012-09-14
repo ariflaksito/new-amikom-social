@@ -21,11 +21,14 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class PostActivity extends Activity {
@@ -35,8 +38,9 @@ public class PostActivity extends Activity {
 	private static final String[] PERMISSIONS = new String[] {
 			"publish_stream", "read_stream", "offline_access" };
 	private static final String APP_ID = "267873336663584";
-	private CheckBox mFacebookCb;
 	private Handler mRunOnUi = new Handler();
+	private TextView countInfo;
+	private EditText reviewEdit;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,11 +52,12 @@ public class PostActivity extends Activity {
 
 		actionBar.setHomeAction(new IntentAction(this, MainActivity
 				.createIntent(this), R.drawable.ic_action_back));
-		//
+
 		mFacebookBtn = (CheckBox) findViewById(R.id.cb_facebook);
 		mProgress = new ProgressDialog(this);
 		mFacebook = new Facebook(APP_ID);
-		final EditText reviewEdit = (EditText) findViewById(R.id.post_txt);
+		reviewEdit = (EditText) findViewById(R.id.post_txt);
+		countInfo = (TextView) findViewById(R.id.count_id);
 		SessionStore.restore(mFacebook, this);
 
 		if (mFacebook.isSessionValid()) {
@@ -61,9 +66,6 @@ public class PostActivity extends Activity {
 			String name = SessionStore.getName(this);
 			name = (name.equals("")) ? "Unknown" : name;
 
-//			mFacebookBtn.setText("  Facebook (" + name + ")");
-//			mFacebookBtn.setTextColor(Color.WHITE);
-			//mFacebookBtn.setText("");
 			mFacebookBtn.setTextColor(Color.WHITE);
 		}
 
@@ -73,6 +75,22 @@ public class PostActivity extends Activity {
 				onFacebookClick();
 			}
 		});
+
+		final TextWatcher mTextEditorWatcher = new TextWatcher() {
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {				
+				countInfo.setText("Character Remain "+ (160-(s.length())));
+			}
+
+			public void afterTextChanged(Editable s) {
+			}
+		};
+		
+		reviewEdit.addTextChangedListener(mTextEditorWatcher);
 
 		((Button) findViewById(R.id.button_post))
 				.setOnClickListener(new OnClickListener() {
@@ -87,6 +105,7 @@ public class PostActivity extends Activity {
 							postToFacebook(review);
 					}
 				});
+
 	}
 
 	private void postToFacebook(String review) {
@@ -94,16 +113,8 @@ public class PostActivity extends Activity {
 		mProgress.show();
 
 		AsyncFacebookRunner mAsyncFbRunner = new AsyncFacebookRunner(mFacebook);
-
 		Bundle params = new Bundle();
-
 		params.putString("message", review);
-		// params.putString("name", "Dexter");
-		// params.putString("caption", "londatiga.net");
-		// params.putString("link", "http://www.londatiga.net");
-		// params.putString("description",
-		// "Dexter, seven years old dachshund who loves to catch cats, eat carrot and krupuk");
-		// params.putString("picture", "http://twitpic.com/show/thumb/6hqd44");
 
 		mAsyncFbRunner.request("me/feed", params, "POST",
 				new WallPostListener());
@@ -161,10 +172,6 @@ public class PostActivity extends Activity {
 		public void onComplete(Bundle values) {
 			SessionStore.save(mFacebook, PostActivity.this);
 
-//			mFacebookBtn.setText("  Facebook (No Name)");
-//			mFacebookBtn.setChecked(true);
-//			mFacebookBtn.setTextColor(Color.WHITE);
-			//mFacebookBtn.setText("");
 			mFacebookBtn.setChecked(true);
 			mFacebookBtn.setTextColor(Color.WHITE);
 
@@ -251,9 +258,9 @@ public class PostActivity extends Activity {
 
 				SessionStore.saveName(username, PostActivity.this);
 
-				//mFacebookBtn.setText("  Facebook (" + username + ")");
-				//mFacebookBtn.setText("");
-				
+				// mFacebookBtn.setText("  Facebook (" + username + ")");
+				// mFacebookBtn.setText("");
+
 				Toast.makeText(PostActivity.this,
 						"Connected to Facebook as " + username,
 						Toast.LENGTH_SHORT).show();
@@ -273,13 +280,9 @@ public class PostActivity extends Activity {
 				Toast.makeText(PostActivity.this, "Facebook logout failed",
 						Toast.LENGTH_SHORT).show();
 			} else {
-//				mFacebookBtn.setChecked(false);
-//				mFacebookBtn.setText("  Facebook (Not connected)");
-//				mFacebookBtn.setTextColor(Color.GRAY);
+
 				mFacebookBtn.setChecked(false);
-				//mFacebookBtn.setText("");
 				mFacebookBtn.setTextColor(Color.GRAY);
-				
 
 				Toast.makeText(PostActivity.this, "Disconnected from Facebook",
 						Toast.LENGTH_SHORT).show();

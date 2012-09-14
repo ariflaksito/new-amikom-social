@@ -6,6 +6,7 @@
     <string name="app_team">Arif Laksito (Project Leader, Webservice and Code)\nFarizal Tri Anugrah, Rakhmad Ikhsanudin, Rizky Tanjung (Code)\nDoni Prabowo, Purwaji Santoso (Design and Layout)\n\nhttp://www.facebook.com/groups/adem.android\n\nhttp://www.amikomsocial.com</string>
     
     <string name="post_title">Write your Shout here</string>
+    <string name="post_count">Character Remain 160</string>
     <string name="post_button">Send</string>
     
     <string name="list_image">Image User</string>
