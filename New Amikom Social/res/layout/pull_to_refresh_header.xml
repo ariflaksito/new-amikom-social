@@ -36,7 +36,6 @@
         />
     <ImageView
         android:id="@+id/pull_to_refresh_image"
-        android:contentDescription="@string/list_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dip"
@@ -48,7 +47,7 @@
         />
     <TextView
         android:id="@+id/pull_to_refresh_text"
-        android:text="@string/list_refresh"
+        android:text="Press to Refresh"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="bold"
         android:paddingTop="5dip"
