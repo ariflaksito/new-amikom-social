@@ -11,6 +11,7 @@ import org.xmlrpc.android.XMLRPCClient;
 import org.xmlrpc.android.XMLRPCException;
 
 import android.content.Context;
+import android.util.Log;
 
 public class ServiceHelper {
 
@@ -66,6 +67,8 @@ public class ServiceHelper {
 			
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 			Date date = new Date();
+			
+			Log.i("=== rst ===", json.getString("status"));
 
 			String sts = json.getString("status");
 			if (sts.equals("1")) {
@@ -73,7 +76,7 @@ public class ServiceHelper {
 				int alumni = Integer.parseInt(json.getString("alumni"));
 				int status = (alumni == 1) ? 3 : 1;				
 				
-				Login login = new Login(json.getString("id"), status, json.getString("name"), dateFormat.format(date), "", 0);
+				Login login = new Login(id, status, json.getString("name"), dateFormat.format(date), "", 0);
 				db.insertLogin(login);
 
 				return true;
@@ -82,11 +85,13 @@ public class ServiceHelper {
 				String txt = (String) client.call("logindosen", id, pwd);
 				JSONArray jsArray = new JSONArray("[" + txt + "]");
 				JSONObject js = jsArray.getJSONObject(0);
+				
+				Log.i("=== rst ===", js.getString("status"));
 
 				String ists = js.getString("status");
 				if (ists.equals("1")) {
 
-					Login login = new Login(js.getString("id"), 2, js.getString("name"), dateFormat.format(date), "", 0);
+					Login login = new Login(id, 2, js.getString("name"), dateFormat.format(date), "", 0);
 					db.insertLogin(login);
 
 					return true;

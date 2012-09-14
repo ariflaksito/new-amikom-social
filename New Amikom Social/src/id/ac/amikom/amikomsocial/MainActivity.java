@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
+import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.TabHost.TabSpec;
@@ -36,10 +37,10 @@ public class MainActivity extends TabActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_tabs);				
+		setContentView(R.layout.activity_tabs);
 
 		db = new DbHelper(this);
-		
+
 		final ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
 		actionBar.setTitle(R.string.app_title);
 
@@ -96,10 +97,11 @@ public class MainActivity extends TabActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		
-		if(db.isLogin())
+
+		if (db.isLogin())
 			inflater.inflate(R.menu.menu_af_login, menu);
-		else inflater.inflate(R.menu.menu_bf_login, menu);
+		else
+			inflater.inflate(R.menu.menu_bf_login, menu);
 
 		return true;
 	}
@@ -129,15 +131,43 @@ public class MainActivity extends TabActivity {
 
 			PopupMenu popup = new PopupMenu(getApplicationContext(), view);
 			MenuInflater inflater = popup.getMenuInflater();
-			
-			if(db.isLogin())
+			popup.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+				public boolean onMenuItemClick(MenuItem item) {
+					switch (item.getItemId()) {
+					case R.id.id_profile:
+						startActivity(new Intent(MainActivity.this,
+								LoginActivity.class));
+						return true;
+					case R.id.id_sync:
+
+						return true;
+					case R.id.id_logout:
+
+						return true;
+					case R.id.id_about:
+						Dialog dialog = new Dialog(MainActivity.this);
+						dialog.setContentView(R.layout.activity_info);
+						dialog.setTitle("Amikom Social");
+						dialog.setCancelable(true);
+						dialog.show();
+
+						return true;
+					default:
+						return false;
+					}
+				}
+			});
+
+			if (db.isLogin())
 				inflater.inflate(R.menu.menu_af_login, popup.getMenu());
-			else inflater.inflate(R.menu.menu_bf_login, popup.getMenu());
+			else
+				inflater.inflate(R.menu.menu_bf_login, popup.getMenu());
 			popup.show();
 		}
 
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -146,12 +176,12 @@ public class MainActivity extends TabActivity {
 			startActivity(new Intent(MainActivity.this, LoginActivity.class));
 			return true;
 		case R.id.id_sync:
-			
-			return true;
-		case R.id.id_logout:			
 
-			return true;	
-		case R.id.id_about:			
+			return true;
+		case R.id.id_logout:
+
+			return true;
+		case R.id.id_about:
 			Dialog dialog = new Dialog(this);
 			dialog.setContentView(R.layout.activity_info);
 			dialog.setTitle("Amikom Social");
