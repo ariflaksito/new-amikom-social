@@ -65,7 +65,7 @@ public class LoginActivity extends Activity {
 
 		DbHelper db = new DbHelper(this);
 		if (db.isLogin()) {
-			setContentView(R.layout.activity_login);
+			setContentView(R.layout.activity_profile);
 
 		} else {
 			setContentView(R.layout.activity_login);

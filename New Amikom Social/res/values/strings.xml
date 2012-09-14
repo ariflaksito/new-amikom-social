@@ -16,6 +16,10 @@
     <string name="log_pwd_txt">Password</string>
     <string name="log_btn_txt">Login</string>
     
+    <string name="profile_info">Welcome to AmikomSocial Application\nUser Login Information: </string>
+    <string name="profile_img_tap">(Tap image to change)</string>
+    <string name="profile_alias">Edit Username</string>
+    
 	<string name="actionbar_activity_not_found">Failed to open intent</string>
 	
 </resources>
