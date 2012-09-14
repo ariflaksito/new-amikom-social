@@ -46,8 +46,13 @@ public class MainActivity extends TabActivity {
 
 		actionBar.setHomeAction(new IntentAction(this, MainActivity
 				.createIntent(this), R.drawable.logo_actionbar));
-		actionBar.addAction(new IntentAction(this, new Intent(this,
-				PostActivity.class), R.drawable.ic_action_edit));
+
+		if (db.isLogin())
+			actionBar.addAction(new IntentAction(this, new Intent(this,
+					PostActivity.class), R.drawable.ic_action_edit));
+		else
+			actionBar.addAction(new IntentAction(this, new Intent(this,
+					LoginActivity.class), R.drawable.ic_action_edit));
 
 		if (Build.VERSION.SDK_INT >= 11)
 			actionBar.addAction(new MenuAction());
