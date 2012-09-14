@@ -4,6 +4,7 @@ import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -22,13 +23,13 @@ public class PostActivity extends Activity {
 		setContentView(R.layout.activity_post);
 
 		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar_post);
-		actionBar.setTitle(R.string.app_title);
+		actionBar.setTitle(R.string.app_post_title);
 
 		actionBar.setHomeAction(new IntentAction(this, MainActivity
 				.createIntent(this), R.drawable.ic_action_back));
 		
 		actionBar.addAction(new IntentAction(this, new Intent(this,
-				SettingActivity.class), R.drawable.ic_action_settings));
+				SettingActivity.class), R.drawable.ic_action_share));
 		
 		reviewEdit = (EditText) findViewById(R.id.post_txt);
 		countInfo = (TextView) findViewById(R.id.count_id);
@@ -50,6 +51,12 @@ public class PostActivity extends Activity {
 		reviewEdit.addTextChangedListener(mTextEditorWatcher);
 
 		
+	}
+	
+	public static Intent createIntent(Context context) {
+		Intent i = new Intent(context, PostActivity.class);
+		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		return i;
 	}
 
 	

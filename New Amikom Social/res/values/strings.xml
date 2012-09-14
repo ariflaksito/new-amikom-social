@@ -2,6 +2,9 @@
 
     <string name="app_name">Amikom Social</string>
     <string name="app_title">AmikomSocial</string>
+    <string name="app_login_title">Login User</string>
+    <string name="app_post_title">Posting Shout</string>
+    <string name="app_setting_title">Sharing Post</string>
     <string name="app_vesion">Stable 4.0</string>
     <string name="app_team">Arif Laksito (Project Leader, Webservice and Code)\nFarizal Tri Anugrah, Rakhmad Ikhsanudin, Rizky Tanjung (Code)\nDoni Prabowo, Purwaji Santoso (Design and Layout)\n\nhttp://www.facebook.com/groups/adem.android\n\nhttp://www.amikomsocial.com</string>
     

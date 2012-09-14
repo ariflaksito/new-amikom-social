@@ -110,7 +110,7 @@ public class LoginActivity extends Activity {
 		}
 
 		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar_post);
-		actionBar.setTitle(R.string.app_title);
+		actionBar.setTitle(R.string.app_login_title);
 
 		actionBar.setHomeAction(new IntentAction(this, MainActivity
 				.createIntent(this), R.drawable.ic_action_back));
