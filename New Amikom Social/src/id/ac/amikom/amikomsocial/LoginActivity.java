@@ -9,11 +9,14 @@ import com.markupartist.android.widget.ActionBar.IntentAction;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +26,7 @@ public class LoginActivity extends Activity {
 	private EditText txtId, txtPwd;
 	private String id, pwd;
 	private TextView viewId, viewName, viewSts, viewLog;
+	private ImageView viewImg;
 
 	public class LoginTask extends AsyncTask<String, Void, Boolean> {
 
@@ -37,8 +41,7 @@ public class LoginActivity extends Activity {
 			dialog.dismiss();
 			if (result == true) {
 				Toast.makeText(LoginActivity.this, "Login Success",
-						Toast.LENGTH_LONG).show();
-
+						Toast.LENGTH_LONG).show();								
 				finish();
 
 			} else {
@@ -52,7 +55,6 @@ public class LoginActivity extends Activity {
 			ServiceHelper srv = new ServiceHelper();
 
 			if (srv.login(LoginActivity.this, id, pwd)) {
-
 				return true;
 			} else {
 				return false;
@@ -72,7 +74,8 @@ public class LoginActivity extends Activity {
 			viewId = (TextView) findViewById(R.id.viewId);
 			viewName = (TextView) findViewById(R.id.viewName);
 			viewSts = (TextView) findViewById(R.id.viewSts);
-			viewLog = (TextView) findViewById(R.id.viewLog);			
+			viewLog = (TextView) findViewById(R.id.viewLog);
+			viewImg = (ImageView) findViewById(R.id.viewImg);
 			
 			Login login = db.getLogin();
 			
@@ -88,6 +91,13 @@ public class LoginActivity extends Activity {
 			viewName.setText("Name User. "+login.get_name());
 			viewSts.setText("Status User. "+identity);
 			viewLog.setText("Login Date. "+login.get_logdate());
+			
+			String imgPath = "/mnt/sdcard/amikom/amikomuser";
+			
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inSampleSize = 2;
+			Bitmap bmp = BitmapFactory.decodeFile(imgPath, options);
+			viewImg.setImageBitmap(bmp);
 						
 
 		} else {

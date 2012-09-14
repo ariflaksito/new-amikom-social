@@ -54,12 +54,13 @@ public class MainActivity extends TabActivity {
 		actionBar.setHomeAction(new IntentAction(this, MainActivity
 				.createIntent(this), R.drawable.logo_actionbar));
 
-		if (db.isLogin())
+		if (db.isLogin()){
 			actionBar.addAction(new IntentAction(this, new Intent(this,
 					PostActivity.class), R.drawable.ic_action_edit));
-		else
+		}else {
 			actionBar.addAction(new IntentAction(this, new Intent(this,
 					LoginActivity.class), R.drawable.ic_action_edit));
+		}	
 
 		if (Build.VERSION.SDK_INT >= 11)
 			actionBar.addAction(new MenuAction());
@@ -223,7 +224,9 @@ public class MainActivity extends TabActivity {
 				Toast.makeText(MainActivity.this,
 						"Logout Success, User data deleted", Toast.LENGTH_LONG)
 						.show();
-
+				
+				startActivity(new Intent(MainActivity.this, MainActivity.class));
+				finish();
 			}
 		}
 
@@ -264,6 +267,13 @@ public class MainActivity extends TabActivity {
 		}
 
 	}
-
+	
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		startActivity(getIntent()); 
+		finish();
+		
+	}
 
 }
