@@ -11,7 +11,6 @@ import org.xmlrpc.android.XMLRPCClient;
 import org.xmlrpc.android.XMLRPCException;
 
 import android.content.Context;
-import android.util.Log;
 
 public class ServiceHelper {
 
@@ -66,9 +65,7 @@ public class ServiceHelper {
 			JSONObject json = jsonArray.getJSONObject(0);
 			
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
-			Date date = new Date();
-			
-			Log.i("=== rst ===", json.getString("status"));
+			Date date = new Date();				
 
 			String sts = json.getString("status");
 			if (sts.equals("1")) {
@@ -84,9 +81,7 @@ public class ServiceHelper {
 			} else {
 				String txt = (String) client.call("logindosen", id, pwd);
 				JSONArray jsArray = new JSONArray("[" + txt + "]");
-				JSONObject js = jsArray.getJSONObject(0);
-				
-				Log.i("=== rst ===", js.getString("status"));
+				JSONObject js = jsArray.getJSONObject(0);								
 
 				String ists = js.getString("status");
 				if (ists.equals("1")) {

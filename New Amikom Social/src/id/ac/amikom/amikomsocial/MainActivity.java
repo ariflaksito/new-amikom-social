@@ -1,15 +1,21 @@
 package id.ac.amikom.amikomsocial;
 
 import id.ac.amikom.amikomsocial.libs.DbHelper;
+import id.ac.amikom.amikomsocial.libs.InternetHelper;
 
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.AbstractAction;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.TabActivity;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,6 +27,7 @@ import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
 
 @SuppressWarnings("deprecation")
@@ -148,7 +155,7 @@ public class MainActivity extends TabActivity {
 
 						return true;
 					case R.id.id_logout:
-
+						new LogoutTask().execute();
 						return true;
 					case R.id.id_about:
 						Dialog dialog = new Dialog(MainActivity.this);
@@ -184,7 +191,7 @@ public class MainActivity extends TabActivity {
 
 			return true;
 		case R.id.id_logout:
-
+			new LogoutTask().execute();
 			return true;
 		case R.id.id_about:
 			Dialog dialog = new Dialog(this);
@@ -199,5 +206,64 @@ public class MainActivity extends TabActivity {
 		}
 
 	}
+
+	public class LogoutTask extends AsyncTask<String, Void, Boolean> {
+
+		private ProgressDialog dialog = new ProgressDialog(
+				MainActivity.this);
+
+		protected void onPreExecute() {
+			dialog.setMessage("Logout..");
+			dialog.show();
+		}
+
+		protected void onPostExecute(Boolean result) {
+			dialog.dismiss();
+			if (result == true) {
+				Toast.makeText(MainActivity.this,
+						"Logout Success, User data deleted", Toast.LENGTH_LONG)
+						.show();
+
+			}
+		}
+
+		@Override
+		protected Boolean doInBackground(String... params) {
+
+			Uri eventUri;
+			if (Build.VERSION.SDK_INT >= 8)
+				eventUri = Uri.parse("content://com.android.calendar/events");
+			else
+				eventUri = Uri.parse("content://calendar/events");
+
+			Cursor c = getContentResolver().query(eventUri, null, null, null,
+					null);
+
+			if (c.moveToFirst()) {
+				while (c.moveToNext()) {
+					String location = c.getString(c
+							.getColumnIndex("eventLocation"));
+					String id = c.getString(c.getColumnIndex("_id"));
+					String loc = "" + location;
+
+					if (loc.equals("STMIK Amikom") || loc.contains("Amikom")) {
+
+						Uri uri = ContentUris.withAppendedId(eventUri,
+								Integer.parseInt(id));
+						getContentResolver().delete(uri, null, null);
+					}
+				}
+			}
+
+			InternetHelper inet = new InternetHelper();
+			inet.deleteData();
+			
+			db.deleteLogin();
+
+			return true;
+		}
+
+	}
+
 
 }
