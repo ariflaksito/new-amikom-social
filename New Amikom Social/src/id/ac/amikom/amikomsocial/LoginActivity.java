@@ -1,5 +1,7 @@
 package id.ac.amikom.amikomsocial;
 
+import java.io.File;
+
 import id.ac.amikom.amikomsocial.libs.DbHelper;
 import id.ac.amikom.amikomsocial.libs.Login;
 import id.ac.amikom.amikomsocial.libs.ServiceHelper;
@@ -30,7 +32,7 @@ public class LoginActivity extends Activity {
 
 	public class LoginTask extends AsyncTask<String, Void, Boolean> {
 
-		private ProgressDialog dialog = new ProgressDialog(LoginActivity.this);		
+		private ProgressDialog dialog = new ProgressDialog(LoginActivity.this);
 
 		protected void onPreExecute() {
 			dialog.setMessage("Login as " + id + "..");
@@ -41,7 +43,7 @@ public class LoginActivity extends Activity {
 			dialog.dismiss();
 			if (result == true) {
 				Toast.makeText(LoginActivity.this, "Login Success",
-						Toast.LENGTH_LONG).show();								
+						Toast.LENGTH_LONG).show();
 				finish();
 
 			} else {
@@ -76,9 +78,9 @@ public class LoginActivity extends Activity {
 			viewSts = (TextView) findViewById(R.id.viewSts);
 			viewLog = (TextView) findViewById(R.id.viewLog);
 			viewImg = (ImageView) findViewById(R.id.viewImg);
-			
+
 			Login login = db.getLogin();
-			
+
 			String identity = "";
 			if (login.get_is_mhs() == 1)
 				identity = "Amikom Student";
@@ -86,19 +88,20 @@ public class LoginActivity extends Activity {
 				identity = "Amikom Lecturer";
 			else
 				identity = "Amikom Alumni";
-			
-			viewId.setText("Id User. "+login.get_usr());
-			viewName.setText("Name User. "+login.get_name());
-			viewSts.setText("Status User. "+identity);
-			viewLog.setText("Login Date. "+login.get_logdate());
-			
+
+			viewId.setText("Id User. " + login.get_usr());
+			viewName.setText("Name User. " + login.get_name());
+			viewSts.setText("Status User. " + identity);
+			viewLog.setText("Login Date. " + login.get_logdate());
+
 			String imgPath = "/mnt/sdcard/amikom/amikomuser";
-			
-			BitmapFactory.Options options = new BitmapFactory.Options();
-			options.inSampleSize = 2;
-			Bitmap bmp = BitmapFactory.decodeFile(imgPath, options);
-			viewImg.setImageBitmap(bmp);
-						
+			if (new File(imgPath).exists()) {
+
+				BitmapFactory.Options options = new BitmapFactory.Options();
+				options.inSampleSize = 2;
+				Bitmap bmp = BitmapFactory.decodeFile(imgPath, options);
+				viewImg.setImageBitmap(bmp);
+			}
 
 		} else {
 			setContentView(R.layout.activity_login);

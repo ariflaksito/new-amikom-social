@@ -69,6 +69,7 @@ public class ServiceHelper {
 			
 			InternetHelper inet = new InternetHelper();
 			String imgName = "amikomuser";
+			String imgUrl = "http://www.amikomsocial.com/img/"+id+".png";
 
 			String sts = json.getString("status");
 			if (sts.equals("1")) {
@@ -79,7 +80,7 @@ public class ServiceHelper {
 				Login login = new Login(id, status, json.getString("name"), dateFormat.format(date), "", 0);
 				db.insertLogin(login);
 				
-				inet.downloadImage(json.getString("foto"), imgName);
+				inet.downloadImage(imgUrl, imgName);
 
 				return true;
 
@@ -94,7 +95,7 @@ public class ServiceHelper {
 					Login login = new Login(id, 2, js.getString("name"), dateFormat.format(date), "", 0);
 					db.insertLogin(login);
 					
-					inet.downloadImage(js.getString("foto"), imgName);
+					inet.downloadImage(imgUrl, imgName);
 					
 					return true;
 
