@@ -1,6 +1,7 @@
 package id.ac.amikom.amikomsocial;
 
 import id.ac.amikom.amikomsocial.libs.DbHelper;
+import id.ac.amikom.amikomsocial.libs.InternetHelper;
 import id.ac.amikom.amikomsocial.libs.Login;
 import id.ac.amikom.amikomsocial.libs.ServiceHelper;
 
@@ -17,13 +18,18 @@ import com.markupartist.android.widget.ActionBar.IntentAction;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -110,15 +116,8 @@ public class PostActivity extends Activity implements LocationListener {
 						if (review.equals(""))
 							return;
 
-						if (mFacebookCb.isChecked()&& mFacebook.isSessionValid())
-							postToFacebook(review);
-						
 						Log.i("==Location==", address);
-						
-						ServiceHelper srv = new ServiceHelper();
-						DbHelper db = new DbHelper(PostActivity.this);
-						Login login = db.getLogin();
-						srv.postShout(login.get_usr(), review, address);
+						new PostingTask().execute(review);
 						
 					}
 				});
@@ -147,7 +146,7 @@ public class PostActivity extends Activity implements LocationListener {
 	}
 
 	private void postToFacebook(String review) {
-		mProgress.setMessage("Posting ...");
+		mProgress.setMessage("Posting to Facebook...");
 		mProgress.show();
 
 		AsyncFacebookRunner mAsyncFbRunner = new AsyncFacebookRunner(mFacebook);
@@ -221,5 +220,36 @@ public class PostActivity extends Activity implements LocationListener {
 	public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
 
 	}
+	
+	public class PostingTask extends AsyncTask<String, Void, Boolean> {
 
+		private ProgressDialog dialog = new ProgressDialog(
+				PostActivity.this);
+		private String msg;
+
+		protected void onPreExecute() {
+			dialog.setMessage("Posting Shout..");
+			dialog.show();
+		}
+
+		protected void onPostExecute(Boolean result) {
+			dialog.dismiss();
+			if (mFacebookCb.isChecked()&& mFacebook.isSessionValid())
+				postToFacebook(msg);	
+		}
+
+		@Override
+		protected Boolean doInBackground(String... params) {
+							
+			msg = params[0];
+			ServiceHelper srv = new ServiceHelper();
+			DbHelper db = new DbHelper(PostActivity.this);
+			Login login = db.getLogin();
+			srv.postShout(login.get_usr(), msg, address);
+			
+			return true;
+		}
+
+	}
+	
 }
