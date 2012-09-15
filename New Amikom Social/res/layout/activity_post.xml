@@ -31,14 +31,31 @@
         android:inputType="none"
         android:maxLength="160"
         android:scrollHorizontally="false" />
-
-    <Button
-        android:id="@+id/button_post"
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dip"
-        android:layout_marginTop="10dip"
-        android:text="@string/post_button"
-        android:width="100dip" />
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/button_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dip"
+            android:layout_marginTop="10dip"
+            android:text="@string/post_button"
+            android:width="100dip" />
+
+        <CheckBox
+            android:id="@+id/cb_facebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.09"
+            android:button="@drawable/btn_check_facebook"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="right"
+            android:textSize="14sp" />
+    </LinearLayout>
 
 </LinearLayout>
