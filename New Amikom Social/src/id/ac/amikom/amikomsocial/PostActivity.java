@@ -86,10 +86,6 @@ public class PostActivity extends Activity implements LocationListener {
 			String name = SessionStore.getName(this);
 			name = (name.equals("")) ? "Unknown" : name;
 
-		}else {
-			mFacebookCb.setChecked(false);
-			mFacebookCb.setClickable(false);
-
 		}
 
 		((Button) findViewById(R.id.button_post))
