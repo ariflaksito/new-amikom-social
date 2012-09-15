@@ -114,4 +114,18 @@ public class ServiceHelper {
 		}
 
 	}
+
+	public boolean postShout(String uid, String msg, String location) {
+		try {
+			
+			String device = android.os.Build.MODEL;
+			clients.call("postmsg", uid, msg, device, location);
+
+		} catch (XMLRPCException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
 }

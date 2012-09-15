@@ -1,5 +1,9 @@
 package id.ac.amikom.amikomsocial;
 
+import id.ac.amikom.amikomsocial.libs.DbHelper;
+import id.ac.amikom.amikomsocial.libs.Login;
+import id.ac.amikom.amikomsocial.libs.ServiceHelper;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -110,6 +114,11 @@ public class PostActivity extends Activity implements LocationListener {
 							postToFacebook(review);
 						
 						Log.i("==Location==", address);
+						
+						ServiceHelper srv = new ServiceHelper();
+						DbHelper db = new DbHelper(PostActivity.this);
+						Login login = db.getLogin();
+						srv.postShout(login.get_usr(), review, address);
 						
 					}
 				});
