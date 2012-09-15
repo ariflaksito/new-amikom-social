@@ -12,7 +12,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dip"
-        android:layout_marginTop="10dip"
+        android:layout_marginTop="10dip"        
         android:text="@string/post_title" />
 
     <TextView
@@ -26,7 +26,9 @@
         android:id="@+id/post_txt"
         android:layout_width="fill_parent"
         android:layout_height="100dip"
-        android:layout_margin="10dip"
+        android:layout_marginTop="10dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
         android:gravity="fill_horizontal"
         android:inputType="none"
         android:maxLength="160"
@@ -51,7 +53,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.09"
-            android:layout_marginLeft="10dip"
+            android:layout_marginLeft="5dip"
             android:button="@drawable/btn_check_facebook"
             android:clickable="true"
             android:focusable="true"
