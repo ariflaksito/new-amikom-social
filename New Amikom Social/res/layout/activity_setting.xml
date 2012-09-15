@@ -29,7 +29,7 @@
             android:padding="10dip"
             android:text="Koneksikan akun facebook anda ke amikom social. Maka anda akan dapat share shout anda dari amikomsocial ke dinding akun facebook anda."
             android:textColor="#000000"
-            android:textSize="13px"
+            android:textSize="13sp"
             android:textStyle="normal" />
 
         <LinearLayout
