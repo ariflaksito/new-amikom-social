@@ -1,9 +1,12 @@
 package id.ac.amikom.amikomsocial;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.BaseRequestListener;
 import com.facebook.android.Facebook;
-import com.facebook.android.FbDialog;
 import com.facebook.android.SessionStore;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.IntentAction;
@@ -12,12 +15,16 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -27,6 +34,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class PostActivity extends Activity implements LocationListener {
+
+	protected LocationManager location;
+	private String address;
 
 	private TextView countInfo;
 	private EditText reviewEdit;
@@ -82,7 +92,7 @@ public class PostActivity extends Activity implements LocationListener {
 
 		if (mFacebook.isSessionValid()) {
 			mFacebookCb.setChecked(true);
-				
+
 			String name = SessionStore.getName(this);
 			name = (name.equals("")) ? "Unknown" : name;
 
@@ -91,26 +101,37 @@ public class PostActivity extends Activity implements LocationListener {
 		((Button) findViewById(R.id.button_post))
 				.setOnClickListener(new OnClickListener() {
 					public void onClick(View v) {
-						
+
 						String review = reviewEdit.getText().toString();
 						if (review.equals(""))
 							return;
 
-						if (mFacebookCb.isChecked() && mFacebook.isSessionValid())
+						if (mFacebookCb.isChecked()
+								&& mFacebook.isSessionValid())
 							postToFacebook(review);
 					}
 				});
 
-
 		((CheckBox) findViewById(R.id.cb_facebook))
 				.setOnClickListener(new OnClickListener() {
 					public void onClick(View v) {
-						SessionStore.restore(mFacebook,PostActivity.this);
+						SessionStore.restore(mFacebook, PostActivity.this);
 						if (mFacebook.isSessionValid() == false) {
 							mFacebookCb.setChecked(false);
 						}
 					}
 				});
+
+		location = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+		Location loc = location
+				.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		if (loc != null) {
+		} else {
+			loc = location.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		}
+
+		this.onLocationChanged(loc);
 
 	}
 
@@ -146,25 +167,48 @@ public class PostActivity extends Activity implements LocationListener {
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		return i;
 	}
+	
+	public void onLocationChanged(Location loc) {
 
-	public void onLocationChanged(Location arg0) {
-		
-		
+		double lat = 0;
+		double lon = 0;
+
+		if (loc != null) {
+			lat = loc.getLatitude();
+			lon = loc.getLongitude();
+		}
+
+		Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+		try {
+			List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
+
+			if (addresses != null && addresses.size() > 0) {
+				Address returnedAddress = addresses.get(0);
+				String addr = "";
+				for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
+					addr = addr + " " + returnedAddress.getAddressLine(i);
+				}
+				address = addr.trim();				
+				Log.i("==Location==", address);
+
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public void onProviderDisabled(String arg0) {
-		
-		
+
 	}
 
 	public void onProviderEnabled(String arg0) {
-		
-		
+
 	}
 
 	public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
-		
-		
+
 	}
 
 }
