@@ -8,11 +8,12 @@ import com.facebook.android.SessionStore;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 
-import android.R.bool;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -25,7 +26,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class PostActivity extends Activity {
+public class PostActivity extends Activity implements LocationListener {
 
 	private TextView countInfo;
 	private EditText reviewEdit;
@@ -72,7 +73,7 @@ public class PostActivity extends Activity {
 		reviewEdit.addTextChangedListener(mTextEditorWatcher);
 
 		mFacebookCb = (CheckBox) findViewById(R.id.cb_facebook);
-		// mFacebookCb.setChecked(false);
+
 		mProgress = new ProgressDialog(this);
 
 		mFacebook = new Facebook(APP_ID);
@@ -81,25 +82,29 @@ public class PostActivity extends Activity {
 
 		if (mFacebook.isSessionValid()) {
 			mFacebookCb.setChecked(true);
-
+				
 			String name = SessionStore.getName(this);
 			name = (name.equals("")) ? "Unknown" : name;
 
-			// mFacebookCb.setText("  Facebook  (" + name + ")");
+		}else {
+			mFacebookCb.setChecked(false);
+			mFacebookCb.setClickable(false);
+
 		}
 
 		((Button) findViewById(R.id.button_post))
 				.setOnClickListener(new OnClickListener() {
 					public void onClick(View v) {
+						
 						String review = reviewEdit.getText().toString();
-
 						if (review.equals(""))
 							return;
 
-						if (mFacebookCb.isChecked())
+						if (mFacebookCb.isChecked() && mFacebook.isSessionValid())
 							postToFacebook(review);
 					}
 				});
+
 
 		((CheckBox) findViewById(R.id.cb_facebook))
 				.setOnClickListener(new OnClickListener() {
@@ -110,6 +115,7 @@ public class PostActivity extends Activity {
 						}
 					}
 				});
+
 	}
 
 	private void postToFacebook(String review) {
@@ -121,13 +127,6 @@ public class PostActivity extends Activity {
 		Bundle params = new Bundle();
 
 		params.putString("message", review);
-		// params.putString("name", "Dexter");
-		// params.putString("caption", "londatiga.net");
-		// params.putString("link", "http://www.londatiga.net");
-		// params.putString(
-		// "description",
-		// "Dexter, seven years old dachshund who loves to catch cats, eat carrot and krupuk");
-		// params.putString("picture", "http://twitpic.com/show/thumb/6hqd44");
 
 		mAsyncFbRunner.request("me/feed", params, "POST",
 				new WallPostListener());
@@ -150,6 +149,26 @@ public class PostActivity extends Activity {
 		Intent i = new Intent(context, PostActivity.class);
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		return i;
+	}
+
+	public void onLocationChanged(Location arg0) {
+		
+		
+	}
+
+	public void onProviderDisabled(String arg0) {
+		
+		
+	}
+
+	public void onProviderEnabled(String arg0) {
+		
+		
+	}
+
+	public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
+		
+		
 	}
 
 }
