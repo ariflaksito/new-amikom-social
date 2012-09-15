@@ -69,6 +69,12 @@ public class SettingActivity extends Activity {
 				onFacebookClick();
 			}
 		});
+		
+		final float scale = this.getResources().getDisplayMetrics().density;
+		mFacebookBtn.setPadding(mFacebookBtn.getPaddingLeft() + (int)(10.0f * scale + 0.5f),
+				mFacebookBtn.getPaddingTop(),
+				mFacebookBtn.getPaddingRight(),
+				mFacebookBtn.getPaddingBottom());
 	}
 
 	private void onFacebookClick() {
