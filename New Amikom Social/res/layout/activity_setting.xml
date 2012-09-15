@@ -19,7 +19,8 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Facebook"
+            android:text="@string/fb_title"
+            android:textSize="14sp"
             android:textStyle="bold"/>
 
         <TextView
@@ -27,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dip"
-            android:text="Koneksikan akun facebook anda ke amikom social. Maka anda akan dapat share shout anda dari amikomsocial ke dinding akun facebook anda."
+            android:text="@string/fb_txt"
             android:textColor="#000000"
             android:textSize="13sp"
             android:textStyle="normal" />
@@ -38,14 +39,13 @@
 
             <CheckBox
                 android:id="@+id/cb_facebook"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dip"                
                 android:button="@drawable/btn_check_facebook"
                 android:clickable="true"
                 android:focusable="true"
-                android:text="  Facebook (Not connected) "
+                android:text="@string/fb_unconnect"
                 android:textColor="#ccc"
                 android:textSize="14sp"
                 android:textStyle="bold" />
