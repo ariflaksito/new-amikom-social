@@ -3,6 +3,7 @@ package id.ac.amikom.amikomsocial;
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.BaseRequestListener;
 import com.facebook.android.Facebook;
+import com.facebook.android.FbDialog;
 import com.facebook.android.SessionStore;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.IntentAction;
@@ -35,7 +36,7 @@ public class PostActivity extends Activity {
 
 	private Handler mRunOnUi = new Handler();
 
-	private static final String APP_ID = "267873336663584";
+	private static final String APP_ID = "327355724027124";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -71,7 +72,7 @@ public class PostActivity extends Activity {
 		reviewEdit.addTextChangedListener(mTextEditorWatcher);
 
 		mFacebookCb = (CheckBox) findViewById(R.id.cb_facebook);
-		//mFacebookCb.setChecked(false);
+		// mFacebookCb.setChecked(false);
 		mProgress = new ProgressDialog(this);
 
 		mFacebook = new Facebook(APP_ID);
@@ -84,7 +85,7 @@ public class PostActivity extends Activity {
 			String name = SessionStore.getName(this);
 			name = (name.equals("")) ? "Unknown" : name;
 
-			//mFacebookCb.setText("  Facebook  (" + name + ")");
+			// mFacebookCb.setText("  Facebook  (" + name + ")");
 		}
 
 		((Button) findViewById(R.id.button_post))
@@ -100,22 +101,15 @@ public class PostActivity extends Activity {
 					}
 				});
 
-		// ((CheckBox) findViewById(R.id.cb_facebook))
-		// .setOnClickListener(new OnClickListener() {
-		// public void onClick(View v) {
-		// if (mFacebook.isSessionValid()) {
-		//
-		// if (mFacebookCb.isChecked()) {
-		// mFacebookCb.setChecked(false);
-		// }
-		// if (!(mFacebookCb.isChecked())) {
-		// mFacebookCb.setChecked(true);
-		// }
-		// } else
-		// mFacebookCb.setChecked(false);
-		//
-		// }
-		// });
+		((CheckBox) findViewById(R.id.cb_facebook))
+				.setOnClickListener(new OnClickListener() {
+					public void onClick(View v) {
+						SessionStore.restore(mFacebook,PostActivity.this);
+						if (mFacebook.isSessionValid() == false) {
+							mFacebookCb.setChecked(false);
+						}
+					}
+				});
 	}
 
 	private void postToFacebook(String review) {
@@ -127,13 +121,13 @@ public class PostActivity extends Activity {
 		Bundle params = new Bundle();
 
 		params.putString("message", review);
-//		params.putString("name", "Dexter");
-//		params.putString("caption", "londatiga.net");
-//		params.putString("link", "http://www.londatiga.net");
-//		params.putString(
-//				"description",
-//				"Dexter, seven years old dachshund who loves to catch cats, eat carrot and krupuk");
-//		params.putString("picture", "http://twitpic.com/show/thumb/6hqd44");
+		// params.putString("name", "Dexter");
+		// params.putString("caption", "londatiga.net");
+		// params.putString("link", "http://www.londatiga.net");
+		// params.putString(
+		// "description",
+		// "Dexter, seven years old dachshund who loves to catch cats, eat carrot and krupuk");
+		// params.putString("picture", "http://twitpic.com/show/thumb/6hqd44");
 
 		mAsyncFbRunner.request("me/feed", params, "POST",
 				new WallPostListener());

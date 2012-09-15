@@ -35,7 +35,7 @@ public class SettingActivity extends Activity {
 	private static final String[] PERMISSIONS = new String[] {
 			"publish_stream", "read_stream", "offline_access" };
 
-	private static final String APP_ID = "267873336663584";
+	private static final String APP_ID = "327355724027124";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
