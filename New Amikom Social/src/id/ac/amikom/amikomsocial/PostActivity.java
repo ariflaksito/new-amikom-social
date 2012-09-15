@@ -106,9 +106,11 @@ public class PostActivity extends Activity implements LocationListener {
 						if (review.equals(""))
 							return;
 
-						if (mFacebookCb.isChecked()
-								&& mFacebook.isSessionValid())
+						if (mFacebookCb.isChecked()&& mFacebook.isSessionValid())
 							postToFacebook(review);
+						
+						Log.i("==Location==", address);
+						
 					}
 				});
 
