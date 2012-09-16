@@ -24,7 +24,7 @@
     <string name="profile_img_tap">(Tap image to change)</string>
     <string name="profile_alias">Edit Username</string>
     
-    <string name="fb_txt">Connect your Facebook account to Amikomsocial and you can share your shout to your Facebook wall.</string>
+    <string name="fb_txt">Connect Facebook account to Amikomsocial and you can share your shout to Facebook wall.</string>
     <string name="fb_title">Facebook</string>
     <string name="fb_unconnect">Facebook (not connected)</string>
     

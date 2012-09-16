@@ -71,7 +71,7 @@ public class SettingActivity extends Activity {
 		});
 		
 		final float scale = this.getResources().getDisplayMetrics().density;
-		mFacebookBtn.setPadding(mFacebookBtn.getPaddingLeft() + (int)(10.0f * scale + 0.5f),
+		mFacebookBtn.setPadding(mFacebookBtn.getPaddingLeft() + (int)(15.0f * scale + 1.5f),
 				mFacebookBtn.getPaddingTop(),
 				mFacebookBtn.getPaddingRight(),
 				mFacebookBtn.getPaddingBottom());
@@ -115,7 +115,7 @@ public class SettingActivity extends Activity {
 		public void onComplete(Bundle values) {
 			SessionStore.save(mFacebook, SettingActivity.this);
 
-			mFacebookBtn.setText("  Facebook (No Name)");
+			mFacebookBtn.setText("Facebook (No Name)");
 			mFacebookBtn.setChecked(true);
 			mFacebookBtn.setTextColor(Color.BLACK);
 
@@ -202,7 +202,7 @@ public class SettingActivity extends Activity {
 
 				SessionStore.saveName(username, SettingActivity.this);
 
-				mFacebookBtn.setText("  Facebook (" + username + ")");
+				mFacebookBtn.setText("Facebook (" + username + ")");
 
 				Toast.makeText(SettingActivity.this,
 						"Connected to Facebook as " + username,

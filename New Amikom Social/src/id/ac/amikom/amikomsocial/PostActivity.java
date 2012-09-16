@@ -1,7 +1,6 @@
 package id.ac.amikom.amikomsocial;
 
 import id.ac.amikom.amikomsocial.libs.DbHelper;
-import id.ac.amikom.amikomsocial.libs.InternetHelper;
 import id.ac.amikom.amikomsocial.libs.Login;
 import id.ac.amikom.amikomsocial.libs.ServiceHelper;
 
@@ -18,18 +17,14 @@ import com.markupartist.android.widget.ActionBar.IntentAction;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -235,7 +230,9 @@ public class PostActivity extends Activity implements LocationListener {
 		protected void onPostExecute(Boolean result) {
 			dialog.dismiss();
 			if (mFacebookCb.isChecked()&& mFacebook.isSessionValid())
-				postToFacebook(msg);	
+				postToFacebook(msg);
+			
+			finish();
 		}
 
 		@Override
