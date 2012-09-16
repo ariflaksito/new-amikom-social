@@ -59,7 +59,7 @@ public class SettingActivity extends Activity {
 			String name = SessionStore.getName(this);
 			name = (name.equals("")) ? "Unknown" : name;
 
-			mFacebookBtn.setText("  Facebook \n(" + name + ")");
+			mFacebookBtn.setText("Facebook (" + name + ")");
 			mFacebookBtn.setTextColor(Color.BLACK);
 		}
 
@@ -224,7 +224,7 @@ public class SettingActivity extends Activity {
 						Toast.LENGTH_SHORT).show();
 			} else {
 				mFacebookBtn.setChecked(false);
-				mFacebookBtn.setText("  Facebook (Not connected)");
+				mFacebookBtn.setText("Facebook (Not connected)");
 				mFacebookBtn.setTextColor(Color.GRAY);
 
 				Toast.makeText(SettingActivity.this,
