@@ -41,7 +41,7 @@ import android.widget.Toast;
 public class PostActivity extends Activity implements LocationListener {
 
 	protected LocationManager location;
-	private String address;
+	private String address = "";
 
 	private TextView countInfo;
 	private EditText reviewEdit;
@@ -68,17 +68,19 @@ public class PostActivity extends Activity implements LocationListener {
 		actionBar.addAction(new IntentAction(this, new Intent(this,
 				SettingActivity.class), R.drawable.ic_action_share));
 		
-		Bundle extras = getIntent().getExtras();
-		String msg = extras.getString("msg");
-		
-		Log.i("==msg==", msg);
-		
-		//if(!msg.equals("null")){
-		//	reviewEdit.setText(msg);
-		//}
-
 		reviewEdit = (EditText) findViewById(R.id.post_txt);
 		countInfo = (TextView) findViewById(R.id.count_id);
+		
+		try {
+			Bundle extras = getIntent().getExtras();
+			String msg = extras.getString("msg");
+
+			if(!msg.equals("null"))
+				reviewEdit.setText(msg);
+				
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}		
 
 		final TextWatcher mTextEditorWatcher = new TextWatcher() {
 			public void beforeTextChanged(CharSequence s, int start, int count,
@@ -119,9 +121,9 @@ public class PostActivity extends Activity implements LocationListener {
 						String review = reviewEdit.getText().toString();
 						if (review.equals(""))
 							return;
-						
+
 						new PostingTask().execute(review);
-						
+
 					}
 				});
 
@@ -180,7 +182,7 @@ public class PostActivity extends Activity implements LocationListener {
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		return i;
 	}
-	
+
 	public void onLocationChanged(Location loc) {
 
 		double lat = 0;
@@ -202,7 +204,7 @@ public class PostActivity extends Activity implements LocationListener {
 				for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
 					addr = addr + " " + returnedAddress.getAddressLine(i);
 				}
-				address = addr.trim();				
+				address = addr.trim();
 				Log.i("==Location==", address);
 
 			}
@@ -223,11 +225,10 @@ public class PostActivity extends Activity implements LocationListener {
 	public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
 
 	}
-	
+
 	public class PostingTask extends AsyncTask<String, Void, Boolean> {
 
-		private ProgressDialog dialog = new ProgressDialog(
-				PostActivity.this);
+		private ProgressDialog dialog = new ProgressDialog(PostActivity.this);
 		private String msg;
 
 		protected void onPreExecute() {
@@ -237,26 +238,26 @@ public class PostActivity extends Activity implements LocationListener {
 
 		protected void onPostExecute(Boolean result) {
 			dialog.dismiss();
-			if (mFacebookCb.isChecked()&& mFacebook.isSessionValid())
+			if (mFacebookCb.isChecked() && mFacebook.isSessionValid())
 				postToFacebook(msg);
-			
+
 			finish();
 		}
 
 		@Override
 		protected Boolean doInBackground(String... params) {
-							
+
 			msg = params[0];
 			ServiceHelper srv = new ServiceHelper();
 			DbHelper db = new DbHelper(PostActivity.this);
 			Login login = db.getLogin();
 			srv.postShout(login.get_usr(), msg, address);
-			
+
 			return true;
 		}
 
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
