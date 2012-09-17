@@ -101,6 +101,38 @@ public class DbHelper extends SQLiteOpenHelper {
 
 		return shoutList;
 	}
+	
+	public List<Shout> getShoutMe(String alias) {
+		List<Shout> shoutList = new ArrayList<Shout>();
+
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cur = db.rawQuery(
+				"Select _id,nid,name,alias,msg,foto,sts,time,via "
+						+ "From shout Where msg like '%@"+alias+"%' " 
+						+ "Order By time Desc Limit 100", null);
+
+		if (cur.moveToFirst()) {
+			do {
+				Shout shout = new Shout();
+				shout.set_id(Integer.parseInt(cur.getString(cur
+						.getColumnIndex("_id"))));
+				shout.set_nid(cur.getString(cur.getColumnIndex("nid")));
+				shout.set_name(cur.getString(cur.getColumnIndex("name")));
+				shout.set_alias(cur.getString(cur.getColumnIndex("alias")));
+				shout.set_msg(cur.getString(cur.getColumnIndex("msg")));
+				shout.set_foto(cur.getString(cur.getColumnIndex("foto")));
+				shout.set_sts(cur.getString(cur.getColumnIndex("sts")));
+				shout.set_time(cur.getString(cur.getColumnIndex("time")));
+				shout.set_via(cur.getString(cur.getColumnIndex("via")));
+				shoutList.add(shout);
+			} while (cur.moveToNext());
+		}
+
+		cur.close();
+		db.close();
+
+		return shoutList;
+	}
 
 	public int getLastShoutId() {
 		SQLiteDatabase db = this.getWritableDatabase();
