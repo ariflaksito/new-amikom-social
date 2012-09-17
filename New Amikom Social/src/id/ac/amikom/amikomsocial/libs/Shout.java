@@ -11,12 +11,15 @@ public class Shout {
 	String _sts;
 	String _time;
 	String _via;
+	String _location;
+
+	
 
 	public Shout() {
 	}
 
 	public Shout(String public_id, String nid, String name, String alias,
-			String msg, String foto, String sts, String time, String via) {
+			String msg, String foto, String sts, String time, String via, String location) {
 
 		this._public_id = Integer.parseInt(public_id);
 		this._nid = nid;
@@ -27,11 +30,12 @@ public class Shout {
 		this._sts = sts;
 		this._time = time;
 		this._via = via;
+		this._location = location;
 
 	}
 	
 	public Shout(int id, String public_id, String nid, String name, String alias,
-			String msg, String foto, String sts, String time, String via) {
+			String msg, String foto, String sts, String time, String via, String location) {
 
 		this._id = id;
 		this._public_id = Integer.parseInt(public_id);
@@ -43,6 +47,7 @@ public class Shout {
 		this._sts = sts;
 		this._time = time;
 		this._via = via;
+		this._location = location;
 
 	}
 
@@ -124,6 +129,14 @@ public class Shout {
 
 	public void set_via(String _via) {
 		this._via = _via;
+	}
+	
+	public String get_location() {
+		return _location;
+	}
+
+	public void set_location(String _location) {
+		this._location = _location;
 	}
 
 }

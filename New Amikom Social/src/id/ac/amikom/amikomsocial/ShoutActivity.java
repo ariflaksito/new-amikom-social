@@ -35,7 +35,7 @@ public class ShoutActivity extends ListActivity {
 		@Override
 		protected String doInBackground(String... params) {
 			ServiceHelper service = new ServiceHelper();
-			service.getShoutService(ShoutActivity.this);
+			service.getShout(ShoutActivity.this);
 			return null;
 		}
 

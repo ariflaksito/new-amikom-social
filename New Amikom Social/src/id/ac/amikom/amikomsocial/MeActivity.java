@@ -21,13 +21,14 @@ import android.widget.ListAdapter;
 public class MeActivity extends ListActivity {
 
 	private ListAdapter adapter;
+	private String name;
 
 	private class GetShout extends AsyncTask<String, Void, String> {
 
 		@Override
 		protected String doInBackground(String... params) {
 			ServiceHelper service = new ServiceHelper();
-			service.getShoutService(MeActivity.this);
+			service.getShoutMe(MeActivity.this, name);
 			return null;
 		}
 
@@ -60,7 +61,14 @@ public class MeActivity extends ListActivity {
 							new GetShout().execute();
 						}
 					});
-
+						
+			Login login = db.getLogin();
+						
+			if (login.get_alias().equals("null")) {
+				String[] nm = login.get_name().split("\\s+");
+				name = nm[0].toLowerCase();
+			}else name = login.get_alias();
+			
 			viewListData();
 
 		}
@@ -68,9 +76,9 @@ public class MeActivity extends ListActivity {
 	}
 
 	private void viewListData() {
+		
 		DbHelper db = new DbHelper(this);
-		Login login = db.getLogin();
-		List<Shout> shoutList = db.getShoutMe(login.get_alias());
+		List<Shout> shoutList = db.getShoutMe(name);
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 
 		for (Shout cn : shoutList) {

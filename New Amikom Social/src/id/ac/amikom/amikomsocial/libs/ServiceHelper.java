@@ -20,7 +20,7 @@ public class ServiceHelper {
 	private URI uris = URI.create("http://www.amikomsocial.com/service/");
 	private XMLRPCClient clients = new XMLRPCClient(uris);
 
-	public boolean getShoutService(Context context) {
+	public boolean getShout(Context context) {
 
 		String text;
 		DbHelper db = new DbHelper(context);
@@ -38,7 +38,44 @@ public class ServiceHelper {
 						json.getString("nid"), json.getString("fullname"),
 						json.getString("alias"), json.getString("msg"),
 						json.getString("thumb"), json.getString("status"),
-						json.getString("time"), json.getString("via"));
+						json.getString("time"), json.getString("via"),
+						json.getString("location"));
+
+				db.insertShout(shout);
+
+			}
+
+		} catch (XMLRPCException er) {
+			er.printStackTrace();
+			return false;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+	}
+	
+	public boolean getShoutMe(Context context, String alias) {
+
+		String text;
+		DbHelper db = new DbHelper(context);
+		int firstId = db.getFirstShoutId();
+
+		try {
+
+			text = (String) clients.call("getmsgme", alias, "" + firstId);
+			JSONArray jsonArray = new JSONArray(text);
+
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject json = jsonArray.getJSONObject(i);
+
+				Shout shout = new Shout(json.getString("id_msg"),
+						json.getString("nid"), json.getString("fullname"),
+						json.getString("alias"), json.getString("msg"),
+						json.getString("thumb"), json.getString("status"),
+						json.getString("time"), json.getString("via"),
+						json.getString("location"));
 
 				db.insertShout(shout);
 

@@ -14,7 +14,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "db_adem";
 
 	public DbHelper(Context context) {
-		super(context, DATABASE_NAME, null, 41);
+		super(context, DATABASE_NAME, null, 42);
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		db.execSQL("CREATE TABLE if not exists shout "
 				+ "(_id INTEGER PRIMARY KEY AUTOINCREMENT, public_id INTEGER, "
 				+ "nid TEXT, " + "name TEXT, alias TEXT, " + "msg TEXT, "
-				+ "foto TEXT, " + "sts TEXT, "
+				+ "foto TEXT, " + "sts TEXT, location TEXT"
 				+ "time TIMESTAMP NOT NULL DEFAULT current_timestamp, "
 				+ "via TEXT);");
 
@@ -109,7 +109,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		Cursor cur = db.rawQuery(
 				"Select _id,nid,name,alias,msg,foto,sts,time,via "
 						+ "From shout Where msg like '%@"+alias+"%' " 
-						+ "Order By time Desc Limit 100", null);
+						+ "Order By time Desc", null);
 
 		if (cur.moveToFirst()) {
 			do {
@@ -138,6 +138,25 @@ public class DbHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor pub_id = db.rawQuery(
 				"Select _id,public_id From shout Order By time Desc Limit 1",
+				new String[] {});
+
+		int lastid = 0;
+		if (pub_id.moveToFirst()) {
+			do {
+				lastid = Integer.parseInt(pub_id.getString(1).toString());
+			} while (pub_id.moveToNext());
+		}
+
+		pub_id.close();
+		db.close();
+
+		return lastid;
+	}
+	
+	public int getFirstShoutId() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor pub_id = db.rawQuery(
+				"Select _id,public_id From shout Order By time Limit 1",
 				new String[] {});
 
 		int lastid = 0;
