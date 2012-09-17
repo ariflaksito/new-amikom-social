@@ -14,7 +14,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "db_adem";
 
 	public DbHelper(Context context) {
-		super(context, DATABASE_NAME, null, 42);
+		super(context, DATABASE_NAME, null, 44);
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		db.execSQL("CREATE TABLE if not exists shout "
 				+ "(_id INTEGER PRIMARY KEY AUTOINCREMENT, public_id INTEGER, "
 				+ "nid TEXT, " + "name TEXT, alias TEXT, " + "msg TEXT, "
-				+ "foto TEXT, " + "sts TEXT, location TEXT"
+				+ "foto TEXT, " + "sts TEXT, location TEXT, "
 				+ "time TIMESTAMP NOT NULL DEFAULT current_timestamp, "
 				+ "via TEXT);");
 
@@ -65,6 +65,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		values.put("sts", shout.get_sts());
 		values.put("time", shout.get_time());
 		values.put("via", shout.get_via());
+		values.put("location", shout.get_location());
 
 		db.insert("shout", null, values);
 		db.close();
@@ -76,7 +77,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cur = db.rawQuery(
-				"Select _id,nid,name,alias,msg,foto,sts,time,via "
+				"Select _id,nid,name,alias,msg,foto,sts,time,via,location "
 						+ "From shout Order By time Desc Limit 100", null);
 
 		if (cur.moveToFirst()) {
@@ -92,6 +93,8 @@ public class DbHelper extends SQLiteOpenHelper {
 				shout.set_sts(cur.getString(cur.getColumnIndex("sts")));
 				shout.set_time(cur.getString(cur.getColumnIndex("time")));
 				shout.set_via(cur.getString(cur.getColumnIndex("via")));
+				shout.set_location(cur.getString(cur.getColumnIndex("location")));
+				
 				shoutList.add(shout);
 			} while (cur.moveToNext());
 		}
@@ -107,7 +110,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cur = db.rawQuery(
-				"Select _id,nid,name,alias,msg,foto,sts,time,via "
+				"Select _id,nid,name,alias,msg,foto,sts,time,via,location "
 						+ "From shout Where msg like '%@"+alias+"%' " 
 						+ "Order By time Desc", null);
 
@@ -124,6 +127,8 @@ public class DbHelper extends SQLiteOpenHelper {
 				shout.set_sts(cur.getString(cur.getColumnIndex("sts")));
 				shout.set_time(cur.getString(cur.getColumnIndex("time")));
 				shout.set_via(cur.getString(cur.getColumnIndex("via")));
+				shout.set_location(cur.getString(cur.getColumnIndex("location")));
+				
 				shoutList.add(shout);
 			} while (cur.moveToNext());
 		}
