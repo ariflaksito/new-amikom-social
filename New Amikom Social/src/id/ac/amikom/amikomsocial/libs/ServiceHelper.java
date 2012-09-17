@@ -56,30 +56,35 @@ public class ServiceHelper {
 	}
 
 	public boolean login(Context context, String id, String pwd) {
-		
+
 		DbHelper db = new DbHelper(context);
-		
+
 		try {
 			String text = (String) client.call("login", id, pwd);
 			JSONArray jsonArray = new JSONArray("[" + text + "]");
 			JSONObject json = jsonArray.getJSONObject(0);
-			
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+
+			SimpleDateFormat dateFormat = new SimpleDateFormat(
+					"yyyy-MM-dd HH:mm:ss");
 			Date date = new Date();
-			
+
 			InternetHelper inet = new InternetHelper();
 			String imgName = "amikomuser";
-			String imgUrl = "http://www.amikomsocial.com/img/"+id+".png";
+			String imgUrl = "http://www.amikomsocial.com/img/" + id + ".png";
+			
+			JSONArray jsUsr = new JSONArray((String) clients.call("getuser", id));
+			JSONObject dtUsr = jsUsr.getJSONObject(0);
 
 			String sts = json.getString("status");
 			if (sts.equals("1")) {
 
 				int alumni = Integer.parseInt(json.getString("alumni"));
-				int status = (alumni == 1) ? 3 : 1;				
-				
-				Login login = new Login(id, status, json.getString("name"), dateFormat.format(date), "", 0);
+				int status = (alumni == 1) ? 3 : 1;
+
+				Login login = new Login(id, status, json.getString("name"),
+						dateFormat.format(date), dtUsr.getString("alias"), 0);
 				db.insertLogin(login);
-				
+
 				inet.downloadImage(imgUrl, imgName);
 
 				return true;
@@ -87,16 +92,17 @@ public class ServiceHelper {
 			} else {
 				String txt = (String) client.call("logindosen", id, pwd);
 				JSONArray jsArray = new JSONArray("[" + txt + "]");
-				JSONObject js = jsArray.getJSONObject(0);								
+				JSONObject js = jsArray.getJSONObject(0);
 
 				String ists = js.getString("status");
 				if (ists.equals("1")) {
 
-					Login login = new Login(id, 2, js.getString("name"), dateFormat.format(date), "", 0);
+					Login login = new Login(id, 2, js.getString("name"),
+							dateFormat.format(date), dtUsr.getString("alias"), 0);
 					db.insertLogin(login);
-					
+
 					inet.downloadImage(imgUrl, imgName);
-					
+
 					return true;
 
 				} else {
@@ -117,7 +123,7 @@ public class ServiceHelper {
 
 	public boolean postShout(String uid, String msg, String location) {
 		try {
-			
+
 			String device = android.os.Build.MODEL;
 			clients.call("postmsg", uid, msg, device, location);
 
@@ -127,5 +133,5 @@ public class ServiceHelper {
 		}
 		return true;
 	}
-	
+
 }
