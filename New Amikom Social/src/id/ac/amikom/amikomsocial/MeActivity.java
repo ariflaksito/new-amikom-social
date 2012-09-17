@@ -22,7 +22,7 @@ public class MeActivity extends ListActivity {
 
 	private ListAdapter adapter;
 
-	private class GetShout extends AsyncTask<String, Void, String> {		
+	private class GetShout extends AsyncTask<String, Void, String> {
 
 		@Override
 		protected String doInBackground(String... params) {
@@ -51,19 +51,24 @@ public class MeActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_shout);
 
-		((PullToRefreshListView) getListView())
-				.setOnRefreshListener(new OnRefreshListener() {
-					public void onRefresh() {
-						new GetShout().execute();
-					}
-				});
+		DbHelper db = new DbHelper(this);
+		if (db.isLogin()) {
 
-		viewListData();
+			((PullToRefreshListView) getListView())
+					.setOnRefreshListener(new OnRefreshListener() {
+						public void onRefresh() {
+							new GetShout().execute();
+						}
+					});
+
+			viewListData();
+
+		}
 
 	}
 
 	private void viewListData() {
-		DbHelper db = new DbHelper(this);		
+		DbHelper db = new DbHelper(this);
 		Login login = db.getLogin();
 		List<Shout> shoutList = db.getShoutMe(login.get_alias());
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
@@ -71,15 +76,16 @@ public class MeActivity extends ListActivity {
 		for (Shout cn : shoutList) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			DateParse dp = new DateParse(cn.get_time());
-			
-			if (cn.get_alias().equals("null")) 
+
+			if (cn.get_alias().equals("null"))
 				map.put("name", cn.get_name());
-			else map.put("name", cn.get_alias());			
-			
-			map.put("icon", R.drawable.none);			
+			else
+				map.put("name", cn.get_alias());
+
+			map.put("icon", R.drawable.none);
 			map.put("msg", cn.get_msg());
 			map.put("via", "from " + cn.get_via() + ", " + dp.parseString());
-			
+
 			list.add(map);
 		}
 

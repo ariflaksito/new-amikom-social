@@ -71,9 +71,11 @@ public class PostActivity extends Activity implements LocationListener {
 		Bundle extras = getIntent().getExtras();
 		String msg = extras.getString("msg");
 		
-		if(!msg.equals("")){
-			reviewEdit.setText(msg);
-		}
+		Log.i("==msg==", msg);
+		
+		//if(!msg.equals("null")){
+		//	reviewEdit.setText(msg);
+		//}
 
 		reviewEdit = (EditText) findViewById(R.id.post_txt);
 		countInfo = (TextView) findViewById(R.id.count_id);
