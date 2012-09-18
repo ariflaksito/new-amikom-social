@@ -40,11 +40,6 @@ public class ShoutActivity extends ListActivity {
 		}
 
 		@Override
-		protected void onPreExecute() {
-
-		}
-
-		@Override
 		protected void onPostExecute(String result) {
 			viewListData();
 

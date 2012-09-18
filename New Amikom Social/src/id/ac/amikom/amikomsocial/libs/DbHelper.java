@@ -94,7 +94,7 @@ public class DbHelper extends SQLiteOpenHelper {
 				shout.set_time(cur.getString(cur.getColumnIndex("time")));
 				shout.set_via(cur.getString(cur.getColumnIndex("via")));
 				shout.set_location(cur.getString(cur.getColumnIndex("location")));
-				
+
 				shoutList.add(shout);
 			} while (cur.moveToNext());
 		}
@@ -104,14 +104,14 @@ public class DbHelper extends SQLiteOpenHelper {
 
 		return shoutList;
 	}
-	
+
 	public List<Shout> getShoutMe(String alias) {
 		List<Shout> shoutList = new ArrayList<Shout>();
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cur = db.rawQuery(
 				"Select _id,nid,name,alias,msg,foto,sts,time,via,location "
-						+ "From shout Where msg like '%@"+alias+"%' " 
+						+ "From shout Where msg like '%@" + alias + "%' "
 						+ "Order By time Desc", null);
 
 		if (cur.moveToFirst()) {
@@ -128,7 +128,7 @@ public class DbHelper extends SQLiteOpenHelper {
 				shout.set_time(cur.getString(cur.getColumnIndex("time")));
 				shout.set_via(cur.getString(cur.getColumnIndex("via")));
 				shout.set_location(cur.getString(cur.getColumnIndex("location")));
-				
+
 				shoutList.add(shout);
 			} while (cur.moveToNext());
 		}
@@ -157,7 +157,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
 		return lastid;
 	}
-	
+
 	public int getFirstShoutId() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor pub_id = db.rawQuery(
@@ -209,8 +209,7 @@ public class DbHelper extends SQLiteOpenHelper {
 			c.moveToFirst();
 
 		Login login = new Login(c.getInt(0), c.getString(4), c.getInt(2),
-				c.getString(1), c.getString(5), c.getString(3),
-				c.getInt(6));
+				c.getString(1), c.getString(5), c.getString(3), c.getInt(6));
 
 		c.close();
 		db.close();
@@ -249,6 +248,16 @@ public class DbHelper extends SQLiteOpenHelper {
 			return false;
 	}
 
+	public boolean isMhs() {
+		Login log = getLogin();
+		int sts = log.get_is_mhs();
+
+		if (sts == 1)
+			return true;
+		else
+			return false;
+	}
+
 	public void deleteLogin() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		String str = "Delete From login";
@@ -256,7 +265,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		db.execSQL(str);
 		db.close();
 	}
-	
+
 	public void insertCalendar(Calendar cal) {
 
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -273,6 +282,60 @@ public class DbHelper extends SQLiteOpenHelper {
 		db.insert("calendar", null, values);
 		db.close();
 
+	}
+
+	public Calendar getCalendar() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor c = db.rawQuery(
+				"Select _id,title,start,end,location,detail,status "
+						+ "From calendar Order By _id", new String[] {});
+
+		if (c != null)
+			c.moveToFirst();
+
+		Calendar cal = new Calendar(c.getString(1), c.getString(2),
+				c.getString(3), c.getString(4), c.getString(5),
+				Integer.parseInt(c.getString(6)));
+
+		c.close();
+		db.close();
+
+		return cal;
+	}
+
+	public boolean isCalendar() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor c = db.rawQuery(
+				"Select _id,title,start,end,location,detail,status "
+						+ "From calendar Order By _id", new String[] {});
+		
+		if (c != null)
+			c.moveToFirst();
+
+		int count = c.getCount();
+		c.close();
+		db.close();
+
+		if (count > 0)
+			return true;
+		else
+			return false;
+	}
+
+	public void deleteCalendar() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		String str = "Delete From calendar Where location like 'STMIK Amikom%'";
+
+		db.execSQL(str);
+		db.close();
+	}
+
+	public void deleteCalendarAc() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		String str = "Delete From calendar Where location like 'Amikom%'";
+
+		db.execSQL(str);
+		db.close();
 	}
 
 }

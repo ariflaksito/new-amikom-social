@@ -170,5 +170,139 @@ public class ServiceHelper {
 		}
 		return true;
 	}
+	
+	public boolean getCalendar(Context context){
+		DbHelper db = new DbHelper(context);
+		Login log = db.getLogin();
+		String text;
+		
+		try{
+			if (db.isMhs())
+				text = (String) client.call("jdwkuliah", log.get_usr());
+			else
+				text = (String) client.call("jdwdosen", log.get_usr());
+
+			JSONArray jsonArray = new JSONArray(text);
+			if (jsonArray.length() > 0) {
+
+				db.deleteCalendar();
+
+				for (int i = 0; i < jsonArray.length(); i++) {
+					JSONObject json = jsonArray.getJSONObject(i);
+
+					String[] jam = json.getString("jam").split("\\-+");
+					if (db.isMhs()) {
+						Calendar cal = new Calendar(json.getString("hari").trim() + " - "
+								+ json.getString("kuliah"),
+								json.getString("fdate") + " " + jam[0],
+								json.getString("edate") + " " + jam[1],
+								"STMIK Amikom - " + json.getString("ruang"),
+								json.getString("dosen"),
+								Integer.parseInt(json.getString("weekly")));
+						db.insertCalendar(cal);
+						
+					}else{
+						Calendar cal = new Calendar(json.getString("hari").trim() + " - "
+								+ json.getString("mkul"),
+								json.getString("fdate") + " " + jam[0],
+								json.getString("edate") + " " + jam[1],
+								"STMIK Amikom - " + json.getString("ruang"),
+								json.getString("kelasgab"),
+								Integer.parseInt(json.getString("weekly")));
+						db.insertCalendar(cal);
+					}
+				}
+				
+				updateCalendarId(context);
+			}	
+			
+			getCalendarAc(context);
+			
+		} catch (XMLRPCException ex) {
+			getCalendarAc(context);
+			ex.printStackTrace();
+			return false;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		
+		return true;
+	}
+	
+	public boolean getCalendarAc(Context context){
+		DbHelper db = new DbHelper(context);
+		try {
+			String text = (String) client.call("getcalendar");
+			JSONArray jsonArray = new JSONArray(text);
+
+			if (jsonArray.length() > 0) {
+
+				db.deleteCalendarAc();
+
+				for (int i = 0; i < jsonArray.length(); i++) {
+					JSONObject json = jsonArray.getJSONObject(i);
+					
+					Calendar cal = new Calendar(json.getString("detail"),
+							json.getString("start"), json.getString("finish"),
+							"Amikom - Amikom Calendar",
+							json.getString("fdate"),
+							Integer.parseInt(json.getString("weekly")));
+
+					db.insertCalendar(cal);
+				}
+
+				updateCalendarId(context);
+			}
+
+			db.close();
+
+		} catch (XMLRPCException er) {
+			er.printStackTrace();
+			return false;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public void updateCalendarId(Context context) {
+		try {
+			String text = (String) client.call("jdwupdate");
+			int id = Integer.parseInt(text);
+			Login log = new Login();
+			log.set_calendar(id);
+			
+			DbHelper db = new DbHelper(context);
+			db.updateLogin(log);
+
+		} catch (XMLRPCException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public boolean checkCalendar(Context context) {
+		DbHelper db = new DbHelper(context);
+		Login l = db.getLogin();		
+		int id = l.get_calendar();
+		int pid = 0;
+
+		try {
+			String str = (String) client.call("jdwupdate");
+			pid = Integer.parseInt(str);
+
+		} catch (XMLRPCException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		if (!db.isCalendar() || pid > id)
+			return true;
+		else
+			return false;
+	}
 
 }
