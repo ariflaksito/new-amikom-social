@@ -256,5 +256,23 @@ public class DbHelper extends SQLiteOpenHelper {
 		db.execSQL(str);
 		db.close();
 	}
+	
+	public void insertCalendar(Calendar cal) {
+
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = new ContentValues();
+
+		values.put("title", cal.get_title());
+		values.put("start", cal.get_start());
+		values.put("end", cal.get_end());
+		values.put("location", cal.get_location());
+		values.put("detail", cal.get_detail());
+		values.put("title", cal.get_title());
+		values.put("status", cal.get_status());
+
+		db.insert("calendar", null, values);
+		db.close();
+
+	}
 
 }
