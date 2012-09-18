@@ -218,16 +218,19 @@ public class DbHelper extends SQLiteOpenHelper {
 
 	}
 
-	public int updateLogin(Login login) {
+	public void updateLogin(Login login) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
 		values.put("alias", login.get_alias());
 		values.put("calendar", login.get_calendar());
-
+		
 		// updating row
-		return db.update("login", values, "_id = ?",
+		db.update("login", values, "_id = ?",
 				new String[] { String.valueOf(login.get_id()) });
+		
+		db.close();
+		
 	}
 
 	public boolean isLogin() {
@@ -284,23 +287,32 @@ public class DbHelper extends SQLiteOpenHelper {
 
 	}
 
-	public Calendar getCalendar() {
+	public List<Calendar> getCalendar() {
+		List<Calendar> calList = new ArrayList<Calendar>();
+		
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor c = db.rawQuery(
 				"Select _id,title,start,end,location,detail,status "
 						+ "From calendar Order By _id", new String[] {});
 
 		if (c != null)
-			c.moveToFirst();
+			c.moveToFirst();		
+				
+		if (c.moveToFirst()) {
+			do {
+				Calendar cal = new Calendar(c.getString(1), c.getString(2),
+						c.getString(3), c.getString(4), c.getString(5),
+						Integer.parseInt(c.getString(6)));
 
-		Calendar cal = new Calendar(c.getString(1), c.getString(2),
-				c.getString(3), c.getString(4), c.getString(5),
-				Integer.parseInt(c.getString(6)));
+				calList.add(cal);
+			} while (c.moveToNext());
+		}
 
 		c.close();
 		db.close();
 
-		return cal;
+		return calList;
+
 	}
 
 	public boolean isCalendar() {
