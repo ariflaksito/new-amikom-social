@@ -75,8 +75,10 @@ public class PostActivity extends Activity implements LocationListener {
 			Bundle extras = getIntent().getExtras();
 			String msg = extras.getString("msg");
 
-			if(!msg.equals("null"))
+			if(!msg.equals("null")){
 				reviewEdit.setText(msg);
+				countInfo.setText("Character Remain " + (160 - msg.length()));
+			}	
 				
 		} catch (NullPointerException e) {
 			e.printStackTrace();
@@ -263,7 +265,7 @@ public class PostActivity extends Activity implements LocationListener {
 		super.onResume();
 		location.requestLocationUpdates(LocationManager.GPS_PROVIDER,
 				1000 * 60 * 30, 1000, this);
-		location.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-				1000 * 60 * 30, 1000, this);
+		//location.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+		//		1000 * 60 * 30, 1000, this);
 	}
 }

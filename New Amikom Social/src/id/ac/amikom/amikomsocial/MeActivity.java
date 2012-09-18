@@ -14,14 +14,23 @@ import id.ac.amikom.amikomsocial.libs.Shout;
 import id.ac.amikom.amikomsocial.libs.CustomAdapter;
 import id.ac.amikom.amikomsocial.libs.DateParse;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 
 public class MeActivity extends ListActivity {
 
 	private ListAdapter adapter;
 	private String name;
+	private List<Shout> shoutList;
 
 	private class GetShout extends AsyncTask<String, Void, String> {
 
@@ -78,7 +87,7 @@ public class MeActivity extends ListActivity {
 	private void viewListData() {
 		
 		DbHelper db = new DbHelper(this);
-		List<Shout> shoutList = db.getShoutMe(name);
+		shoutList = db.getShoutMe(name);
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 
 		for (Shout cn : shoutList) {
@@ -103,6 +112,62 @@ public class MeActivity extends ListActivity {
 
 		setListAdapter(adapter);
 		registerForContextMenu(getListView());
+	}
+	
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+		DbHelper db = new DbHelper(this);
+
+		if (db.isLogin())
+			l.showContextMenuForChild(v);
+
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+
+		menu.setHeaderTitle("Shout Option");
+		menu.add(Menu.NONE, 0, Menu.NONE, "Re-Shout");
+		menu.add(Menu.NONE, 1, Menu.NONE, "Reply");
+		menu.add(Menu.NONE, 2, Menu.NONE, "Profile");
+
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
+				.getMenuInfo();
+		
+		Shout shout = shoutList.get(info.position-1);
+		
+		String name;
+		if (shout.get_alias().equals("null")) {
+			String[] nm = shout.get_name().split("\\s+");
+			name = nm[0].toLowerCase();
+		}else name = shout.get_alias();
+		
+		String postAlias = "@" + name;
+		String postMsg = ":O " + postAlias + " " + shout.get_msg();
+		Intent i = new Intent(MeActivity.this, PostActivity.class);
+
+		switch (item.getItemId()) {
+		case 0:
+			i.putExtra("msg", postMsg);
+			startActivity(i);
+			return (true);
+		case 1:
+			i.putExtra("msg", postAlias);
+			startActivity(i);
+			return (true);
+
+		case 2:
+
+			return (true);
+		}
+
+		return (super.onOptionsItemSelected(item));
+
 	}
 
 }
