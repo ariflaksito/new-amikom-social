@@ -25,6 +25,7 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
+import android.view.Window;
 import android.widget.Toast;
 
 public class SettingActivity extends PreferenceActivity {
@@ -111,6 +112,7 @@ public class SettingActivity extends PreferenceActivity {
 				event.put("eventLocation", cn.get_location());
 				event.put("dtstart", dtstart);
 				event.put("hasAlarm", 1);
+				event.put("timezone", "Asia/Indonesia");
 
 				if (cn.get_status() == 1) {
 					String[] title = cn.get_title().split("\\-+");
@@ -156,12 +158,12 @@ public class SettingActivity extends PreferenceActivity {
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.layout.activity_setting);
 
-		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar_post);
-		actionBar.setTitle(R.string.app_setting_title);
+		//ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar_post);
+		//actionBar.setTitle(R.string.app_setting_title);
 
 		ListPreference listPreferenceCategory = (ListPreference) findPreference("id_calendar");
 

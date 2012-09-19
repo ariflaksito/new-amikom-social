@@ -216,10 +216,10 @@ public class ServiceHelper {
 				updateCalendarId(context);
 			}	
 			
-			getCalendarAc(context);
+			//getCalendarAc(context);
 			
 		} catch (XMLRPCException ex) {
-			getCalendarAc(context);
+			//getCalendarAc(context);
 			ex.printStackTrace();
 			return false;
 		} catch (JSONException e) {
