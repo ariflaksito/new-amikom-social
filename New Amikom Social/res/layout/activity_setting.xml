@@ -7,6 +7,13 @@
         android:id="@+id/actionbar_post"
         style="@style/ActionBar" />
     -->    
+    
+    <PreferenceCategory android:title="Social Network Share" >
+        <Preference
+            android:key="id_share"
+            android:summary="Share Shout to Facebook and Twitter"
+            android:title="Share Shout" />
+    </PreferenceCategory>    
 
     <PreferenceCategory android:title="Calendar Setting" >
 

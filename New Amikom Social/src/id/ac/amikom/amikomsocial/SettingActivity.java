@@ -3,8 +3,6 @@ package id.ac.amikom.amikomsocial;
 import java.util.Calendar;
 import java.util.List;
 
-import com.markupartist.android.widget.ActionBar;
-
 import id.ac.amikom.amikomsocial.libs.Cald;
 import id.ac.amikom.amikomsocial.libs.DbHelper;
 import android.app.Activity;
@@ -12,6 +10,8 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -25,7 +25,6 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
-import android.view.Window;
 import android.widget.Toast;
 
 public class SettingActivity extends PreferenceActivity {
@@ -112,7 +111,7 @@ public class SettingActivity extends PreferenceActivity {
 				event.put("eventLocation", cn.get_location());
 				event.put("dtstart", dtstart);
 				event.put("hasAlarm", 1);
-				event.put("timezone", "Asia/Indonesia");
+				event.put("eventTimezone", "Asia/Jakarta	");
 
 				if (cn.get_status() == 1) {
 					String[] title = cn.get_title().split("\\-+");
@@ -209,6 +208,18 @@ public class SettingActivity extends PreferenceActivity {
 						return true;
 					}
 				});
+		
+		Preference share = findPreference("id_share");
+		share.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			
+			public boolean onPreferenceClick(Preference pref) {
+				Intent i = new Intent(SettingActivity.this, ShareActivity.class);
+				i.putExtra("msg", "setting");
+				startActivity(i);
+				return false;
+			}
+		});
+		
 
 		Preference sync = findPreference("id_sync");
 		sync.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -263,5 +274,11 @@ public class SettingActivity extends PreferenceActivity {
 				return true;
 			}
 		});
+	}
+	
+	public static Intent createIntent(Context context) {
+		Intent i = new Intent(context, SettingActivity.class);
+		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		return i;
 	}
 }
