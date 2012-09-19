@@ -203,7 +203,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	public Login getLogin() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor c = db.rawQuery(
-				"Select _id,name, is_mhs, alias, usr, logdate, calendar "
+				"Select _id, name, is_mhs, alias, usr, logdate, calendar "
 						+ "From login Limit 1", new String[] {});
 		if (c != null)
 			c.moveToFirst();
@@ -224,8 +224,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 		values.put("alias", login.get_alias());
 		values.put("calendar", login.get_calendar());
-		
-		// updating row
+			
 		db.update("login", values, "_id = ?",
 				new String[] { String.valueOf(login.get_id()) });
 		

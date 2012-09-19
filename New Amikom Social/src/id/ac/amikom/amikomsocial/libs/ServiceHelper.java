@@ -286,6 +286,7 @@ public class ServiceHelper {
 	
 	public boolean checkCalendar(Context context) {
 		DbHelper db = new DbHelper(context);
+		
 		Login l = db.getLogin();		
 		int id = l.get_calendar();
 		int pid = 0;

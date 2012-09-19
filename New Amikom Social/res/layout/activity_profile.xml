@@ -1,98 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#e7e7e7" >
 
-    <LinearLayout
+    <com.markupartist.android.widget.ActionBar
+        android:id="@+id/actionbar_post"
+        style="@style/ActionBar" />
+
+    <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"        
-        android:orientation="vertical" >
-
-        <com.markupartist.android.widget.ActionBar
-            android:id="@+id/actionbar_post"
-            style="@style/ActionBar" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dip"
-            android:layout_marginTop="10dip"
-            android:paddingLeft="10dip"
-            android:paddingRight="10dip"
-            android:text="@string/profile_info"
-            android:textSize="16dp" />
-
-        <ImageView
-            android:id="@+id/viewImg"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/none"
-            android:contentDescription="@string/list_image"
-            android:scaleType="fitCenter" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="20dip"
-            android:paddingLeft="10dip"
-            android:paddingRight="10dip"
-            android:text="@string/profile_img_tap"
-            android:textSize="13dp" />
-
-        <TextView
-            android:id="@+id/viewId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dip"
-            android:paddingRight="10dip"
-            android:textSize="14dp" />
-
-        <TextView
-            android:id="@+id/viewName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dip"
-            android:paddingRight="10dip"
-            android:textSize="14dp" />
-
-        <TextView
-            android:id="@+id/viewSts"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dip"
-            android:paddingRight="10dip"
-            android:textSize="14dp" />
-
-        <TextView
-            android:id="@+id/viewLog"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dip"
-            android:paddingRight="10dip"
-            android:textSize="14dp" />
-
-        <TextView
-            android:id="@+id/viewLoc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dip"
-            android:paddingRight="10dip"
-            android:textSize="14dp" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/actionbar_post" >
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="horizontal" >
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-            <Button
-                android:id="@+id/btnEdit"
-                android:layout_width="170dp"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dip"
-                android:text="@string/profile_alias" />
-        </LinearLayout>
-    </LinearLayout>
+                android:layout_marginBottom="10dip"
+                android:layout_marginTop="10dip"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip"
+                android:text="@string/profile_info"
+                android:textSize="16dp" />
 
-</ScrollView>
+            <ImageView
+                android:id="@+id/viewImg"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_margin="10dp"
+                android:contentDescription="@string/list_image"
+                android:scaleType="fitCenter"
+                android:src="@drawable/none" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="20dip"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip"
+                android:text="@string/profile_img_tap"
+                android:textSize="13dp" />
+
+            <TextView
+                android:id="@+id/viewId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/viewName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/viewSts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/viewLog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/viewLoc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip"
+                android:textSize="14dp" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/btnEdit"
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dip"
+                    android:text="@string/profile_alias" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
