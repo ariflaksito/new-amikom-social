@@ -18,7 +18,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -154,7 +153,8 @@ public class MainActivity extends TabActivity {
 								LoginActivity.class));
 						return true;
 					case R.id.id_setting:
-						viewDeviceCald();
+						startActivity(new Intent(MainActivity.this,
+								SettingActivity.class));
 						return true;
 					case R.id.id_logout:
 						new LogoutTask().execute();
@@ -190,7 +190,8 @@ public class MainActivity extends TabActivity {
 			startActivity(new Intent(MainActivity.this, LoginActivity.class));
 			return true;
 		case R.id.id_setting:
-			viewDeviceCald();
+			startActivity(new Intent(MainActivity.this,
+					SettingActivity.class));
 			return true;
 		case R.id.id_logout:
 			new LogoutTask().execute();
@@ -267,39 +268,6 @@ public class MainActivity extends TabActivity {
 			return true;
 		}
 
-	}
-	
-	protected void viewDeviceCald(){
-		String calUriString;
-		if (Build.VERSION.SDK_INT >= 8) {
-			calUriString = "content://com.android.calendar/calendars";
-		} else {
-			calUriString = "content://calendar/calendars";
-		}				
-
-		
-		Uri uri = Uri.parse(calUriString);
-		Cursor cursor = getContentResolver().query(uri, null, null, null, null);										
-
-		if (cursor != null && cursor.getCount() > 0) {
-			cursor.moveToFirst();
-			
-			CharSequence[] list = new String[cursor.getCount()];
-			CharSequence[] valueList = new String[cursor.getCount()];
-			
-			int i = 0;
-			do {
-				list[i] = cursor.getString(0);
-				
-				if (Build.VERSION.SDK_INT >= 14) 
-					valueList[i] = cursor.getString(2);
-				else
-					valueList[i] = cursor.getString(cursor.getColumnIndex("displayName"));
-				
-				i++;
-			} while (cursor.moveToNext());							
-		}						
-		
 	}
 	
 	@Override

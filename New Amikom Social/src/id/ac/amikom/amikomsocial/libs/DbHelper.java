@@ -268,7 +268,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		db.close();
 	}
 
-	public void insertCalendar(Calendar cal) {
+	public void insertCalendar(Cald cal) {
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
@@ -286,8 +286,8 @@ public class DbHelper extends SQLiteOpenHelper {
 
 	}
 
-	public List<Calendar> getCalendar() {
-		List<Calendar> calList = new ArrayList<Calendar>();
+	public List<Cald> getCalendar() {
+		List<Cald> calList = new ArrayList<Cald>();
 		
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor c = db.rawQuery(
@@ -299,7 +299,7 @@ public class DbHelper extends SQLiteOpenHelper {
 				
 		if (c.moveToFirst()) {
 			do {
-				Calendar cal = new Calendar(c.getString(1), c.getString(2),
+				Cald cal = new Cald(c.getString(1), c.getString(2),
 						c.getString(3), c.getString(4), c.getString(5),
 						Integer.parseInt(c.getString(6)));
 

@@ -192,7 +192,7 @@ public class ServiceHelper {
 
 					String[] jam = json.getString("jam").split("\\-+");
 					if (db.isMhs()) {
-						Calendar cal = new Calendar(json.getString("hari").trim() + " - "
+						Cald cal = new Cald(json.getString("hari").trim() + " - "
 								+ json.getString("kuliah"),
 								json.getString("fdate") + " " + jam[0],
 								json.getString("edate") + " " + jam[1],
@@ -202,7 +202,7 @@ public class ServiceHelper {
 						db.insertCalendar(cal);
 						
 					}else{
-						Calendar cal = new Calendar(json.getString("hari").trim() + " - "
+						Cald cal = new Cald(json.getString("hari").trim() + " - "
 								+ json.getString("mkul"),
 								json.getString("fdate") + " " + jam[0],
 								json.getString("edate") + " " + jam[1],
@@ -244,7 +244,7 @@ public class ServiceHelper {
 				for (int i = 0; i < jsonArray.length(); i++) {
 					JSONObject json = jsonArray.getJSONObject(i);
 					
-					Calendar cal = new Calendar(json.getString("detail"),
+					Cald cal = new Cald(json.getString("detail"),
 							json.getString("start"), json.getString("finish"),
 							"Amikom - Amikom Calendar",
 							json.getString("fdate"),

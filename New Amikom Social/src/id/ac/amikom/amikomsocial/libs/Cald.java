@@ -1,6 +1,6 @@
 package id.ac.amikom.amikomsocial.libs;
 
-public class Calendar {
+public class Cald {
 	
 	int _id;
 	String _title;
@@ -10,9 +10,9 @@ public class Calendar {
 	String _detail;
 	int _status;
 	
-	public Calendar(){ }
+	public Cald(){ }
 	
-	public Calendar(int id, String title, String start, String end, String location, String detail, int status){
+	public Cald(int id, String title, String start, String end, String location, String detail, int status){
 		this._id = id;
 		this._title = title;
 		this._start = start;
@@ -22,7 +22,7 @@ public class Calendar {
 		this._status = status;
 	}
 	
-	public Calendar(String title, String start, String end, String location, String detail, int status){	
+	public Cald(String title, String start, String end, String location, String detail, int status){	
 		this._title = title;
 		this._start = start;
 		this._end = end;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import id.ac.amikom.amikomsocial.libs.Calendar;
+import id.ac.amikom.amikomsocial.libs.Cald;
 import id.ac.amikom.amikomsocial.libs.CustomAdapter;
 import id.ac.amikom.amikomsocial.libs.DbHelper;
 import id.ac.amikom.amikomsocial.libs.ServiceHelper;
@@ -63,14 +63,14 @@ public class CalendarActivity extends ListActivity {
 	}
 
 	private void viewListData() {
-		List<Calendar> calList;
+		List<Cald> calList;
 
 		DbHelper db = new DbHelper(this);
 		calList = db.getCalendar();
 
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 
-		for (Calendar cn : calList) {
+		for (Cald cn : calList) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
 
 			String[] ruang = cn.get_location().split("\\-+");

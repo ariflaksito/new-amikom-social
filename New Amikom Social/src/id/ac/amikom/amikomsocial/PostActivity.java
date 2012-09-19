@@ -66,7 +66,7 @@ public class PostActivity extends Activity implements LocationListener {
 				.createIntent(this), R.drawable.ic_action_back));
 
 		actionBar.addAction(new IntentAction(this, new Intent(this,
-				SettingActivity.class), R.drawable.ic_action_share));
+				ShareActivity.class), R.drawable.ic_action_share));
 		
 		reviewEdit = (EditText) findViewById(R.id.post_txt);
 		countInfo = (TextView) findViewById(R.id.count_id);
@@ -265,7 +265,7 @@ public class PostActivity extends Activity implements LocationListener {
 		super.onResume();
 		location.requestLocationUpdates(LocationManager.GPS_PROVIDER,
 				1000 * 60 * 30, 1000, this);
-		//location.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-		//		1000 * 60 * 30, 1000, this);
+		location.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+				1000 * 60 * 30, 1000, this);
 	}
 }

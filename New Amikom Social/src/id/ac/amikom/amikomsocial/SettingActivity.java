@@ -1,237 +1,287 @@
 package id.ac.amikom.amikomsocial;
 
-import org.json.JSONObject;
-import org.json.JSONTokener;
+import java.util.Calendar;
+import java.util.List;
 
-import com.facebook.android.DialogError;
-import com.facebook.android.Facebook;
-import com.facebook.android.FacebookError;
-import com.facebook.android.SessionStore;
-import com.facebook.android.Facebook.DialogListener;
 import com.markupartist.android.widget.ActionBar;
-import com.markupartist.android.widget.ActionBar.IntentAction;
 
+import id.ac.amikom.amikomsocial.libs.Cald;
+import id.ac.amikom.amikomsocial.libs.DbHelper;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.graphics.Color;
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.CheckBox;
+import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.Preference.OnPreferenceClickListener;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
+import android.text.format.DateUtils;
 import android.widget.Toast;
 
-public class SettingActivity extends Activity {
+public class SettingActivity extends PreferenceActivity {
 
-	private Facebook mFacebook;
-	private CheckBox mFacebookBtn;
-	private ProgressDialog mProgress;
+	private DbHelper db = null;
+	public static final String UPDATE_PREF = "id_auto_time";
+	public static final String CALD_PREF = "id_calendar";
 
-	private static final String[] PERMISSIONS = new String[] {
-			"publish_stream", "read_stream", "offline_access" };
+	public class BackgroundSync extends AsyncTask<String, Void, Boolean> {
 
-	private static final String APP_ID = "327355724027124";
+		ProgressDialog dialog = new ProgressDialog(SettingActivity.this);
+
+		@Override
+		protected Boolean doInBackground(final String... params) {
+			SharedPreferences prefs = PreferenceManager
+					.getDefaultSharedPreferences(getBaseContext());
+		
+			Uri eventUri, alarmUri = null;
+			
+			
+			if (Build.VERSION.SDK_INT >= 8){
+				eventUri = Uri.parse("content://com.android.calendar/events");
+				alarmUri = Uri.parse("content://com.android.calendar/reminders");
+			}else{
+				eventUri = Uri.parse("content://calendar/events");
+				alarmUri = Uri.parse("content://calendar/reminders");
+			}	
+				
+			Cursor c = getContentResolver().query(eventUri, null, null, null, null);
+			
+			if (c.moveToFirst()) {
+				while (c.moveToNext()) {
+					String location = c.getString(c
+							.getColumnIndex("eventLocation"));
+					String id = c.getString(c.getColumnIndex("_id"));
+					String loc = "" + location;
+
+					if (loc.equals("STMIK Amikom") || loc.contains("Amikom")) {
+
+						Uri uri = ContentUris.withAppendedId(eventUri,
+								Integer.parseInt(id));
+						getContentResolver().delete(uri, null, null);
+					}
+				}
+			}
+
+			List<Cald> cald = db.getCalendar();
+			//startManagingCursor(cr);
+			
+			ContentResolver cv = getContentResolver();			
+			
+			for (Cald cn : cald) {
+					
+					long dtstart = 0;
+					long dtend = 0;
+					Calendar cal_start = Calendar.getInstance();
+					String[] istart = cn.get_start().split("\\s+");
+					
+					String[] start = istart[0].split("\\-+");
+					int sYear = Integer.parseInt(start[0]);
+					int sMonth = Integer.parseInt(start[1]) - 1;
+					int sDay = Integer.parseInt(start[2]);
+										
+					String[] sh = istart[1].split("\\.+");
+					int stHH = Integer.parseInt(sh[0]);
+					int stII = Integer.parseInt(sh[1]);
+
+					cal_start.set(sYear, sMonth, sDay, stHH, stII, 0);
+					dtstart = cal_start.getTimeInMillis();										
+					
+					Calendar cal_end = Calendar.getInstance();
+					String[] iend = cn.get_end().split("\\s+");										
+										
+					String[] eh = iend[1].split("\\.+");
+					int enHH = Integer.parseInt(eh[0]);
+					int enII = Integer.parseInt(eh[1]);										
+					
+					cal_end.set(sYear, sMonth, sDay, enHH, enII, 0);						
+					dtend = cal_end.getTimeInMillis();					
+
+					ContentValues event = new ContentValues();
+					event.put("calendar_id", prefs.getString("id_calendar", "0"));					
+					event.put("description", cn.get_detail().toUpperCase());
+					event.put("eventLocation", cn.get_location());																	   
+					event.put("dtstart", dtstart);										
+					event.put("hasAlarm", 1);							
+					
+					if(cn.get_status()==1){
+						String[] title = cn.get_title().split("\\-+");
+						
+						event.put("title", title[1].trim());
+						event.put("duration", "P" + ((dtend-dtstart)/DateUtils.SECOND_IN_MILLIS) + "S");
+						event.put("rrule", "FREQ=WEEKLY;COUNT=6");	
+					}else{
+						event.put("title", cn.get_title());
+						event.put("dtend", dtend);	
+					}
+					
+					Uri ev = cv.insert(eventUri, event);
+										
+				    ContentValues values = new ContentValues();
+				    values.put( "event_id", Long.parseLong(ev.getLastPathSegment()));
+				    values.put( "method", 1 );
+				    values.put( "minutes", 30 );
+				    
+				    cv.insert( alarmUri, values );
+
+				
+			}																
+
+			return true;
+
+		}
+
+		protected void onPreExecute() {
+			this.dialog.setMessage("Please Wait, Synchronizing Calendar");
+			this.dialog.show();
+		}
+
+		protected void onPostExecute(final Boolean success) {
+			this.dialog.dismiss();
+		}
+
+	}
+
+	public SettingActivity() {
+		db = new DbHelper(this);
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setting);
 
 		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar_post);
 		actionBar.setTitle(R.string.app_setting_title);
 
-		actionBar.setHomeAction(new IntentAction(this, PostActivity
-				.createIntent(this), R.drawable.ic_action_back));
+		ListPreference listPreferenceCategory = (ListPreference) findPreference("id_calendar");
 
-		mFacebookBtn = (CheckBox) findViewById(R.id.cb_facebook);
+		String calUriString;
+		if (Build.VERSION.SDK_INT >= 8) {
+			calUriString = "content://com.android.calendar/calendars";
+		} else {
+			calUriString = "content://calendar/calendars";
+		}				
 
-		mProgress = new ProgressDialog(this);
-		mFacebook = new Facebook(APP_ID);
+		
+		Uri uri = Uri.parse(calUriString);
+		Cursor cursor = getContentResolver().query(uri, null, null, null, null);										
 
-		SessionStore.restore(mFacebook, this);
-
-		if (mFacebook.isSessionValid()) {
-			mFacebookBtn.setChecked(true);
-
-			String name = SessionStore.getName(this);
-			name = (name.equals("")) ? "Unknown" : name;
-
-			mFacebookBtn.setText("Facebook (" + name + ")");
-			mFacebookBtn.setTextColor(Color.BLACK);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			
+			CharSequence[] list = new String[cursor.getCount()];
+			CharSequence[] valueList = new String[cursor.getCount()];
+			
+			int i = 0;
+			do {
+				list[i] = cursor.getString(0);
+				
+				if (Build.VERSION.SDK_INT >= 14) {
+					valueList[i] = cursor.getString(2);
+				} else {
+					valueList[i] = cursor.getString(cursor.getColumnIndex("displayName"));
+				}	
+				
+				i++;
+			} while (cursor.moveToNext());
+			
+			listPreferenceCategory.setEntries(valueList);
+			listPreferenceCategory.setEntryValues(list);
+			
 		}
+		
+		
 
-		mFacebookBtn.setOnClickListener(new OnClickListener() {
+		listPreferenceCategory
+				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+					public boolean onPreferenceChange(Preference preference,
+							Object newValue) {
+						return true;
+					}
+				});
 
-			public void onClick(View v) {
-				onFacebookClick();
+		Preference sync = findPreference("id_sync");
+		sync.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+			public boolean onPreferenceClick(Preference preference) {
+
+				SharedPreferences pref = getSharedPreferences(
+						"cald_pref", Activity.MODE_PRIVATE);
+				int refresh = Integer.parseInt(pref.getString("id_calendar", "0"));							
+
+				if (refresh > 0) {
+					if (db.isCalendar())
+						new BackgroundSync().execute();
+					else {
+						Toast.makeText(
+								getBaseContext(),
+								"Error synchronizing calendar, No data calendar. Go to Calendar menu and Refresh data",
+								Toast.LENGTH_LONG).show();
+					}
+				} else {
+					Toast.makeText(
+							getBaseContext(),
+							"Error synchronizing calendar, select device calendar first",
+							Toast.LENGTH_LONG).show();
+				}
+
+				return false;
 			}
 		});
+
+		setUpdatePreferences();
+
+	}
+
+	private void setUpdatePreferences() {
+		ListPreference updatePref = (ListPreference) findPreference(UPDATE_PREF);
+		updatePref.setSummary(updatePref.getValue());
+
+		updatePref
+				.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+					public boolean onPreferenceChange(Preference preference,
+							Object newValue) {
+						ListPreference listPreference = (ListPreference) preference;
+						listPreference.setSummary((String) newValue);
+
+						SharedPreferences mySharedPreferences = getSharedPreferences(
+								"auto_pref", Activity.MODE_PRIVATE);
+						SharedPreferences.Editor editor = mySharedPreferences
+								.edit();
+						editor.putString(UPDATE_PREF, (String) newValue);
+						editor.commit();
+						return true;
+					}
+				});
 		
-		final float scale = this.getResources().getDisplayMetrics().density;
-		mFacebookBtn.setPadding(mFacebookBtn.getPaddingLeft() + (int)(15.0f * scale + 1.5f),
-				mFacebookBtn.getPaddingTop(),
-				mFacebookBtn.getPaddingRight(),
-				mFacebookBtn.getPaddingBottom());
+		ListPreference caldPref = (ListPreference) findPreference(CALD_PREF);
+		caldPref.setSummary(caldPref.getValue());
+
+		caldPref
+				.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+					public boolean onPreferenceChange(Preference preference,
+							Object newValue) {
+						ListPreference listPreference = (ListPreference) preference;
+						listPreference.setSummary((String) newValue);
+
+						SharedPreferences mySharedPreferences = getSharedPreferences(
+								"cald_pref", Activity.MODE_PRIVATE);
+						SharedPreferences.Editor editor = mySharedPreferences
+								.edit();
+						editor.putString(CALD_PREF, (String) newValue);
+						editor.commit();
+						return true;
+					}
+				});
 	}
-
-	private void onFacebookClick() {
-		if (mFacebook.isSessionValid()) {
-			final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-			builder.setMessage("Delete current Facebook connection?")
-					.setCancelable(false)
-					.setPositiveButton("Yes",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									fbLogout();
-								}
-							})
-					.setNegativeButton("No",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									dialog.cancel();
-
-									mFacebookBtn.setChecked(true);
-								}
-							});
-
-			final AlertDialog alert = builder.create();
-
-			alert.show();
-		} else {
-			mFacebookBtn.setChecked(false);
-
-			mFacebook.authorize(this, PERMISSIONS, -1,
-					new FbLoginDialogListener());
-		}
-	}
-
-	private final class FbLoginDialogListener implements DialogListener {
-		public void onComplete(Bundle values) {
-			SessionStore.save(mFacebook, SettingActivity.this);
-
-			mFacebookBtn.setText("Facebook (No Name)");
-			mFacebookBtn.setChecked(true);
-			mFacebookBtn.setTextColor(Color.BLACK);
-
-			getFbName();
-		}
-
-		public void onFacebookError(FacebookError error) {
-			Toast.makeText(SettingActivity.this, "Facebook connection failed",
-					Toast.LENGTH_SHORT).show();
-
-			mFacebookBtn.setChecked(false);
-		}
-
-		public void onError(DialogError error) {
-			Toast.makeText(SettingActivity.this, "Facebook connection failed",
-					Toast.LENGTH_SHORT).show();
-
-			mFacebookBtn.setChecked(false);
-		}
-
-		public void onCancel() {
-			mFacebookBtn.setChecked(false);
-		}
-	}
-
-	private void getFbName() {
-		mProgress.setMessage("Finalizing ...");
-		mProgress.show();
-
-		new Thread() {
-			@Override
-			public void run() {
-				String name = "";
-				int what = 1;
-
-				try {
-					String me = mFacebook.request("me");
-
-					JSONObject jsonObj = (JSONObject) new JSONTokener(me)
-							.nextValue();
-					name = jsonObj.getString("name");
-					what = 0;
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-
-				mFbHandler.sendMessage(mFbHandler.obtainMessage(what, name));
-			}
-		}.start();
-	}
-
-	private void fbLogout() {
-		mProgress.setMessage("Disconnecting from Facebook");
-		mProgress.show();
-
-		new Thread() {
-			@Override
-			public void run() {
-				SessionStore.clear(SettingActivity.this);
-
-				int what = 1;
-
-				try {
-					mFacebook.logout(SettingActivity.this);
-
-					what = 0;
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-
-				mHandler.sendMessage(mHandler.obtainMessage(what));
-			}
-		}.start();
-	}
-
-	private Handler mFbHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			mProgress.dismiss();
-
-			if (msg.what == 0) {
-				String username = (String) msg.obj;
-				username = (username.equals("")) ? "No Name" : username;
-
-				SessionStore.saveName(username, SettingActivity.this);
-
-				mFacebookBtn.setText("Facebook (" + username + ")");
-
-				Toast.makeText(SettingActivity.this,
-						"Connected to Facebook as " + username,
-						Toast.LENGTH_SHORT).show();
-			} else {
-				Toast.makeText(SettingActivity.this, "Connected to Facebook",
-						Toast.LENGTH_SHORT).show();
-			}
-		}
-	};
-
-	private Handler mHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			mProgress.dismiss();
-
-			if (msg.what == 1) {
-				Toast.makeText(SettingActivity.this, "Facebook logout failed",
-						Toast.LENGTH_SHORT).show();
-			} else {
-				mFacebookBtn.setChecked(false);
-				mFacebookBtn.setText("Facebook (Not connected)");
-				mFacebookBtn.setTextColor(Color.GRAY);
-
-				Toast.makeText(SettingActivity.this,
-						"Disconnected from Facebook", Toast.LENGTH_SHORT)
-						.show();
-			}
-		}
-	};
-
 }
