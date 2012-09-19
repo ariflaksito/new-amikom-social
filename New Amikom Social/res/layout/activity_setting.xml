@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<PreferenceCategory android:title="Calendar Setting">
+		<ListPreference android:key="id_calendar" android:name="id_calendar"
+			android:title="Select Calendar" android:summary="Set a calendar to synchronize"
+			android:entries="@array/id_cald" android:entryValues="@array/val_cald" />
+
+		<Preference android:key="id_sync" android:title="Synchronize Calendar"
+			android:summary="Synchronize Amikom Calendar and Device Calendar" />
+
+	</PreferenceCategory>
+
+</PreferenceScreen>
