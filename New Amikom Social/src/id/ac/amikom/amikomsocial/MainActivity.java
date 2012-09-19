@@ -1,7 +1,5 @@
 package id.ac.amikom.amikomsocial;
 
-import java.util.Calendar;
-
 import id.ac.amikom.amikomsocial.libs.DbHelper;
 import id.ac.amikom.amikomsocial.libs.InternetHelper;
 
@@ -155,7 +153,7 @@ public class MainActivity extends TabActivity {
 						startActivity(new Intent(MainActivity.this,
 								LoginActivity.class));
 						return true;
-					case R.id.id_sync:
+					case R.id.id_setting:
 						viewDeviceCald();
 						return true;
 					case R.id.id_logout:
@@ -191,7 +189,7 @@ public class MainActivity extends TabActivity {
 		case R.id.id_profile:
 			startActivity(new Intent(MainActivity.this, LoginActivity.class));
 			return true;
-		case R.id.id_sync:
+		case R.id.id_setting:
 			viewDeviceCald();
 			return true;
 		case R.id.id_logout:
@@ -281,10 +279,7 @@ public class MainActivity extends TabActivity {
 
 		
 		Uri uri = Uri.parse(calUriString);
-		Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-		
-		Log.i("==uri-calendar==",""+cursor.getCount());
-						
+		Cursor cursor = getContentResolver().query(uri, null, null, null, null);										
 
 		if (cursor != null && cursor.getCount() > 0) {
 			cursor.moveToFirst();
@@ -301,13 +296,10 @@ public class MainActivity extends TabActivity {
 				else
 					valueList[i] = cursor.getString(cursor.getColumnIndex("displayName"));
 				
-				Log.i("==list==",""+list[i]);
-				Log.i("==value==",""+valueList[i]);
 				i++;
-			} while (cursor.moveToNext());
-				
-			
-		}
+			} while (cursor.moveToNext());							
+		}						
+		
 	}
 	
 	@Override
