@@ -43,6 +43,9 @@ public class ShareActivity extends Activity {
 		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar_post);
 		actionBar.setTitle(R.string.app_setting_title);
 		
+		actionBar.setHomeAction(new IntentAction(this, PostActivity
+				.createIntent(this), R.drawable.ic_action_back));
+		
 		try {
 			Bundle extras = getIntent().getExtras();
 			String msg = extras.getString("msg");
@@ -50,16 +53,12 @@ public class ShareActivity extends Activity {
 			if(!msg.equals("null")){
 				actionBar.setHomeAction(new IntentAction(this, SettingActivity
 						.createIntent(this), R.drawable.ic_action_back));
-			}else{
-				actionBar.setHomeAction(new IntentAction(this, PostActivity
-						.createIntent(this), R.drawable.ic_action_back));
-			}
+			}				
+			
 				
 		} catch (NullPointerException e) {
 			e.printStackTrace();
-		}		
-
-		
+		}				
 
 		mFacebookBtn = (CheckBox) findViewById(R.id.cb_facebook);
 
