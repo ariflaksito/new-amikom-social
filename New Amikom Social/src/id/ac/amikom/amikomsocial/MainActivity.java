@@ -54,13 +54,13 @@ public class MainActivity extends TabActivity {
 		actionBar.setHomeAction(new IntentAction(this, MainActivity
 				.createIntent(this), R.drawable.logo_actionbar));
 
-		if (db.isLogin()){
+		if (db.isLogin()) {
 			actionBar.addAction(new IntentAction(this, new Intent(this,
 					PostActivity.class), R.drawable.ic_action_edit));
-		}else {
+		} else {
 			actionBar.addAction(new IntentAction(this, new Intent(this,
 					LoginActivity.class), R.drawable.ic_action_edit));
-		}	
+		}
 
 		if (Build.VERSION.SDK_INT >= 11)
 			actionBar.addAction(new MenuAction());
@@ -212,8 +212,7 @@ public class MainActivity extends TabActivity {
 
 	public class LogoutTask extends AsyncTask<String, Void, Boolean> {
 
-		private ProgressDialog dialog = new ProgressDialog(
-				MainActivity.this);
+		private ProgressDialog dialog = new ProgressDialog(MainActivity.this);
 
 		protected void onPreExecute() {
 			dialog.setMessage("Logout..");
@@ -226,7 +225,7 @@ public class MainActivity extends TabActivity {
 				Toast.makeText(MainActivity.this,
 						"Logout Success, User data deleted", Toast.LENGTH_LONG)
 						.show();
-				
+
 				startActivity(new Intent(MainActivity.this, MainActivity.class));
 				finish();
 			}
@@ -262,20 +261,20 @@ public class MainActivity extends TabActivity {
 
 			InternetHelper inet = new InternetHelper();
 			inet.deleteData();
-			
+
 			db.deleteLogin();
 
 			return true;
 		}
 
 	}
-	
+
 	@Override
 	protected void onRestart() {
 		super.onRestart();
-		startActivity(getIntent()); 
+		startActivity(getIntent());
 		finish();
-		
+
 	}
 
 }

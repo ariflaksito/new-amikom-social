@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content" android:layout_height="wrap_content" >
 
-	<PreferenceCategory android:title="Calendar Setting">
-		<ListPreference android:key="id_calendar" android:name="id_calendar"
-			android:title="Select Calendar" android:summary="Set a calendar to synchronize"
-			android:entries="@array/id_cald" android:entryValues="@array/val_cald" />
+    <com.markupartist.android.widget.ActionBar
+        android:id="@+id/actionbar_post"
+        style="@style/ActionBar" />
 
-		<Preference android:key="id_sync" android:title="Synchronize Calendar"
-			android:summary="Synchronize Amikom Calendar and Device Calendar" />
+    <PreferenceCategory android:title="Calendar Setting" >
 
-	</PreferenceCategory>
+        <ListPreference
+            android:name="id_calendar"
+            android:entries="@array/id_cald"
+            android:entryValues="@array/val_cald"
+            android:key="id_calendar"
+            android:summary="Set a calendar to synchronize"
+            android:title="Select Calendar" />
+
+        <Preference
+            android:key="id_sync"
+            android:summary="Synchronize Amikom Calendar and Device Calendar"
+            android:title="Synchronize Calendar" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

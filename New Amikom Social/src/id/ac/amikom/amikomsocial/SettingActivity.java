@@ -41,20 +41,21 @@ public class SettingActivity extends PreferenceActivity {
 		protected Boolean doInBackground(final String... params) {
 			SharedPreferences prefs = PreferenceManager
 					.getDefaultSharedPreferences(getBaseContext());
-		
+
 			Uri eventUri, alarmUri = null;
-			
-			
-			if (Build.VERSION.SDK_INT >= 8){
+
+			if (Build.VERSION.SDK_INT >= 8) {
 				eventUri = Uri.parse("content://com.android.calendar/events");
-				alarmUri = Uri.parse("content://com.android.calendar/reminders");
-			}else{
+				alarmUri = Uri
+						.parse("content://com.android.calendar/reminders");
+			} else {
 				eventUri = Uri.parse("content://calendar/events");
 				alarmUri = Uri.parse("content://calendar/reminders");
-			}	
-				
-			Cursor c = getContentResolver().query(eventUri, null, null, null, null);
-			
+			}
+
+			Cursor c = getContentResolver().query(eventUri, null, null, null,
+					null);
+
 			if (c.moveToFirst()) {
 				while (c.moveToNext()) {
 					String location = c.getString(c
@@ -72,68 +73,68 @@ public class SettingActivity extends PreferenceActivity {
 			}
 
 			List<Cald> cald = db.getCalendar();
-			//startManagingCursor(cr);
-			
-			ContentResolver cv = getContentResolver();			
-			
+
+			ContentResolver cv = getContentResolver();
+
 			for (Cald cn : cald) {
-					
-					long dtstart = 0;
-					long dtend = 0;
-					Calendar cal_start = Calendar.getInstance();
-					String[] istart = cn.get_start().split("\\s+");
-					
-					String[] start = istart[0].split("\\-+");
-					int sYear = Integer.parseInt(start[0]);
-					int sMonth = Integer.parseInt(start[1]) - 1;
-					int sDay = Integer.parseInt(start[2]);
-										
-					String[] sh = istart[1].split("\\.+");
-					int stHH = Integer.parseInt(sh[0]);
-					int stII = Integer.parseInt(sh[1]);
 
-					cal_start.set(sYear, sMonth, sDay, stHH, stII, 0);
-					dtstart = cal_start.getTimeInMillis();										
-					
-					Calendar cal_end = Calendar.getInstance();
-					String[] iend = cn.get_end().split("\\s+");										
-										
-					String[] eh = iend[1].split("\\.+");
-					int enHH = Integer.parseInt(eh[0]);
-					int enII = Integer.parseInt(eh[1]);										
-					
-					cal_end.set(sYear, sMonth, sDay, enHH, enII, 0);						
-					dtend = cal_end.getTimeInMillis();					
+				long dtstart = 0;
+				long dtend = 0;
+				Calendar cal_start = Calendar.getInstance();
+				String[] istart = cn.get_start().split("\\s+");
 
-					ContentValues event = new ContentValues();
-					event.put("calendar_id", prefs.getString("id_calendar", "0"));					
-					event.put("description", cn.get_detail().toUpperCase());
-					event.put("eventLocation", cn.get_location());																	   
-					event.put("dtstart", dtstart);										
-					event.put("hasAlarm", 1);							
-					
-					if(cn.get_status()==1){
-						String[] title = cn.get_title().split("\\-+");
-						
-						event.put("title", title[1].trim());
-						event.put("duration", "P" + ((dtend-dtstart)/DateUtils.SECOND_IN_MILLIS) + "S");
-						event.put("rrule", "FREQ=WEEKLY;COUNT=6");	
-					}else{
-						event.put("title", cn.get_title());
-						event.put("dtend", dtend);	
-					}
-					
-					Uri ev = cv.insert(eventUri, event);
-										
-				    ContentValues values = new ContentValues();
-				    values.put( "event_id", Long.parseLong(ev.getLastPathSegment()));
-				    values.put( "method", 1 );
-				    values.put( "minutes", 30 );
-				    
-				    cv.insert( alarmUri, values );
+				String[] start = istart[0].split("\\-+");
+				int sYear = Integer.parseInt(start[0]);
+				int sMonth = Integer.parseInt(start[1]) - 1;
+				int sDay = Integer.parseInt(start[2]);
 
-				
-			}																
+				String[] sh = istart[1].split("\\.+");
+				int stHH = Integer.parseInt(sh[0]);
+				int stII = Integer.parseInt(sh[1]);
+
+				cal_start.set(sYear, sMonth, sDay, stHH, stII, 0);
+				dtstart = cal_start.getTimeInMillis();
+
+				Calendar cal_end = Calendar.getInstance();
+				String[] iend = cn.get_end().split("\\s+");
+
+				String[] eh = iend[1].split("\\.+");
+				int enHH = Integer.parseInt(eh[0]);
+				int enII = Integer.parseInt(eh[1]);
+
+				cal_end.set(sYear, sMonth, sDay, enHH, enII, 0);
+				dtend = cal_end.getTimeInMillis();
+
+				ContentValues event = new ContentValues();
+				event.put("calendar_id", prefs.getString("id_calendar", "0"));
+				event.put("description", cn.get_detail().toUpperCase());
+				event.put("eventLocation", cn.get_location());
+				event.put("dtstart", dtstart);
+				event.put("hasAlarm", 1);
+
+				if (cn.get_status() == 1) {
+					String[] title = cn.get_title().split("\\-+");
+
+					event.put("title", title[1].trim());
+					event.put("duration", "P"
+							+ ((dtend - dtstart) / DateUtils.SECOND_IN_MILLIS)
+							+ "S");
+					event.put("rrule", "FREQ=WEEKLY;COUNT=6");
+				} else {
+					event.put("title", cn.get_title());
+					event.put("dtend", dtend);
+				}
+
+				Uri ev = cv.insert(eventUri, event);
+
+				ContentValues values = new ContentValues();
+				values.put("event_id", Long.parseLong(ev.getLastPathSegment()));
+				values.put("method", 1);
+				values.put("minutes", 30);
+
+				cv.insert(alarmUri, values);
+
+			}
 
 			return true;
 
@@ -156,9 +157,8 @@ public class SettingActivity extends PreferenceActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_setting);
+		addPreferencesFromResource(R.layout.activity_setting);
 
 		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar_post);
 		actionBar.setTitle(R.string.app_setting_title);
@@ -170,37 +170,35 @@ public class SettingActivity extends PreferenceActivity {
 			calUriString = "content://com.android.calendar/calendars";
 		} else {
 			calUriString = "content://calendar/calendars";
-		}				
+		}
 
-		
 		Uri uri = Uri.parse(calUriString);
-		Cursor cursor = getContentResolver().query(uri, null, null, null, null);										
+		Cursor cursor = getContentResolver().query(uri, null, null, null, null);
 
 		if (cursor != null && cursor.getCount() > 0) {
 			cursor.moveToFirst();
-			
+
 			CharSequence[] list = new String[cursor.getCount()];
 			CharSequence[] valueList = new String[cursor.getCount()];
-			
+
 			int i = 0;
 			do {
 				list[i] = cursor.getString(0);
-				
+
 				if (Build.VERSION.SDK_INT >= 14) {
 					valueList[i] = cursor.getString(2);
 				} else {
-					valueList[i] = cursor.getString(cursor.getColumnIndex("displayName"));
-				}	
-				
+					valueList[i] = cursor.getString(cursor
+							.getColumnIndex("displayName"));
+				}
+
 				i++;
 			} while (cursor.moveToNext());
-			
+
 			listPreferenceCategory.setEntries(valueList);
 			listPreferenceCategory.setEntryValues(list);
-			
+
 		}
-		
-		
 
 		listPreferenceCategory
 				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -215,9 +213,10 @@ public class SettingActivity extends PreferenceActivity {
 
 			public boolean onPreferenceClick(Preference preference) {
 
-				SharedPreferences pref = getSharedPreferences(
-						"cald_pref", Activity.MODE_PRIVATE);
-				int refresh = Integer.parseInt(pref.getString("id_calendar", "0"));							
+				SharedPreferences pref = getSharedPreferences("cald_pref",
+						Activity.MODE_PRIVATE);
+				int refresh = Integer.parseInt(pref.getString("id_calendar",
+						"0"));
 
 				if (refresh > 0) {
 					if (db.isCalendar())
@@ -225,13 +224,13 @@ public class SettingActivity extends PreferenceActivity {
 					else {
 						Toast.makeText(
 								getBaseContext(),
-								"Error synchronizing calendar, No data calendar. Go to Calendar menu and Refresh data",
+								"Error synchronizing calendar, No data calendar. Go to Calendar list and Refresh data",
 								Toast.LENGTH_LONG).show();
 					}
 				} else {
 					Toast.makeText(
 							getBaseContext(),
-							"Error synchronizing calendar, select device calendar first",
+							"Error synchronizing calendar, select calendar device first",
 							Toast.LENGTH_LONG).show();
 				}
 
@@ -244,44 +243,23 @@ public class SettingActivity extends PreferenceActivity {
 	}
 
 	private void setUpdatePreferences() {
-		ListPreference updatePref = (ListPreference) findPreference(UPDATE_PREF);
-		updatePref.setSummary(updatePref.getValue());
 
-		updatePref
-				.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-					public boolean onPreferenceChange(Preference preference,
-							Object newValue) {
-						ListPreference listPreference = (ListPreference) preference;
-						listPreference.setSummary((String) newValue);
-
-						SharedPreferences mySharedPreferences = getSharedPreferences(
-								"auto_pref", Activity.MODE_PRIVATE);
-						SharedPreferences.Editor editor = mySharedPreferences
-								.edit();
-						editor.putString(UPDATE_PREF, (String) newValue);
-						editor.commit();
-						return true;
-					}
-				});
-		
 		ListPreference caldPref = (ListPreference) findPreference(CALD_PREF);
 		caldPref.setSummary(caldPref.getValue());
 
-		caldPref
-				.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-					public boolean onPreferenceChange(Preference preference,
-							Object newValue) {
-						ListPreference listPreference = (ListPreference) preference;
-						listPreference.setSummary((String) newValue);
+		caldPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+			public boolean onPreferenceChange(Preference preference,
+					Object newValue) {
+				ListPreference listPreference = (ListPreference) preference;
+				listPreference.setSummary((String) newValue);
 
-						SharedPreferences mySharedPreferences = getSharedPreferences(
-								"cald_pref", Activity.MODE_PRIVATE);
-						SharedPreferences.Editor editor = mySharedPreferences
-								.edit();
-						editor.putString(CALD_PREF, (String) newValue);
-						editor.commit();
-						return true;
-					}
-				});
+				SharedPreferences mySharedPreferences = getSharedPreferences(
+						"cald_pref", Activity.MODE_PRIVATE);
+				SharedPreferences.Editor editor = mySharedPreferences.edit();
+				editor.putString(CALD_PREF, (String) newValue);
+				editor.commit();
+				return true;
+			}
+		});
 	}
 }
