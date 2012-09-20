@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content" android:layout_height="wrap_content" >
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
 
-    <!--  
-    <com.markupartist.android.widget.ActionBar
-        android:id="@+id/actionbar_post"
-        style="@style/ActionBar" />
-    -->    
-    
     <PreferenceCategory android:title="Social Network Share" >
         <Preference
             android:key="id_share"
             android:summary="Share Shout to Facebook and Twitter"
             android:title="Share Shout" />
-    </PreferenceCategory>    
+    </PreferenceCategory>
 
     <PreferenceCategory android:title="Calendar Setting" >
 
