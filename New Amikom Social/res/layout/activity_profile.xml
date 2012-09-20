@@ -7,7 +7,7 @@
     <com.markupartist.android.widget.ActionBar
         android:id="@+id/actionbar_post"
         style="@style/ActionBar" />
-
+
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -46,45 +46,53 @@
                 android:text="@string/profile_img_tap"
                 android:textSize="13dp" />
 
-            <TextView
-                android:id="@+id/viewId"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dip"
-                android:paddingRight="10dip"
-                android:textSize="14dp" />
+                android:layout_margin="10dip"
+                android:background="@drawable/customborder"
+                android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/viewName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dip"
-                android:paddingRight="10dip"
-                android:textSize="14dp" />
+                <TextView
+                    android:id="@+id/viewId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="3dip"
+                    android:paddingRight="3dip"
+                    android:textSize="14dp" />
 
-            <TextView
-                android:id="@+id/viewSts"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dip"
-                android:paddingRight="10dip"
-                android:textSize="14dp" />
+                <TextView
+                    android:id="@+id/viewName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="3dip"
+                    android:paddingRight="3dip"
+                    android:textSize="14dp" />
 
-            <TextView
-                android:id="@+id/viewLog"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dip"
-                android:paddingRight="10dip"
-                android:textSize="14dp" />
+                <TextView
+                    android:id="@+id/viewSts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="3dip"
+                    android:paddingRight="3dip"
+                    android:textSize="14dp" />
 
-            <TextView
-                android:id="@+id/viewLoc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dip"
-                android:paddingRight="10dip"
-                android:textSize="14dp" />
+                <TextView
+                    android:id="@+id/viewLog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="3dip"
+                    android:paddingRight="3dip"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/viewLoc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="3dip"
+                    android:paddingRight="3dip"
+                    android:textSize="14dp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -92,7 +100,7 @@
                 android:orientation="horizontal" >
 
                 <Button
-                    android:id="@+id/btnEdit"
+                    android:id="@+id/btnEdit"                    
                     android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dip"
