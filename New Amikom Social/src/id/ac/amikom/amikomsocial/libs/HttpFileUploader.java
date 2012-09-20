@@ -11,7 +11,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.util.Log;
 
 public class HttpFileUploader implements Runnable {

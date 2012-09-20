@@ -2,11 +2,13 @@ package id.ac.amikom.amikomsocial;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import id.ac.amikom.amikomsocial.libs.DbHelper;
+import id.ac.amikom.amikomsocial.libs.HttpFileUploader;
 import id.ac.amikom.amikomsocial.libs.Login;
 import id.ac.amikom.amikomsocial.libs.ServiceHelper;
 import id.ac.amikom.amikomsocial.libs.Shout;
@@ -124,6 +126,57 @@ public class LoginActivity extends Activity {
 		}
 	}
 
+	public class UploadTask extends AsyncTask<String, Void, Boolean> {
+
+		private ProgressDialog dialog = new ProgressDialog(LoginActivity.this);
+		String out;
+
+		protected void onPreExecute() {
+			dialog.setMessage("Uploading..");
+			dialog.show();
+		}
+
+		protected void onPostExecute(Boolean result) {
+			this.dialog.dismiss();
+
+			String imgPath = "";
+			boolean exists = (new File("/mnt/sdcard/amikom/usr@tmp"))
+					.exists();
+			if (exists) {
+				imgPath = "/mnt/sdcard/amikom/usr@tmp";
+			} else {
+				imgPath = "/mnt/sdcard/amikom/usr@default";
+			}
+
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inSampleSize = 2;
+			Bitmap bmp = BitmapFactory.decodeFile(imgPath, options);
+			viewImg.setImageBitmap(bmp);
+
+			Toast.makeText(LoginActivity.this, out, Toast.LENGTH_LONG)
+					.show();
+
+		}
+
+		@Override
+		protected Boolean doInBackground(String... params) {
+
+			try {
+				HttpFileUploader htfu = new HttpFileUploader(
+						LoginActivity.this,
+						"http://amikomsocial.com/service/srvimg",
+						"noparamshere", params[0]);
+				out = htfu.doStart();
+
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+
+			return null;
+		}
+
+	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -314,7 +367,7 @@ public class LoginActivity extends Activity {
 					resizedBitmap
 							.compress(Bitmap.CompressFormat.JPEG, 100, out);
 
-					//new UploadTask().execute();
+					new UploadTask().execute(pathOfOutputImage);
 
 				} catch (Exception e) {
 					Log.e("Image", e.getMessage(), e);
