@@ -305,5 +305,27 @@ public class ServiceHelper {
 		else
 			return false;
 	}
+	
+	public String[] updateUsername(String uid, String usr) {
 
+		String[] out = new String[2];
+		try {
+
+			String service = (String) clients.call("edituser", uid, usr);
+			JSONArray jsonArray = new JSONArray(service);
+			JSONObject json = jsonArray.getJSONObject(0);
+			
+			out[0] = json.getString("sts");
+			out[1] = json.getString("msg");
+
+		} catch (XMLRPCException e) {
+			out[0] = "0";
+			out[1] = "No Internet Connection";
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return out;
+	}
 }

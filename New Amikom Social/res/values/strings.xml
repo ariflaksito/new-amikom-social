@@ -28,6 +28,8 @@
     <string name="fb_title">Facebook</string>
     <string name="fb_unconnect">Facebook (not connected)</string>
     
+    <string name="dialog_usr_txt">Use alphanumeric, underscore, lowercase and character count(5&#8211;15)</string>
+    
 	<string name="actionbar_activity_not_found">Failed to open intent</string>
 	
 </resources>

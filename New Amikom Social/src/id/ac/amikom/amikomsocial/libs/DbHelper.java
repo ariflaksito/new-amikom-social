@@ -138,6 +138,14 @@ public class DbHelper extends SQLiteOpenHelper {
 
 		return shoutList;
 	}
+	
+	public void updateAlias(String usr, String alias){
+		SQLiteDatabase db = this.getWritableDatabase();
+		String str = "Update shout set alias='"+ alias +"' Where nid='"+ usr +"'";
+
+		db.execSQL(str);
+		db.close();
+	}
 
 	public int getLastShoutId() {
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -222,8 +230,12 @@ public class DbHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
+		values.put("name", login.get_name());
+		values.put("usr", login.get_usr());
 		values.put("alias", login.get_alias());
-		values.put("calendar", login.get_calendar());
+		values.put("logdate", login.get_logdate().toString());
+		values.put("is_mhs", login.get_is_mhs());
+		values.put("calendar", login.get_calendar());				
 			
 		db.update("login", values, "_id = ?",
 				new String[] { String.valueOf(login.get_id()) });
