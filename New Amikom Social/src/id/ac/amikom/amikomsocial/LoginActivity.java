@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -28,10 +29,11 @@ import android.widget.Toast;
 
 public class LoginActivity extends Activity {
 
+	private static final int RESULT_LOAD_IMAGE = 1;
 	private Button btnLogin, btnProfile;
 	private EditText txtId, txtPwd;
 	private String id, pwd;
-	private TextView viewId, viewName, viewSts, viewLog;
+	private TextView viewId, viewUsr, viewName, viewSts, viewLog;
 	private ImageView viewImg;
 
 	public class LoginTask extends AsyncTask<String, Void, Boolean> {
@@ -69,7 +71,7 @@ public class LoginActivity extends Activity {
 		}
 
 	}
-	
+
 	public class EditUserTask extends AsyncTask<String, Void, Boolean> {
 
 		ProgressDialog dialog = new ProgressDialog(LoginActivity.this);
@@ -80,19 +82,19 @@ public class LoginActivity extends Activity {
 		protected Boolean doInBackground(String... params) {
 			DbHelper db = new DbHelper(LoginActivity.this);
 			ServiceHelper srv = new ServiceHelper();
-			
+
 			Login login = db.getLogin();
-			text = srv.updateUsername(login.get_usr(), params[0]);									
-			
-			if(text[0].equals("1")){
+			text = srv.updateUsername(login.get_usr(), params[0]);
+
+			if (text[0].equals("1")) {
 				login.set_alias(params[0]);
 				db.updateLogin(login);
-				
+
 				Shout shout = new Shout();
 				shout.set_alias(params[0]);
 				db.updateAlias(login.get_usr(), params[0]);
-			}	
-			
+			}
+
 			return true;
 		}
 
@@ -103,7 +105,7 @@ public class LoginActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-									
+
 			Toast.makeText(LoginActivity.this, text[1], Toast.LENGTH_LONG)
 					.show();
 
@@ -111,7 +113,7 @@ public class LoginActivity extends Activity {
 
 		}
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -119,9 +121,10 @@ public class LoginActivity extends Activity {
 		DbHelper db = new DbHelper(this);
 		if (db.isLogin()) {
 			setContentView(R.layout.activity_profile);
-			
+
 			btnProfile = (Button) findViewById(R.id.btnEdit);
 			viewId = (TextView) findViewById(R.id.viewId);
+			viewUsr = (TextView) findViewById(R.id.viewUsr);
 			viewName = (TextView) findViewById(R.id.viewName);
 			viewSts = (TextView) findViewById(R.id.viewSts);
 			viewLog = (TextView) findViewById(R.id.viewLog);
@@ -138,6 +141,7 @@ public class LoginActivity extends Activity {
 				identity = "Amikom Alumni";
 
 			viewId.setText("Id User. " + login.get_usr());
+			viewUsr.setText("Username. " + login.get_alias());
 			viewName.setText("Name User. " + login.get_name());
 			viewSts.setText("Status User. " + identity);
 			viewLog.setText("Login Date. " + login.get_logdate());
@@ -150,6 +154,18 @@ public class LoginActivity extends Activity {
 				Bitmap bmp = BitmapFactory.decodeFile(imgPath, options);
 				viewImg.setImageBitmap(bmp);
 			}
+
+			viewImg.setOnClickListener(new View.OnClickListener() {
+
+				public void onClick(View arg0) {
+					Intent i = new Intent(
+							Intent.ACTION_PICK,
+							android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+					startActivityForResult(i, RESULT_LOAD_IMAGE);
+
+				}
+			});
 
 		} else {
 			setContentView(R.layout.activity_login);
@@ -175,7 +191,7 @@ public class LoginActivity extends Activity {
 
 		actionBar.setHomeAction(new IntentAction(this, MainActivity
 				.createIntent(this), R.drawable.ic_action_back));
-		
+
 		btnProfile.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
@@ -186,8 +202,8 @@ public class LoginActivity extends Activity {
 
 				LayoutInflater factory = LayoutInflater
 						.from(LoginActivity.this);
-				View textEntryView = factory.inflate(
-						R.layout.dialog_username, null);
+				View textEntryView = factory.inflate(R.layout.dialog_username,
+						null);
 				final EditText postText = (EditText) textEntryView
 						.findViewById(R.id.user_txt);
 
@@ -196,8 +212,9 @@ public class LoginActivity extends Activity {
 				alert.setPositiveButton("Save",
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog,
-									int whichButton) {								
-								new EditUserTask().execute(postText.getText().toString());
+									int whichButton) {
+								new EditUserTask().execute(postText.getText()
+										.toString());
 
 							}
 						});
@@ -206,9 +223,13 @@ public class LoginActivity extends Activity {
 
 			}
 		});
-		
+
 	}
-	
-	
-	
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+			
+	}
+
 }

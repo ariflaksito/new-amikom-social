@@ -32,7 +32,7 @@
                 android:id="@+id/viewImg"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:layout_margin="10dp"
+                android:layout_margin="10dp"                
                 android:contentDescription="@string/list_image"
                 android:scaleType="fitCenter"
                 android:src="@drawable/none" />
@@ -40,7 +40,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingBottom="20dip"
+                android:paddingBottom="8dip"
                 android:paddingLeft="10dip"
                 android:paddingRight="10dip"
                 android:text="@string/profile_img_tap"
@@ -57,40 +57,48 @@
                     android:id="@+id/viewId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="3dip"
-                    android:paddingRight="3dip"
+                    android:paddingLeft="5dip"
+                    android:paddingRight="5dip"
+                    android:textSize="14dp" />
+                
+                <TextView
+                    android:id="@+id/viewUsr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dip"
+                    android:paddingRight="5dip"
                     android:textSize="14dp" />
 
                 <TextView
                     android:id="@+id/viewName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="3dip"
-                    android:paddingRight="3dip"
+                    android:paddingLeft="5dip"
+                    android:paddingRight="5dip"
                     android:textSize="14dp" />
 
                 <TextView
                     android:id="@+id/viewSts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="3dip"
-                    android:paddingRight="3dip"
+                    android:paddingLeft="5dip"
+                    android:paddingRight="5dip"
                     android:textSize="14dp" />
 
                 <TextView
                     android:id="@+id/viewLog"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="3dip"
-                    android:paddingRight="3dip"
+                    android:paddingLeft="5dip"
+                    android:paddingRight="5dip"
                     android:textSize="14dp" />
 
                 <TextView
                     android:id="@+id/viewLoc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="3dip"
-                    android:paddingRight="3dip"
+                    android:paddingLeft="5dip"
+                    android:paddingRight="5dip"
                     android:textSize="14dp" />
             </LinearLayout>
 
