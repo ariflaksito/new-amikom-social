@@ -140,8 +140,7 @@ public class LoginActivity extends Activity {
 			this.dialog.dismiss();
 
 			String imgPath = "";
-			boolean exists = (new File("/mnt/sdcard/amikom/usr@tmp"))
-					.exists();
+			boolean exists = (new File("/mnt/sdcard/amikom/usr@tmp")).exists();
 			if (exists) {
 				imgPath = "/mnt/sdcard/amikom/usr@tmp";
 			} else {
@@ -153,8 +152,7 @@ public class LoginActivity extends Activity {
 			Bitmap bmp = BitmapFactory.decodeFile(imgPath, options);
 			viewImg.setImageBitmap(bmp);
 
-			Toast.makeText(LoginActivity.this, out, Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(LoginActivity.this, out, Toast.LENGTH_LONG).show();
 
 		}
 
@@ -176,7 +174,7 @@ public class LoginActivity extends Activity {
 		}
 
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -230,6 +228,38 @@ public class LoginActivity extends Activity {
 				}
 			});
 
+			btnProfile.setOnClickListener(new View.OnClickListener() {
+
+				public void onClick(View v) {
+
+					AlertDialog.Builder alert = new AlertDialog.Builder(
+							LoginActivity.this);
+					alert.setTitle("Edit Username");
+
+					LayoutInflater factory = LayoutInflater
+							.from(LoginActivity.this);
+					View textEntryView = factory.inflate(
+							R.layout.dialog_username, null);
+					final EditText postText = (EditText) textEntryView
+							.findViewById(R.id.user_txt);
+
+					alert.setView(textEntryView);
+
+					alert.setPositiveButton("Save",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+									new EditUserTask().execute(postText
+											.getText().toString());
+
+								}
+							});
+
+					alert.show();
+
+				}
+			});
+
 		} else {
 			setContentView(R.layout.activity_login);
 			btnLogin = (Button) findViewById(R.id.btnLog);
@@ -254,38 +284,6 @@ public class LoginActivity extends Activity {
 
 		actionBar.setHomeAction(new IntentAction(this, MainActivity
 				.createIntent(this), R.drawable.ic_action_back));
-
-		btnProfile.setOnClickListener(new View.OnClickListener() {
-
-			public void onClick(View v) {
-
-				AlertDialog.Builder alert = new AlertDialog.Builder(
-						LoginActivity.this);
-				alert.setTitle("Edit Username");
-
-				LayoutInflater factory = LayoutInflater
-						.from(LoginActivity.this);
-				View textEntryView = factory.inflate(R.layout.dialog_username,
-						null);
-				final EditText postText = (EditText) textEntryView
-						.findViewById(R.id.user_txt);
-
-				alert.setView(textEntryView);
-
-				alert.setPositiveButton("Save",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								new EditUserTask().execute(postText.getText()
-										.toString());
-
-							}
-						});
-
-				alert.show();
-
-			}
-		});
 
 	}
 
