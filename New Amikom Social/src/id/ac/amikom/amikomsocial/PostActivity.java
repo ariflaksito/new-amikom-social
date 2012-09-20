@@ -265,7 +265,7 @@ public class PostActivity extends Activity implements LocationListener {
 		super.onResume();
 		location.requestLocationUpdates(LocationManager.GPS_PROVIDER,
 				1000 * 60 * 30, 1000, this);
-		location.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-				1000 * 60 * 30, 1000, this);
+		//location.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+		//		1000 * 60 * 30, 1000, this);
 	}
 }
