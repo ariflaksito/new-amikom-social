@@ -157,12 +157,9 @@ public class SettingActivity extends PreferenceActivity {
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {		
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.layout.activity_setting);
-
-		//ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar_post);
-		//actionBar.setTitle(R.string.app_setting_title);
 
 		ListPreference listPreferenceCategory = (ListPreference) findPreference("id_calendar");
 
@@ -208,10 +205,10 @@ public class SettingActivity extends PreferenceActivity {
 						return true;
 					}
 				});
-		
+
 		Preference share = findPreference("id_share");
 		share.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			
+
 			public boolean onPreferenceClick(Preference pref) {
 				Intent i = new Intent(SettingActivity.this, ShareActivity.class);
 				i.putExtra("msg", "setting");
@@ -219,7 +216,6 @@ public class SettingActivity extends PreferenceActivity {
 				return false;
 			}
 		});
-		
 
 		Preference sync = findPreference("id_sync");
 		sync.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -275,7 +271,7 @@ public class SettingActivity extends PreferenceActivity {
 			}
 		});
 	}
-	
+
 	public static Intent createIntent(Context context) {
 		Intent i = new Intent(context, SettingActivity.class);
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
