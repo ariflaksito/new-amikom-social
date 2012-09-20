@@ -7,11 +7,13 @@ import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.AbstractAction;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TabActivity;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -157,7 +159,7 @@ public class MainActivity extends TabActivity {
 								SettingActivity.class));
 						return true;
 					case R.id.id_logout:
-						new LogoutTask().execute();
+						confirmDialog();
 						return true;
 					case R.id.id_about:
 						Dialog dialog = new Dialog(MainActivity.this);
@@ -190,11 +192,10 @@ public class MainActivity extends TabActivity {
 			startActivity(new Intent(MainActivity.this, LoginActivity.class));
 			return true;
 		case R.id.id_setting:
-			startActivity(new Intent(MainActivity.this,
-					SettingActivity.class));
+			startActivity(new Intent(MainActivity.this, SettingActivity.class));
 			return true;
 		case R.id.id_logout:
-			new LogoutTask().execute();
+			confirmDialog();
 			return true;
 		case R.id.id_about:
 			Dialog dialog = new Dialog(this);
@@ -277,4 +278,23 @@ public class MainActivity extends TabActivity {
 
 	}
 
+	protected void confirmDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+		builder.setMessage("Are you sure you want to logout from Amikomsocial?")
+				.setCancelable(false)
+				.setPositiveButton("Yes",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								new LogoutTask().execute();
+							}
+						})
+				.setNegativeButton("No", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				});
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+	
 }
