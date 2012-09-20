@@ -156,7 +156,7 @@ public class LoginActivity extends Activity {
 			viewSts.setText("Status User. " + identity);
 			viewLog.setText("Login Date. " + login.get_logdate());
 
-			String imgPath = "/mnt/sdcard/amikom/amikomuser";
+			String imgPath = "/mnt/sdcard/amikom/usr@default";
 			if (new File(imgPath).exists()) {
 
 				BitmapFactory.Options options = new BitmapFactory.Options();

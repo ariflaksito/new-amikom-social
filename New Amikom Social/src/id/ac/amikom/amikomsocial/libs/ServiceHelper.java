@@ -106,7 +106,7 @@ public class ServiceHelper {
 			Date date = new Date();
 
 			InternetHelper inet = new InternetHelper();
-			String imgName = "amikomuser";
+			String imgName = "usr@default";
 			String imgUrl = "http://www.amikomsocial.com/img/" + id + ".png";
 			
 			JSONArray jsUsr = new JSONArray((String) clients.call("getuser", id));
