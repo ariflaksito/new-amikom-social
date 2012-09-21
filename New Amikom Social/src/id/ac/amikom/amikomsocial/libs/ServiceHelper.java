@@ -121,7 +121,7 @@ public class ServiceHelper {
 				Login login = new Login(id, status, json.getString("name"),
 						dateFormat.format(date), dtUsr.getString("alias"), 0);
 				db.insertLogin(login);
-
+								
 				inet.downloadImage(imgUrl, imgName);
 
 				return true;
@@ -140,7 +140,7 @@ public class ServiceHelper {
 					Login login = new Login(id, 2, js.getString("name"),
 							dateFormat.format(date), dtUsr.getString("alias"), 0);
 					db.insertLogin(login);
-
+					
 					inet.downloadImage(imgUrl, imgName);
 
 					return true;
@@ -276,10 +276,11 @@ public class ServiceHelper {
 		try {
 			String text = (String) client.call("jdwupdate");
 			int id = Integer.parseInt(text);
-			Login log = new Login();
-			log.set_calendar(id);
-			
 			DbHelper db = new DbHelper(context);
+			
+			Login log = db.getLogin();
+			log.set_calendar(id);			
+			
 			db.updateLogin(log);
 
 		} catch (XMLRPCException e) {

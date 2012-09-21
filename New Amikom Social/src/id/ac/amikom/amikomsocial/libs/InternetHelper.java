@@ -1,5 +1,7 @@
 package id.ac.amikom.amikomsocial.libs;
 
+import id.ac.amikom.amikomsocial.FileHelper;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,10 +16,7 @@ import java.util.Enumeration;
 
 import org.apache.http.util.ByteArrayBuffer;
 
-
-public class InternetHelper {
-	
-	private static String path = "/mnt/sdcard/amikom/";
+public class InternetHelper {	
 
 	public String getLocalIpAddress() {
 		try {
@@ -38,13 +37,14 @@ public class InternetHelper {
 		return null;
 	}
 
-	public void downloadImage(String imgUrl, String fileName) {
+	public void downloadImage(String imgUrl, String fileName) {		
 		
-		if(new File(path).isDirectory())
-			deleteData();
-
-		new File(path).mkdirs();
-		File f = new File(path + fileName);
+		FileHelper fh = new FileHelper();
+		
+		if(!fh.checkDir())
+			fh.createDir();		
+		
+		File f = new File(fh.getPath() + fileName);
 
 		try {
 			URL url = new URL(imgUrl);
@@ -68,17 +68,5 @@ public class InternetHelper {
 
 	}
 
-	public void deleteData() {
-						
-		File file = new File(path);
-
-		if (file.exists()) {
-			String deleteCmd = "rm -r " + path;
-			Runtime runtime = Runtime.getRuntime();
-			try {
-				runtime.exec(deleteCmd);
-			} catch (IOException e) {
-			}
-		}
-	}
+	
 }

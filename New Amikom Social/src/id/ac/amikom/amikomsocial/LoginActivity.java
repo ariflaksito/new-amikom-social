@@ -271,7 +271,9 @@ public class LoginActivity extends Activity {
 				public void onClick(View v) {
 					id = txtId.getText().toString();
 					pwd = txtPwd.getText().toString();
-
+					
+					FileHelper fh = new FileHelper();
+					fh.deleteData();
 					new LoginTask().execute();
 
 				}

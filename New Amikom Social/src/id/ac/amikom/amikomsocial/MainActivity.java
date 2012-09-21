@@ -1,7 +1,6 @@
 package id.ac.amikom.amikomsocial;
 
 import id.ac.amikom.amikomsocial.libs.DbHelper;
-import id.ac.amikom.amikomsocial.libs.InternetHelper;
 
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.AbstractAction;
@@ -260,9 +259,8 @@ public class MainActivity extends TabActivity {
 				}
 			}
 
-			InternetHelper inet = new InternetHelper();
-			inet.deleteData();
-
+			FileHelper fh = new FileHelper();
+			fh.deleteData();
 			db.deleteLogin();
 
 			return true;
