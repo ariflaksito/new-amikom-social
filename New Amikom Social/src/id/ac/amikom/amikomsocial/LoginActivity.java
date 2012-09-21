@@ -323,28 +323,24 @@ public class LoginActivity extends Activity {
 
 				InputStream is = new FileInputStream(pathOfInputImage);
 
-				// decode image size (decode metadata only, not the whole image)
 				BitmapFactory.Options options = new BitmapFactory.Options();
 				options.inJustDecodeBounds = true;
 				BitmapFactory.decodeStream(is, null, options);
 				is.close();
 				is = null;
 
-				// save width and height
 				inWidth = options.outWidth;
 				inHeight = options.outHeight;
 
-				// decode full image pre-resized
 				is = new FileInputStream(pathOfInputImage);
 				options = new BitmapFactory.Options();
-				// calc rought re-size (this is no exact resize)
+
 				options.inSampleSize = Math.max(inWidth / dstWidth, inHeight
 						/ dstHeight);
-				// decode full image
+
 				Bitmap roughBitmap = BitmapFactory.decodeStream(is, null,
 						options);
-
-				// calc exact destination size
+				
 				Matrix m = new Matrix();
 				RectF inRect = new RectF(0, 0, roughBitmap.getWidth(),
 						roughBitmap.getHeight());
