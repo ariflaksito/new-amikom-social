@@ -108,15 +108,15 @@ public class ServiceHelper {
 			InternetHelper inet = new InternetHelper();
 			String imgName = "usr@default";
 			String imgUrl = "http://www.amikomsocial.com/img/" + id + ".png";
-			
-			JSONArray jsUsr = new JSONArray((String) clients.call("getuser", id));
-			JSONObject dtUsr = jsUsr.getJSONObject(0);
-
+						
 			String sts = json.getString("status");
 			if (sts.equals("1")) {
 
 				int alumni = Integer.parseInt(json.getString("alumni"));
 				int status = (alumni == 1) ? 3 : 1;
+				
+				JSONArray jsUsr = new JSONArray((String) clients.call("getuser", id));
+				JSONObject dtUsr = jsUsr.getJSONObject(0);
 
 				Login login = new Login(id, status, json.getString("name"),
 						dateFormat.format(date), dtUsr.getString("alias"), 0);
@@ -133,6 +133,9 @@ public class ServiceHelper {
 
 				String ists = js.getString("status");
 				if (ists.equals("1")) {
+					
+					JSONArray jsUsr = new JSONArray((String) clients.call("getuser", id));
+					JSONObject dtUsr = jsUsr.getJSONObject(0);
 
 					Login login = new Login(id, 2, js.getString("name"),
 							dateFormat.format(date), dtUsr.getString("alias"), 0);
