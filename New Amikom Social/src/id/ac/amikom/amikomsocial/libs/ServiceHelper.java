@@ -11,6 +11,7 @@ import org.xmlrpc.android.XMLRPCClient;
 import org.xmlrpc.android.XMLRPCException;
 
 import android.content.Context;
+import android.util.Log;
 
 public class ServiceHelper {
 
@@ -289,7 +290,37 @@ public class ServiceHelper {
 			e.printStackTrace();
 		}
 	}
+	
+	public void updateVersion(Context context){
+		DbHelper db = new DbHelper(context);
+		Login login = db.getLogin();
+		int version = login.get_version();
+		
+		if(version==0){
+			JSONArray json = null;
+			try {
+				
+				String text = (String) clients.call("getuserfoto");
+				json = new JSONArray(text);
+				
+				for (int i = 0; i < json.length(); i++) {
+					JSONObject js = json.getJSONObject(i);
+					
+					Log.i("==foto==",js.getString("foto"));
+					
+				}	
 
+			} catch (XMLRPCException e) {
+				e.printStackTrace();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}else{
+			
+		}
+		
+	}
+	
 	public boolean checkCalendar(Context context) {
 		DbHelper db = new DbHelper(context);
 
@@ -352,4 +383,5 @@ public class ServiceHelper {
 
 		return json;
 	}
+	
 }

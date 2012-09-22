@@ -36,6 +36,7 @@ public class ShoutActivity extends ListActivity {
 		protected String doInBackground(String... params) {
 			ServiceHelper service = new ServiceHelper();
 			service.getShout(ShoutActivity.this);
+			service.updateVersion(ShoutActivity.this);
 			return null;
 		}
 

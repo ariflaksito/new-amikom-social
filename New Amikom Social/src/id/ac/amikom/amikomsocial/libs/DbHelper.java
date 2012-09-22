@@ -203,6 +203,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		values.put("logdate", login.get_logdate().toString());
 		values.put("is_mhs", login.get_is_mhs());
 		values.put("calendar", login.get_calendar());
+		values.put("version", login.get_version());
 
 		db.insert("login", null, values);
 		db.close();
