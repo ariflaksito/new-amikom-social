@@ -11,7 +11,6 @@ import org.xmlrpc.android.XMLRPCClient;
 import org.xmlrpc.android.XMLRPCException;
 
 import android.content.Context;
-import android.util.Log;
 
 public class ServiceHelper {
 
@@ -334,6 +333,30 @@ public class ServiceHelper {
 			String srv;
 			try {
 				
+				String text = (String) clients.call("listversion");
+				JSONArray json = new JSONArray(text);
+				
+				for (int i = 0; i < json.length(); i++) {
+					JSONObject js = json.getJSONObject(i);										
+					
+					MCrypt mc = new MCrypt();
+					byte[] en;
+					try {
+						
+						if(js.getString("desc").equals("update-foto")){
+							en = mc.encrypt(js.getString("nid"));						
+							InternetHelper inet = new InternetHelper();
+							inet.downloadImage(js.getString("param"), mc.bytesToHex(en));
+							
+						}else if(js.getString("desc").equals("update-alias")){
+							db.updateAlias(js.getString("nid"), js.getString("param"));
+						}																								
+						
+					} catch (Exception e) {						
+						e.printStackTrace();
+					}					
+					
+				}	
 				
 				
 				srv = (String) clients.call("getversion");
