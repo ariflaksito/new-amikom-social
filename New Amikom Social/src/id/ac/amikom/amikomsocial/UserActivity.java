@@ -30,7 +30,7 @@ public class UserActivity extends Activity {
 		setContentView(R.layout.activity_user);
 		
 		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar_post);
-		actionBar.setTitle(R.string.app_login_title);
+		actionBar.setTitle(R.string.app_user_title);
 
 		actionBar.setHomeAction(new IntentAction(this, MainActivity
 				.createIntent(this), R.drawable.ic_action_back));
