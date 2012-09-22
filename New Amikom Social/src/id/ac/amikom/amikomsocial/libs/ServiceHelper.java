@@ -319,11 +319,11 @@ public class ServiceHelper {
 				}	
 				
 				String srv = (String) clients.call("getversion");
-				JSONArray jsArray = new JSONArray(srv);
+				JSONArray jsArray = new JSONArray("[" + srv + "]");
 				JSONObject jsRes = jsArray.getJSONObject(0);
 				
 				login.set_version(jsRes.getInt("ver"));
-				db.updateLogin(login);
+				db.updateLogin(login);								
 
 			} catch (XMLRPCException e) {
 				e.printStackTrace();
@@ -331,11 +331,26 @@ public class ServiceHelper {
 				e.printStackTrace();
 			}
 		}else{
+			String srv;
+			try {
+				
+				
+				
+				srv = (String) clients.call("getversion");
+				JSONArray jsArray = new JSONArray("[" + srv + "]");
+				JSONObject jsRes = jsArray.getJSONObject(0);
+				
+				login.set_version(jsRes.getInt("ver"));
+				db.updateLogin(login);								
+				
+			} catch (XMLRPCException e) {			
+				e.printStackTrace();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 			
 		}
-		
-		
-		
+						
 	}
 	
 	public boolean checkCalendar(Context context) {
