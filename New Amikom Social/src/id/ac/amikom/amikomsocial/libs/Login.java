@@ -8,13 +8,14 @@ public class Login {
 	String _logdate;
 	String _alias;
 	int _calendar;
+	int _version;	
 
 	public Login() {
 
 	}
 
 	public Login(int id, String usr, int is_mhs, String name, String logdate,
-			String alias, int calendar) {
+			String alias, int calendar, int version) {
 
 		this._id = id;
 		this._usr = usr;
@@ -23,11 +24,12 @@ public class Login {
 		this._logdate = logdate;
 		this._alias = alias;
 		this._calendar = calendar;
+		this._version = version;
 		
 	}
 	
 	public Login(String usr, int is_mhs, String name, String logdate,
-			String alias, int calendar) {
+			String alias, int calendar, int version) {
 		
 		this._usr = usr;
 		this._is_mhs = is_mhs;
@@ -35,6 +37,7 @@ public class Login {
 		this._logdate = logdate;
 		this._alias = alias;
 		this._calendar = calendar;
+		this._version = version;
 		
 	}
 	
@@ -93,5 +96,12 @@ public class Login {
 	public void set_calendar(int _calendar) {
 		this._calendar = _calendar;
 	}
+	
+	public int get_version() {
+		return _version;
+	}
 
+	public void set_version(int _version) {
+		this._version = _version;
+	}
 }

@@ -24,7 +24,7 @@ public class ServiceHelper {
 
 		String text;
 		DbHelper db = new DbHelper(context);
-		int lastId = db.getLastShoutId();
+		int lastId = db.getLastShoutId();				
 
 		try {
 
@@ -120,7 +120,7 @@ public class ServiceHelper {
 				JSONObject dtUsr = jsUsr.getJSONObject(0);
 
 				Login login = new Login(id, status, json.getString("name"),
-						dateFormat.format(date), dtUsr.getString("alias"), 0);
+						dateFormat.format(date), dtUsr.getString("alias"), 0, 0);
 				db.insertLogin(login);
 
 				inet.downloadImage(imgUrl, imgName);
@@ -141,7 +141,7 @@ public class ServiceHelper {
 
 					Login login = new Login(id, 2, js.getString("name"),
 							dateFormat.format(date), dtUsr.getString("alias"),
-							0);
+							0, 0);
 					db.insertLogin(login);
 
 					inet.downloadImage(imgUrl, imgName);

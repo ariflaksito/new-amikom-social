@@ -14,7 +14,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "db_adem";
 
 	public DbHelper(Context context) {
-		super(context, DATABASE_NAME, null, 45);
+		super(context, DATABASE_NAME, null, 46);
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		db.execSQL("CREATE TABLE if not exists login "
 				+ "(_id INTEGER PRIMARY KEY AUTOINCREMENT, " + "usr TEXT, "
 				+ "is_mhs INTEGER, " + "name TEXT, " + "logdate DATE,"
-				+ "alias TEXT," + "calendar INTEGER);");
+				+ "alias TEXT," + "calendar INTEGER," + "version INTEGER );");
 
 	}
 
@@ -211,13 +211,13 @@ public class DbHelper extends SQLiteOpenHelper {
 	public Login getLogin() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor c = db.rawQuery(
-				"Select _id, name, is_mhs, alias, usr, logdate, calendar "
+				"Select _id, name, is_mhs, alias, usr, logdate, calendar, version "
 						+ "From login Limit 1", new String[] {});
 		if (c != null)
 			c.moveToFirst();
 
 		Login login = new Login(c.getInt(0), c.getString(4), c.getInt(2),
-				c.getString(1), c.getString(5), c.getString(3), c.getInt(6));
+				c.getString(1), c.getString(5), c.getString(3), c.getInt(6), c.getInt(7));
 
 		c.close();
 		db.close();
@@ -235,7 +235,8 @@ public class DbHelper extends SQLiteOpenHelper {
 		values.put("alias", login.get_alias());
 		values.put("logdate", login.get_logdate().toString());
 		values.put("is_mhs", login.get_is_mhs());
-		values.put("calendar", login.get_calendar());				
+		values.put("calendar", login.get_calendar());	
+		values.put("version", login.get_version());
 			
 		db.update("login", values, "_id = ?",
 				new String[] { String.valueOf(login.get_id()) });
