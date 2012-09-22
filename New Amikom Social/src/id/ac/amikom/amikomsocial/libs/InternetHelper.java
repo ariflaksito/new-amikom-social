@@ -1,6 +1,5 @@
 package id.ac.amikom.amikomsocial.libs;
 
-import id.ac.amikom.amikomsocial.FileHelper;
 
 import java.io.BufferedInputStream;
 import java.io.File;

@@ -1,4 +1,4 @@
-package id.ac.amikom.amikomsocial;
+package id.ac.amikom.amikomsocial.libs;
 
 import java.io.File;
 import java.io.IOException;

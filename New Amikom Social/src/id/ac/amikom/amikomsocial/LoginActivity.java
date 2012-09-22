@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import id.ac.amikom.amikomsocial.libs.DbHelper;
+import id.ac.amikom.amikomsocial.libs.FileHelper;
 import id.ac.amikom.amikomsocial.libs.HttpFileUploader;
 import id.ac.amikom.amikomsocial.libs.Login;
 import id.ac.amikom.amikomsocial.libs.ServiceHelper;

@@ -1,6 +1,7 @@
 package id.ac.amikom.amikomsocial;
 
 import id.ac.amikom.amikomsocial.libs.DbHelper;
+import id.ac.amikom.amikomsocial.libs.FileHelper;
 
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.AbstractAction;
