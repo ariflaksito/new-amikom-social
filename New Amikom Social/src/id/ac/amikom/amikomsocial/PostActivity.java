@@ -206,14 +206,15 @@ public class PostActivity extends Activity implements LocationListener {
 				for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
 					addr = addr + " " + returnedAddress.getAddressLine(i);
 				}
-				address = addr.trim();
-				Log.i("==Location==", address);
+				address = addr.trim();				
 
 			}
 		} catch (IOException e) {
 			address = "undefined";
 			e.printStackTrace();
 		}
+		
+		Log.i("==Location==", address);
 
 	}
 
@@ -266,8 +267,8 @@ public class PostActivity extends Activity implements LocationListener {
 		super.onResume();
 		location.requestLocationUpdates(LocationManager.GPS_PROVIDER,
 				1000 * 60 * 30, 1000, this);
-		location.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-				1000 * 60 * 30, 1000, this);
+		//location.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+		//		1000 * 60 * 30, 1000, this);
 		
 	}
 }

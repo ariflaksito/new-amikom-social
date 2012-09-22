@@ -1,5 +1,6 @@
 package id.ac.amikom.amikomsocial;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,7 @@ import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
 
 import id.ac.amikom.amikomsocial.libs.DbHelper;
 import id.ac.amikom.amikomsocial.libs.Login;
+import id.ac.amikom.amikomsocial.libs.MCrypt;
 import id.ac.amikom.amikomsocial.libs.ServiceHelper;
 import id.ac.amikom.amikomsocial.libs.Shout;
 import id.ac.amikom.amikomsocial.libs.CustomAdapter;
@@ -48,7 +50,11 @@ public class MeActivity extends ListActivity {
 
 		@Override
 		protected void onPostExecute(String result) {
-			viewListData();
+			try {
+				viewListData();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
 			((PullToRefreshListView) getListView()).onRefreshComplete();
 			super.onPostExecute(result);
@@ -78,13 +84,17 @@ public class MeActivity extends ListActivity {
 				name = nm[0].toLowerCase();
 			}else name = login.get_alias();
 			
-			viewListData();
+			try {
+				viewListData();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
 		}
 
 	}
 
-	private void viewListData() {
+	private void viewListData() throws Exception {
 		
 		DbHelper db = new DbHelper(this);
 		shoutList = db.getShoutMe(name);
@@ -99,7 +109,14 @@ public class MeActivity extends ListActivity {
 			else
 				map.put("name", cn.get_alias());
 
-			map.put("icon", R.drawable.none);
+			MCrypt mc = new MCrypt();
+			File f = new File("/mnt/sdcard/amikom/" + mc.bytesToHex(mc.encrypt(cn.get_nid())));
+
+			if (f.exists())
+				map.put("icon", "/mnt/sdcard/amikom/" + mc.bytesToHex(mc.encrypt(cn.get_nid())));
+			else
+				map.put("icon", R.drawable.none);
+			
 			map.put("msg", cn.get_msg());
 			map.put("via", "from " + cn.get_via() + ", " + dp.parseString());
 
