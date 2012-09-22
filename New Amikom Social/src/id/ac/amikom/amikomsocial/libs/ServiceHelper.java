@@ -55,7 +55,7 @@ public class ServiceHelper {
 
 		return true;
 	}
-	
+
 	public boolean getShoutMe(Context context, String alias) {
 
 		String text;
@@ -108,20 +108,21 @@ public class ServiceHelper {
 			InternetHelper inet = new InternetHelper();
 			String imgName = "usr@default";
 			String imgUrl = "http://www.amikomsocial.com/img/" + id + ".png";
-						
+
 			String sts = json.getString("status");
 			if (sts.equals("1")) {
 
 				int alumni = Integer.parseInt(json.getString("alumni"));
 				int status = (alumni == 1) ? 3 : 1;
-				
-				JSONArray jsUsr = new JSONArray((String) clients.call("getuser", id));
+
+				JSONArray jsUsr = new JSONArray((String) clients.call(
+						"getuser", id));
 				JSONObject dtUsr = jsUsr.getJSONObject(0);
 
 				Login login = new Login(id, status, json.getString("name"),
 						dateFormat.format(date), dtUsr.getString("alias"), 0);
 				db.insertLogin(login);
-								
+
 				inet.downloadImage(imgUrl, imgName);
 
 				return true;
@@ -133,14 +134,16 @@ public class ServiceHelper {
 
 				String ists = js.getString("status");
 				if (ists.equals("1")) {
-					
-					JSONArray jsUsr = new JSONArray((String) clients.call("getuser", id));
+
+					JSONArray jsUsr = new JSONArray((String) clients.call(
+							"getuser", id));
 					JSONObject dtUsr = jsUsr.getJSONObject(0);
 
 					Login login = new Login(id, 2, js.getString("name"),
-							dateFormat.format(date), dtUsr.getString("alias"), 0);
+							dateFormat.format(date), dtUsr.getString("alias"),
+							0);
 					db.insertLogin(login);
-					
+
 					inet.downloadImage(imgUrl, imgName);
 
 					return true;
@@ -173,13 +176,13 @@ public class ServiceHelper {
 		}
 		return true;
 	}
-	
-	public boolean getCalendar(Context context){
+
+	public boolean getCalendar(Context context) {
 		DbHelper db = new DbHelper(context);
 		Login log = db.getLogin();
 		String text;
-		
-		try{
+
+		try {
 			if (db.isMhs())
 				text = (String) client.call("jdwkuliah", log.get_usr());
 			else
@@ -195,18 +198,18 @@ public class ServiceHelper {
 
 					String[] jam = json.getString("jam").split("\\-+");
 					if (db.isMhs()) {
-						Cald cal = new Cald(json.getString("hari").trim() + " - "
-								+ json.getString("kuliah"),
+						Cald cal = new Cald(json.getString("hari").trim()
+								+ " - " + json.getString("kuliah"),
 								json.getString("fdate") + " " + jam[0],
 								json.getString("edate") + " " + jam[1],
 								"STMIK Amikom - " + json.getString("ruang"),
-								json.getString("dosen"),
-								Integer.parseInt(json.getString("weekly")));
+								json.getString("dosen"), Integer.parseInt(json
+										.getString("weekly")));
 						db.insertCalendar(cal);
-						
-					}else{
-						Cald cal = new Cald(json.getString("hari").trim() + " - "
-								+ json.getString("mkul"),
+
+					} else {
+						Cald cal = new Cald(json.getString("hari").trim()
+								+ " - " + json.getString("mkul"),
 								json.getString("fdate") + " " + jam[0],
 								json.getString("edate") + " " + jam[1],
 								"STMIK Amikom - " + json.getString("ruang"),
@@ -215,26 +218,25 @@ public class ServiceHelper {
 						db.insertCalendar(cal);
 					}
 				}
-				
+
 				updateCalendarId(context);
-			}	
-			
-			//getCalendarAc(context);
-			
+			}
+
+			// getCalendarAc(context);
+
 		} catch (XMLRPCException ex) {
-			//getCalendarAc(context);
+			// getCalendarAc(context);
 			ex.printStackTrace();
 			return false;
 		} catch (JSONException e) {
 			e.printStackTrace();
 			return false;
 		}
-		
-		
+
 		return true;
 	}
-	
-	public boolean getCalendarAc(Context context){
+
+	public boolean getCalendarAc(Context context) {
 		DbHelper db = new DbHelper(context);
 		try {
 			String text = (String) client.call("getcalendar");
@@ -246,12 +248,12 @@ public class ServiceHelper {
 
 				for (int i = 0; i < jsonArray.length(); i++) {
 					JSONObject json = jsonArray.getJSONObject(i);
-					
+
 					Cald cal = new Cald(json.getString("detail"),
 							json.getString("start"), json.getString("finish"),
 							"Amikom - Amikom Calendar",
-							json.getString("fdate"),
-							Integer.parseInt(json.getString("weekly")));
+							json.getString("fdate"), Integer.parseInt(json
+									.getString("weekly")));
 
 					db.insertCalendar(cal);
 				}
@@ -268,30 +270,30 @@ public class ServiceHelper {
 			e.printStackTrace();
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	public void updateCalendarId(Context context) {
 		try {
 			String text = (String) client.call("jdwupdate");
 			int id = Integer.parseInt(text);
 			DbHelper db = new DbHelper(context);
-			
+
 			Login log = db.getLogin();
-			log.set_calendar(id);			
-			
+			log.set_calendar(id);
+
 			db.updateLogin(log);
 
 		} catch (XMLRPCException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public boolean checkCalendar(Context context) {
 		DbHelper db = new DbHelper(context);
-		
-		Login l = db.getLogin();		
+
+		Login l = db.getLogin();
 		int id = l.get_calendar();
 		int pid = 0;
 
@@ -309,7 +311,7 @@ public class ServiceHelper {
 		else
 			return false;
 	}
-	
+
 	public String[] updateUsername(String uid, String usr) {
 
 		String[] out = new String[2];
@@ -318,7 +320,7 @@ public class ServiceHelper {
 			String service = (String) clients.call("edituser", uid, usr);
 			JSONArray jsonArray = new JSONArray(service);
 			JSONObject json = jsonArray.getJSONObject(0);
-			
+
 			out[0] = json.getString("sts");
 			out[1] = json.getString("msg");
 
@@ -331,5 +333,23 @@ public class ServiceHelper {
 		}
 
 		return out;
+	}
+
+	public JSONArray getUser(String id) {
+
+		JSONArray json = null;
+		try {
+
+			String text = (String) clients.call("getuser", id);
+
+			json = new JSONArray(text);
+
+		} catch (XMLRPCException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return json;
 	}
 }

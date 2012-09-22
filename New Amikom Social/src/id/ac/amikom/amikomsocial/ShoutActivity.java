@@ -130,6 +130,7 @@ public class ShoutActivity extends ListActivity {
 			name = nm[0].toLowerCase();
 		}else name = shout.get_alias();
 		
+		String nid = shout.get_nid();				
 		String postAlias = "@" + name;
 		String postMsg = ":O " + postAlias + " " + shout.get_msg();
 		Intent i = new Intent(ShoutActivity.this, PostActivity.class);
@@ -145,7 +146,9 @@ public class ShoutActivity extends ListActivity {
 			return (true);
 
 		case 2:
-
+			Intent in = new Intent(ShoutActivity.this, UserActivity.class);
+			in.putExtra("nid", nid);			
+			startActivity(in);
 			return (true);
 		}
 
