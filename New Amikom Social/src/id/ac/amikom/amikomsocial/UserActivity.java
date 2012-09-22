@@ -7,6 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.markupartist.android.widget.ActionBar;
+import com.markupartist.android.widget.ActionBar.IntentAction;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
@@ -25,6 +28,12 @@ public class UserActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user);
+		
+		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar_post);
+		actionBar.setTitle(R.string.app_login_title);
+
+		actionBar.setHomeAction(new IntentAction(this, MainActivity
+				.createIntent(this), R.drawable.ic_action_back));
 
 		Bundle extras = getIntent().getExtras();
 		id = extras.getString("nid");
