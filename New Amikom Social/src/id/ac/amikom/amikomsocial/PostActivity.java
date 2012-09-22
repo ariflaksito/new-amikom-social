@@ -211,6 +211,7 @@ public class PostActivity extends Activity implements LocationListener {
 
 			}
 		} catch (IOException e) {
+			address = "undefined";
 			e.printStackTrace();
 		}
 
@@ -267,5 +268,6 @@ public class PostActivity extends Activity implements LocationListener {
 				1000 * 60 * 30, 1000, this);
 		location.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
 				1000 * 60 * 30, 1000, this);
+		
 	}
 }
