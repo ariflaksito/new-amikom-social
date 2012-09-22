@@ -296,19 +296,34 @@ public class ServiceHelper {
 		Login login = db.getLogin();
 		int version = login.get_version();
 		
-		if(version==0){
-			JSONArray json = null;
+		if(version==0){			
 			try {
 				
 				String text = (String) clients.call("getuserfoto");
-				json = new JSONArray(text);
+				JSONArray json = new JSONArray(text);
 				
 				for (int i = 0; i < json.length(); i++) {
-					JSONObject js = json.getJSONObject(i);
+					JSONObject js = json.getJSONObject(i);										
 					
-					Log.i("==foto==",js.getString("foto"));
+					MCrypt mc = new MCrypt();
+					byte[] en;
+					try {
+						en = mc.encrypt(js.getString("nid"));						
+						InternetHelper inet = new InternetHelper();
+						inet.downloadImage(js.getString("thumb"), mc.bytesToHex(en));												
+						
+					} catch (Exception e) {						
+						e.printStackTrace();
+					}					
 					
 				}	
+				
+				String srv = (String) clients.call("getversion");
+				JSONArray jsArray = new JSONArray(srv);
+				JSONObject jsRes = jsArray.getJSONObject(0);
+				
+				login.set_version(jsRes.getInt("ver"));
+				db.updateLogin(login);
 
 			} catch (XMLRPCException e) {
 				e.printStackTrace();
@@ -318,6 +333,8 @@ public class ServiceHelper {
 		}else{
 			
 		}
+		
+		
 		
 	}
 	

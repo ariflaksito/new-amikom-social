@@ -1,5 +1,6 @@
 package id.ac.amikom.amikomsocial;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +9,7 @@ import com.markupartist.android.widget.PullToRefreshListView;
 import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
 
 import id.ac.amikom.amikomsocial.libs.DbHelper;
+import id.ac.amikom.amikomsocial.libs.MCrypt;
 import id.ac.amikom.amikomsocial.libs.ServiceHelper;
 import id.ac.amikom.amikomsocial.libs.Shout;
 import id.ac.amikom.amikomsocial.libs.CustomAdapter;
@@ -27,22 +29,30 @@ import android.widget.ListView;
 
 public class ShoutActivity extends ListActivity {
 
-	private ListAdapter adapter;	
+	private ListAdapter adapter;
 	private List<Shout> shoutList;
-	
+
 	private class GetShout extends AsyncTask<String, Void, String> {
 
 		@Override
 		protected String doInBackground(String... params) {
 			ServiceHelper service = new ServiceHelper();
 			service.getShout(ShoutActivity.this);
-			service.updateVersion(ShoutActivity.this);
+
+			DbHelper db = new DbHelper(ShoutActivity.this);
+			if (db.isLogin())
+				service.updateVersion(ShoutActivity.this);
+
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(String result) {
-			viewListData();
+			try {
+				viewListData();
+			} catch (Exception e) {				
+				e.printStackTrace();
+			}
 
 			((PullToRefreshListView) getListView()).onRefreshComplete();
 			super.onPostExecute(result);
@@ -62,17 +72,20 @@ public class ShoutActivity extends ListActivity {
 					}
 				});
 
-		viewListData();
+		try {
+			viewListData();
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}
 
 	}
 
-	private void viewListData() {
+	private void viewListData() throws Exception {
 		DbHelper db = new DbHelper(this);
 		shoutList = db.getShout();
-		
-		
+
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
-		
+
 		for (Shout cn : shoutList) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			DateParse dp = new DateParse(cn.get_time());
@@ -80,14 +93,21 @@ public class ShoutActivity extends ListActivity {
 			if (cn.get_alias().equals("null"))
 				map.put("name", cn.get_name());
 			else
-				map.put("name", cn.get_alias());								
+				map.put("name", cn.get_alias());
 
-			map.put("icon", R.drawable.none);
+			MCrypt mc = new MCrypt();
+			File f = new File("/mnt/sdcard/amikom/" + mc.bytesToHex(mc.encrypt(cn.get_nid())));
+
+			if (f.exists())
+				map.put("icon", "/mnt/sdcard/amikom/" + mc.bytesToHex(mc.encrypt(cn.get_nid())));
+			else
+				map.put("icon", R.drawable.none);
+
 			map.put("msg", cn.get_msg());
 			map.put("via", "from " + cn.get_via() + ", " + dp.parseString());
 
 			list.add(map);
-			
+
 		}
 
 		adapter = new CustomAdapter(this, list, R.layout.activity_shout,
@@ -122,16 +142,17 @@ public class ShoutActivity extends ListActivity {
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
 				.getMenuInfo();
-		
-		Shout shout = shoutList.get(info.position-1);
-		
+
+		Shout shout = shoutList.get(info.position - 1);
+
 		String name;
 		if (shout.get_alias().equals("null")) {
 			String[] nm = shout.get_name().split("\\s+");
 			name = nm[0].toLowerCase();
-		}else name = shout.get_alias();
-		
-		String nid = shout.get_nid();				
+		} else
+			name = shout.get_alias();
+
+		String nid = shout.get_nid();
 		String postAlias = "@" + name;
 		String postMsg = ":O " + postAlias + " " + shout.get_msg();
 		Intent i = new Intent(ShoutActivity.this, PostActivity.class);
@@ -148,7 +169,7 @@ public class ShoutActivity extends ListActivity {
 
 		case 2:
 			Intent in = new Intent(ShoutActivity.this, UserActivity.class);
-			in.putExtra("nid", nid);			
+			in.putExtra("nid", nid);
 			startActivity(in);
 			return (true);
 		}
