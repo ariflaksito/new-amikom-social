@@ -11,6 +11,7 @@ import org.xmlrpc.android.XMLRPCClient;
 import org.xmlrpc.android.XMLRPCException;
 
 import android.content.Context;
+import android.util.Log;
 
 public class ServiceHelper {
 
@@ -317,7 +318,7 @@ public class ServiceHelper {
 					
 				}	
 				
-				String srv = (String) clients.call("getversion");
+				String srv = (String) clients.call("getversion", version);
 				JSONArray jsArray = new JSONArray("[" + srv + "]");
 				JSONObject jsRes = jsArray.getJSONObject(0);
 				
@@ -350,7 +351,9 @@ public class ServiceHelper {
 							
 						}else if(js.getString("desc").equals("update-alias")){
 							db.updateAlias(js.getString("nid"), js.getString("param"));
-						}																								
+						}		
+						
+						Log.i("==desc==", js.getString("desc"));
 						
 					} catch (Exception e) {						
 						e.printStackTrace();

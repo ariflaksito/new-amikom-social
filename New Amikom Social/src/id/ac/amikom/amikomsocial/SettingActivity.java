@@ -111,7 +111,7 @@ public class SettingActivity extends PreferenceActivity {
 				event.put("eventLocation", cn.get_location());
 				event.put("dtstart", dtstart);
 				event.put("hasAlarm", 1);
-				event.put("eventTimezone", "Asia/Jakarta	");
+				event.put("eventTimezone", "Asia/Jakarta");
 
 				if (cn.get_status() == 1) {
 					String[] title = cn.get_title().split("\\-+");
