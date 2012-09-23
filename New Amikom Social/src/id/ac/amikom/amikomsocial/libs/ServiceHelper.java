@@ -296,6 +296,9 @@ public class ServiceHelper {
 		Login login = db.getLogin();
 		int version = login.get_version();
 		
+		Log.i("==db.ver==", ""+version);
+		Log.i("==cald.ver==", ""+login.get_calendar());
+		
 		if(version==0){			
 			try {
 				
@@ -318,7 +321,7 @@ public class ServiceHelper {
 					
 				}	
 				
-				String srv = (String) clients.call("getversion", version);
+				String srv = (String) clients.call("getversion");
 				JSONArray jsArray = new JSONArray("[" + srv + "]");
 				JSONObject jsRes = jsArray.getJSONObject(0);
 				
@@ -330,15 +333,16 @@ public class ServiceHelper {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-		}else{
-			String srv;
+		}else{			
 			try {
 				
-				String text = (String) clients.call("listversion");
+				String text = (String) clients.call("listversion", ""+version);
 				JSONArray json = new JSONArray(text);
 				
 				for (int i = 0; i < json.length(); i++) {
 					JSONObject js = json.getJSONObject(i);										
+					
+					Log.i("==desc==", js.getString("desc"));
 					
 					MCrypt mc = new MCrypt();
 					byte[] en;
@@ -362,7 +366,7 @@ public class ServiceHelper {
 				}	
 				
 				
-				srv = (String) clients.call("getversion");
+				String srv = (String) clients.call("getversion");
 				JSONArray jsArray = new JSONArray("[" + srv + "]");
 				JSONObject jsRes = jsArray.getJSONObject(0);
 				

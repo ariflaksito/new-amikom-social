@@ -200,17 +200,15 @@ public class PostActivity extends Activity implements LocationListener {
 		try {
 			List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
 
-			if (addresses != null && addresses.size() > 0) {
+			if (addresses != null && addresses.size() > 0 && lat > 0 && lon > 0) {
 				Address returnedAddress = addresses.get(0);
 				String addr = "";
 				for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
 					addr = addr + " " + returnedAddress.getAddressLine(i);
 				}
 				address = addr.trim();				
-
 			}
-		} catch (IOException e) {
-			address = "undefined";
+		} catch (IOException e) {			
 			e.printStackTrace();
 		}
 		

@@ -28,7 +28,7 @@ public class UserActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user);
-		
+
 		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar_post);
 		actionBar.setTitle(R.string.app_user_title);
 
@@ -46,14 +46,15 @@ public class UserActivity extends Activity {
 		usrShout = (TextView) findViewById(R.id.usrShout);
 
 		new LoadData().execute();
+
 	}
 
 	private class LoadData extends AsyncTask<Void, Void, Boolean> {
 
-		private ProgressDialog dialog = new ProgressDialog(
-				UserActivity.this);
+		private ProgressDialog dialog = new ProgressDialog(UserActivity.this);
 		private JSONArray jsonData;
 		private Bitmap foto;
+		private boolean sts;
 
 		protected void onPreExecute() {
 			dialog.setMessage("Loading..");
@@ -62,35 +63,41 @@ public class UserActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			try {
-				JSONObject json = jsonData.getJSONObject(0);
 
-				if (!json.getString("foto").equals("")) {
-					usrImg.setImageBitmap(foto);
-				} else {
-					usrImg.setImageDrawable(getResources().getDrawable(
-							R.drawable.none));
+			if (!sts) {				
+				finish();
+			} else {
+
+				try {
+					JSONObject json = jsonData.getJSONObject(0);
+
+					if (!json.getString("foto").equals("")) {
+						usrImg.setImageBitmap(foto);
+					} else {
+						usrImg.setImageDrawable(getResources().getDrawable(
+								R.drawable.none));
+					}
+
+					usrName.setText(json.getString("fullname") + " (" + id
+							+ ")");
+
+					String sts = "";
+					if (json.getString("status").equals("1"))
+						sts = "Student";
+					else if (json.getString("status").equals("2"))
+						sts = "Lecturer";
+					else
+						sts = "Alumnus";
+
+					usrAlias.setText(json.getString("alias") + " (" + sts + ")");
+					usrReg.setText("Reg.Date " + json.getString("logdate"));
+					usrShout.setText(json.getString("shout") + " Shout");
+					usrLoc.setText(json.getString("device") + " from "
+							+ json.getString("location"));
+
+				} catch (JSONException e) {
+					e.printStackTrace();
 				}
-
-				usrName.setText(json.getString("fullname") + " (" + id + ")");
-
-				String sts = "";
-				if (json.getString("status").equals("1"))
-					sts = "Student";
-				else if (json.getString("status").equals("2"))
-					sts = "Lecturer";
-				else
-					sts = "Alumnus";
-
-				usrAlias.setText(json.getString("alias") + " (" + sts + ")");
-				usrReg.setText("Reg.Date " + json.getString("logdate"));
-				usrShout.setText(json.getString("shout") + " Shout");
-				usrLoc.setText(json.getString("device") + " from "
-						+ json.getString("location"));
-
-			} catch (JSONException e) {
-
-				e.printStackTrace();
 			}
 
 			dialog.dismiss();
@@ -98,18 +105,19 @@ public class UserActivity extends Activity {
 
 		@Override
 		protected Boolean doInBackground(Void... arg0) {
-
-			ServiceHelper srv = new ServiceHelper();
-			jsonData = srv.getUser(id);
-
+			
 			try {
-
+				ServiceHelper srv = new ServiceHelper();
+				jsonData = srv.getUser(id);
 				JSONObject json = jsonData.getJSONObject(0);
 
 				InputStream in = new java.net.URL(json.getString("foto"))
 						.openStream();
 				foto = BitmapFactory.decodeStream(in);
+				sts = true;
+				
 			} catch (Exception e) {
+				sts = false;
 				e.printStackTrace();
 			}
 
