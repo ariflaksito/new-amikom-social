@@ -14,7 +14,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "db_adem";
 
 	public DbHelper(Context context) {
-		super(context, DATABASE_NAME, null, 47);
+		super(context, DATABASE_NAME, null, 48);
 	}
 
 	@Override
