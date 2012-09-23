@@ -1,64 +1,76 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#e7e7e7"
-    android:orientation="vertical" >
+    android:background="#e7e7e7" >
 
     <com.markupartist.android.widget.ActionBar
         android:id="@+id/actionbar_post"
         style="@style/ActionBar" />
 
-    <TextView
+    <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dip"
-        android:layout_marginTop="10dip"        
-        android:text="@string/post_title" />
+        android:layout_below="@+id/actionbar_post" >
 
-    <TextView
-        android:id="@+id/count_id"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dip"
-        android:text="@string/post_count" />
-
-    <EditText
-        android:id="@+id/post_txt"
-        android:layout_width="fill_parent"
-        android:layout_height="120dip"
-        android:layout_marginTop="10dip"
-        android:layout_marginLeft="10dip"
-        android:layout_marginRight="10dip"
-        android:gravity="fill_horizontal"
-        android:inputType="none"
-        android:maxLength="160"
-        android:scrollHorizontally="false" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/button_post"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dip"
-            android:layout_marginTop="10dip"
-            android:text="@string/post_button"
-            android:width="100dip" />
+            android:orientation="vertical" >
 
-        <CheckBox
-            android:id="@+id/cb_facebook"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.09"
-            android:layout_marginLeft="5dip"
-            android:button="@drawable/btn_check_facebook"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="right"
-            android:textSize="14sp" />
-    </LinearLayout>
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dip"
+                android:layout_marginTop="10dip"
+                android:text="@string/post_title" />
 
-</LinearLayout>
+            <TextView
+                android:id="@+id/count_id"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dip"
+                android:text="@string/post_count" />
+
+            <EditText
+                android:id="@+id/post_txt"
+                android:layout_width="fill_parent"
+                android:layout_height="150dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="10dip"
+                android:gravity="fill_horizontal"
+                android:inputType="none"
+                android:maxLength="160"
+                android:scrollHorizontally="false" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/button_post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dip"
+                    android:layout_marginTop="10dip"
+                    android:text="@string/post_button"
+                    android:width="100dip" />
+
+                <CheckBox
+                    android:id="@+id/cb_facebook"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dip"
+                    android:layout_weight="0.09"
+                    android:button="@drawable/btn_check_facebook"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="right"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
