@@ -140,14 +140,12 @@ public class PostActivity extends Activity implements LocationListener {
 				});
 
 		location = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-		Location loc = location
-				.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		if (loc != null) {
+		Location loc = location.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		if (loc != null) {			
 		} else {
 			loc = location.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		}
-
+		
 		this.onLocationChanged(loc);
 
 	}
@@ -185,18 +183,19 @@ public class PostActivity extends Activity implements LocationListener {
 		return i;
 	}
 
-	public void onLocationChanged(Location loc) {
-
+	public void onLocationChanged(Location loc) {		
+		
 		double lat = 0;
 		double lon = 0;
 
 		if (loc != null) {
 			lat = loc.getLatitude();
 			lon = loc.getLongitude();
+						
 		}
 
 		Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-
+		
 		try {
 			List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
 
@@ -206,29 +205,32 @@ public class PostActivity extends Activity implements LocationListener {
 				for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
 					addr = addr + " " + returnedAddress.getAddressLine(i);
 				}
-
-				if (lat > 0 && lon > 0)
-					address = addr.trim();
-				else
-					address = "";
+				
+				if(lat!=0 && lon!=0)
+				address = addr.trim();
+				else address = "";
+				
+				Log.i("==Address==", address);
+				
 			}
-		} catch (IOException e) {
+		} catch (IOException e) {			
 			e.printStackTrace();
-		}
-
-		Log.i("==Location==", address);
+		}		
 
 	}
 
-	public void onProviderDisabled(String arg0) {
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
 
 	}
 
-	public void onProviderEnabled(String arg0) {
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
 
 	}
 
-	public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
 
 	}
 
