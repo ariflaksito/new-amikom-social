@@ -64,7 +64,7 @@ public class UserActivity extends Activity {
 		@Override
 		protected void onPostExecute(Boolean result) {
 
-			if (!sts) {				
+			if (!sts) {
 				finish();
 			} else {
 
@@ -105,17 +105,20 @@ public class UserActivity extends Activity {
 
 		@Override
 		protected Boolean doInBackground(Void... arg0) {
-			
+
 			try {
 				ServiceHelper srv = new ServiceHelper();
 				jsonData = srv.getUser(id);
 				JSONObject json = jsonData.getJSONObject(0);
 
-				InputStream in = new java.net.URL(json.getString("foto"))
-						.openStream();
-				foto = BitmapFactory.decodeStream(in);
+				if (!json.getString("foto").equals("")) {
+					InputStream in = new java.net.URL(json.getString("foto"))
+							.openStream();
+					foto = BitmapFactory.decodeStream(in);
+				}
+
 				sts = true;
-				
+
 			} catch (Exception e) {
 				sts = false;
 				e.printStackTrace();

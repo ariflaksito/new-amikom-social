@@ -67,22 +67,22 @@ public class PostActivity extends Activity implements LocationListener {
 
 		actionBar.addAction(new IntentAction(this, new Intent(this,
 				ShareActivity.class), R.drawable.ic_action_share));
-		
+
 		reviewEdit = (EditText) findViewById(R.id.post_txt);
 		countInfo = (TextView) findViewById(R.id.count_id);
-		
+
 		try {
 			Bundle extras = getIntent().getExtras();
 			String msg = extras.getString("msg");
 
-			if(!msg.equals("null")){
+			if (!msg.equals("null")) {
 				reviewEdit.setText(msg);
 				countInfo.setText("Character Remain " + (160 - msg.length()));
-			}	
-				
+			}
+
 		} catch (NullPointerException e) {
 			e.printStackTrace();
-		}		
+		}
 
 		final TextWatcher mTextEditorWatcher = new TextWatcher() {
 			public void beforeTextChanged(CharSequence s, int start, int count,
@@ -200,18 +200,22 @@ public class PostActivity extends Activity implements LocationListener {
 		try {
 			List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
 
-			if (addresses != null && addresses.size() > 0 && lat > 0 && lon > 0) {
+			if (addresses != null && addresses.size() > 0) {
 				Address returnedAddress = addresses.get(0);
 				String addr = "";
 				for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
 					addr = addr + " " + returnedAddress.getAddressLine(i);
 				}
-				address = addr.trim();				
+
+				if (lat > 0 && lon > 0)
+					address = addr.trim();
+				else
+					address = "";
 			}
-		} catch (IOException e) {			
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		Log.i("==Location==", address);
 
 	}
@@ -267,6 +271,6 @@ public class PostActivity extends Activity implements LocationListener {
 				1000 * 60 * 30, 1000, this);
 		location.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
 				1000 * 60 * 30, 1000, this);
-		
+
 	}
 }
