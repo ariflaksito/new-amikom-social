@@ -103,7 +103,9 @@ public class ShoutActivity extends ListActivity {
 			else
 				map.put("icon", R.drawable.none);
 
-			map.put("msg", cn.get_msg());
+			
+			String msg = cn.get_msg().replace("@(\\w)", " <b>nick</b> ");
+			map.put("msg", msg);
 			map.put("via", "from " + cn.get_via() + ", " + dp.parseString());
 
 			list.add(map);
