@@ -117,7 +117,9 @@ public class MeActivity extends ListActivity {
 			else
 				map.put("icon", R.drawable.none);
 			
-			map.put("msg", cn.get_msg());
+			String msg = cn.get_msg().replaceAll("(\\@[a-z0-9_]+)", " <font color='#FF8800'>$1</font> ");
+			String fmsg = msg.replaceAll("(\\#[a-z0-9_]+)", " <font color='#53B949'>$1</font> ");
+			map.put("msg", fmsg);
 			map.put("via", "from " + cn.get_via() + ", " + dp.parseString());
 
 			list.add(map);
