@@ -106,7 +106,7 @@ public class ShoutActivity extends ListActivity {
 			
 			String msg = cn.get_msg().replaceAll("(\\@[a-z0-9_]+)", " <font color='#FF8800'>$1</font> ");
 			String fmsg = msg.replaceAll("(\\#[a-z0-9_]+)", " <font color='#53B949'>$1</font> ");
-			map.put("msg", fmsg);
+			map.put("msg", "<a href=\"http://panic.amikom.ac.id/css/icon/page_edit.png\" /> "+fmsg);
 			map.put("via", "from " + cn.get_via() + ", " + dp.parseString());
 
 			list.add(map);
