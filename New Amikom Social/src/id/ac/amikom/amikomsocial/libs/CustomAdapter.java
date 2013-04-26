@@ -1,33 +1,31 @@
 package id.ac.amikom.amikomsocial.libs;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.text.Html;
-import android.text.Html.ImageGetter;
+import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.TextView.BufferType;
 
 public class CustomAdapter extends SimpleAdapter {
 	private int[] colors = new int[] { 0x30E7E7E7, 0x30FFFFFF };
-
+	private Context c;
+	
 	public CustomAdapter(Context context, List<HashMap<String, Object>> items,
 			int resource, String[] from, int[] to) {
 		super(context, items, resource, from, to);
+		c = context;
 	}
 
 	@Override
 	public void setViewText(TextView view, String text) {
-		view.setText(Html.fromHtml(text, imgGetter, null), BufferType.SPANNABLE);
+		URLImageParser p = new URLImageParser(view, c);
+		Spanned htmlSpan = Html.fromHtml(text, p, null);
+		view.setText(htmlSpan);
 	}
 
 	@Override
@@ -37,35 +35,6 @@ public class CustomAdapter extends SimpleAdapter {
 		view.setBackgroundColor(colors[colorPos]);
 
 		return view;
-	}
-
-	static ImageGetter imgGetter = new Html.ImageGetter() {
-		public Drawable getDrawable(String source) {
-			Drawable d = null;
-			try {
-				InputStream src = imageFetch(source);
-				d = Drawable.createFromStream(src, "src");
-				if (d != null) {
-					d.setBounds(0, 0, d.getIntrinsicWidth(),
-							d.getIntrinsicHeight());
-				}
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			return d;
-		}
-	};
-
-	public static InputStream imageFetch(String source) throws MalformedURLException,
-			IOException {
-		URL url = new URL(source);
-		Object o = url.getContent();
-		InputStream content = (InputStream) o;
-		
-		return content;
 	}
 
 }

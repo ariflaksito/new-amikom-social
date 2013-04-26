@@ -15,8 +15,7 @@ public class Shout {
 
 	
 
-	public Shout() {
-	}
+	public Shout() { }
 
 	public Shout(String public_id, String nid, String name, String alias,
 			String msg, String foto, String sts, String time, String via, String location) {
