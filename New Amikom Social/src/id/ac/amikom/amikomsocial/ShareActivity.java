@@ -406,6 +406,10 @@ public class ShareActivity extends Activity {
 					e.printStackTrace();
 				}
 			} else {
+				
+				mProgress.setMessage("Loading...");
+				mProgress.show();
+				
 				new Thread(new Runnable() {
 					public void run() {
 						try {
