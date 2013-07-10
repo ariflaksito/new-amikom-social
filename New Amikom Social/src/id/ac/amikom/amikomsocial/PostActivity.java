@@ -8,6 +8,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
+import twitter4j.conf.ConfigurationBuilder;
+
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.BaseRequestListener;
 import com.facebook.android.Facebook;
@@ -19,6 +25,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -48,7 +55,17 @@ public class PostActivity extends Activity implements LocationListener {
 
 	private Facebook mFacebook;
 	private CheckBox mFacebookCb;
+	private CheckBox mTwitterCb;
 	private ProgressDialog mProgress;
+	
+	static String TWITTER_CONSUMER_KEY = "cpZmKRjZ31DPWOJ81Gjazw";
+	static String TWITTER_CONSUMER_SECRET = "XMYSsvwiv7w0IVbtk9dhTQaApnqrzGSyN19749J4OE";
+
+	static final String PREF_KEY_OAUTH_TOKEN = "oauth_token";
+	static final String PREF_KEY_OAUTH_SECRET = "oauth_token_secret";
+	static final String PREF_KEY_TWITTER_LOGIN = "isTwitterLogedIn";
+	static final String PREF_KEY_USER = "username";
+	private static SharedPreferences mSharedPreferences;
 
 	private Handler mRunOnUi = new Handler();
 
@@ -99,14 +116,14 @@ public class PostActivity extends Activity implements LocationListener {
 		};
 
 		reviewEdit.addTextChangedListener(mTextEditorWatcher);
-
 		mFacebookCb = (CheckBox) findViewById(R.id.cb_facebook);
-
+		mTwitterCb = (CheckBox) findViewById(R.id.cb_twitter);
 		mProgress = new ProgressDialog(this);
-
 		mFacebook = new Facebook(APP_ID);
-
 		SessionStore.restore(mFacebook, this);
+
+		mSharedPreferences = getApplicationContext().getSharedPreferences(
+				"MyPref", 0);
 
 		if (mFacebook.isSessionValid()) {
 			mFacebookCb.setChecked(true);
@@ -115,6 +132,9 @@ public class PostActivity extends Activity implements LocationListener {
 			name = (name.equals("")) ? "Unknown" : name;
 
 		}
+
+		if (isTwitterLoggedInAlready())
+			mTwitterCb.setChecked(true);
 
 		((Button) findViewById(R.id.button_post))
 				.setOnClickListener(new OnClickListener() {
@@ -139,13 +159,23 @@ public class PostActivity extends Activity implements LocationListener {
 					}
 				});
 
+		((CheckBox) findViewById(R.id.cb_twitter))
+				.setOnClickListener(new OnClickListener() {
+					public void onClick(View v) {						
+						if (!isTwitterLoggedInAlready()) {
+							mTwitterCb.setChecked(false);
+						}
+					}
+				});
+
 		location = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		Location loc = location.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		if (loc != null) {			
+		Location loc = location
+				.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		if (loc != null) {
 		} else {
 			loc = location.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		}
-		
+
 		this.onLocationChanged(loc);
 
 	}
@@ -155,13 +185,39 @@ public class PostActivity extends Activity implements LocationListener {
 		mProgress.show();
 
 		AsyncFacebookRunner mAsyncFbRunner = new AsyncFacebookRunner(mFacebook);
-
 		Bundle params = new Bundle();
-
 		params.putString("message", review);
 
 		mAsyncFbRunner.request("me/feed", params, "POST",
 				new WallPostListener());
+	}
+	
+	private void postToTwitter(String post){
+		try {
+			ConfigurationBuilder builder = new ConfigurationBuilder();
+			builder.setOAuthConsumerKey(TWITTER_CONSUMER_KEY);
+			builder.setOAuthConsumerSecret(TWITTER_CONSUMER_SECRET);
+
+			// Access Token
+			String access_token = mSharedPreferences.getString(
+					PREF_KEY_OAUTH_TOKEN, "");
+			// Access Token Secret
+			String access_token_secret = mSharedPreferences.getString(
+					PREF_KEY_OAUTH_SECRET, "");
+
+			AccessToken accessToken = new AccessToken(access_token,
+					access_token_secret);
+			Twitter twitter = new TwitterFactory(builder.build())
+					.getInstance(accessToken);
+
+			// Update status
+			twitter4j.Status response = twitter.updateStatus(post);
+
+			Log.d("Status", "> " + response.getText());
+		} catch (TwitterException e) {
+			// Error in updating status
+			Log.d("Twitter Update Error", e.getMessage());
+		}
 	}
 
 	private final class WallPostListener extends BaseRequestListener {
@@ -183,19 +239,19 @@ public class PostActivity extends Activity implements LocationListener {
 		return i;
 	}
 
-	public void onLocationChanged(Location loc) {		
-		
+	public void onLocationChanged(Location loc) {
+
 		double lat = 0;
 		double lon = 0;
 
 		if (loc != null) {
 			lat = loc.getLatitude();
 			lon = loc.getLongitude();
-						
+
 		}
 
 		Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-		
+
 		try {
 			List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
 
@@ -205,19 +261,20 @@ public class PostActivity extends Activity implements LocationListener {
 				for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
 					addr = addr + " " + returnedAddress.getAddressLine(i);
 				}
-				
-				if(lat!=0 && lon!=0)
-				address = addr.trim();
-				else address = "";
-				
+
+				if (lat != 0 && lon != 0)
+					address = addr.trim();
+				else
+					address = "";
+
 				Log.i("==Address==", address);
-				
-			}else{
+
+			} else {
 				Log.i("==Address==", "Not Found");
 			}
-		} catch (IOException e) {			
+		} catch (IOException e) {
 			e.printStackTrace();
-		}		
+		}
 
 	}
 
@@ -251,6 +308,9 @@ public class PostActivity extends Activity implements LocationListener {
 			if (mFacebookCb.isChecked() && mFacebook.isSessionValid())
 				postToFacebook(msg);
 
+			if(isTwitterLoggedInAlready() && mTwitterCb.isChecked())
+				postToTwitter(msg);
+			
 			finish();
 		}
 
@@ -266,6 +326,10 @@ public class PostActivity extends Activity implements LocationListener {
 			return true;
 		}
 
+	}
+
+	public boolean isTwitterLoggedInAlready() {
+		return mSharedPreferences.getBoolean(PREF_KEY_TWITTER_LOGIN, false);
 	}
 
 	@Override
