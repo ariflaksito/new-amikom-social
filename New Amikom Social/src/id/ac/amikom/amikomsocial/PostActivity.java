@@ -212,6 +212,8 @@ public class PostActivity extends Activity implements LocationListener {
 				
 				Log.i("==Address==", address);
 				
+			}else{
+				Log.i("==Address==", "Not Found");
 			}
 		} catch (IOException e) {			
 			e.printStackTrace();
