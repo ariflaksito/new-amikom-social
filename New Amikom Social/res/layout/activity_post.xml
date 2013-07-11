@@ -41,7 +41,7 @@
                 android:layout_marginTop="10dip"
                 android:gravity="fill_horizontal"
                 android:inputType="none"
-                android:maxLength="160"
+                android:maxLength="140"
                 android:scrollHorizontally="false" />
 
             <LinearLayout

@@ -108,7 +108,7 @@ public class PostActivity extends Activity implements LocationListener {
 
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-				countInfo.setText("Character Remain " + (160 - (s.length())));
+				countInfo.setText("Character Remain " + (140 - (s.length())));
 			}
 
 			public void afterTextChanged(Editable s) {
@@ -321,7 +321,12 @@ public class PostActivity extends Activity implements LocationListener {
 			ServiceHelper srv = new ServiceHelper();
 			DbHelper db = new DbHelper(PostActivity.this);
 			Login login = db.getLogin();
-			srv.postShout(login.get_usr(), msg, address);
+			
+			String share = "";
+			if(mFacebookCb.isChecked()) share += "*facebook ";
+			if(mTwitterCb.isChecked()) share += "*twitter";
+			
+			srv.postShout(login.get_usr(), msg + share, address);
 
 			return true;
 		}
