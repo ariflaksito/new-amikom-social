@@ -50,7 +50,7 @@ public class ShoutActivity extends ListActivity {
 		protected void onPostExecute(String result) {
 			try {
 				viewListData();
-			} catch (Exception e) {				
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
@@ -74,7 +74,7 @@ public class ShoutActivity extends ListActivity {
 
 		try {
 			viewListData();
-		} catch (Exception e) {			
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -96,19 +96,24 @@ public class ShoutActivity extends ListActivity {
 				map.put("name", cn.get_alias());
 
 			MCrypt mc = new MCrypt();
-			File f = new File("/mnt/sdcard/amikom/" + mc.bytesToHex(mc.encrypt(cn.get_nid())));
+			File f = new File("/mnt/sdcard/amikom/"
+					+ mc.bytesToHex(mc.encrypt(cn.get_nid())));
 
 			if (f.exists())
-				map.put("icon", "/mnt/sdcard/amikom/" + mc.bytesToHex(mc.encrypt(cn.get_nid())));
+				map.put("icon",
+						"/mnt/sdcard/amikom/"
+								+ mc.bytesToHex(mc.encrypt(cn.get_nid())));
 			else
 				map.put("icon", R.drawable.none);
 
-			
-			String msg = cn.get_msg().replaceAll("(\\@[a-z0-9_]+)", " <font color='#FF8800'>$1</font> ");
-			String fmsg = msg.replaceAll("(\\#[a-z0-9_]+)", " <font color='#53B949'>$1</font> ");
-			String imsg = fmsg.replaceAll("(\\*[a-z0-9]+)", "<font color='#D3D3D3'>$1</font>");
-						
-			map.put("msg",imsg);
+			String msg = cn.get_msg().replaceAll("(\\@[a-z0-9_]+)",
+					" <font color='#FF8800'>$1</font> ");
+			String fmsg = msg.replaceAll("(\\#[a-z0-9_]+)",
+					" <font color='#53B949'>$1</font> ");
+			String imsg = fmsg.replaceAll("(\\*[a-z0-9]+)",
+					"<font color='#D3D3D3'>$1</font>");
+
+			map.put("msg", imsg);
 			map.put("via", "from " + cn.get_via() + ", " + dp.parseString());
 
 			list.add(map);
@@ -135,11 +140,14 @@ public class ShoutActivity extends ListActivity {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
-
-		menu.setHeaderTitle("Shout Option");
-		menu.add(Menu.NONE, 0, Menu.NONE, "Re-Shout");
-		menu.add(Menu.NONE, 1, Menu.NONE, "Reply");
-		menu.add(Menu.NONE, 2, Menu.NONE, "Profile");
+		
+		DbHelper db = new DbHelper(this);
+		if (db.isLogin()) {
+			menu.setHeaderTitle("Shout Option");
+			menu.add(Menu.NONE, 0, Menu.NONE, "Re-Shout");
+			menu.add(Menu.NONE, 1, Menu.NONE, "Reply");
+			menu.add(Menu.NONE, 2, Menu.NONE, "Profile");
+		}
 
 	}
 

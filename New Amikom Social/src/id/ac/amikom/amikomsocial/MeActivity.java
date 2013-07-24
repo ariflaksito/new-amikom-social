@@ -76,14 +76,15 @@ public class MeActivity extends ListActivity {
 							new GetShout().execute();
 						}
 					});
-						
+
 			Login login = db.getLogin();
-						
+
 			if (login.get_alias().equals("null")) {
 				String[] nm = login.get_name().split("\\s+");
 				name = nm[0].toLowerCase();
-			}else name = login.get_alias();
-			
+			} else
+				name = login.get_alias();
+
 			try {
 				viewListData();
 			} catch (Exception e) {
@@ -95,7 +96,7 @@ public class MeActivity extends ListActivity {
 	}
 
 	private void viewListData() throws Exception {
-		
+
 		DbHelper db = new DbHelper(this);
 		shoutList = db.getShoutMe(name);
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
@@ -110,17 +111,23 @@ public class MeActivity extends ListActivity {
 				map.put("name", cn.get_alias());
 
 			MCrypt mc = new MCrypt();
-			File f = new File("/mnt/sdcard/amikom/" + mc.bytesToHex(mc.encrypt(cn.get_nid())));
+			File f = new File("/mnt/sdcard/amikom/"
+					+ mc.bytesToHex(mc.encrypt(cn.get_nid())));
 
 			if (f.exists())
-				map.put("icon", "/mnt/sdcard/amikom/" + mc.bytesToHex(mc.encrypt(cn.get_nid())));
+				map.put("icon",
+						"/mnt/sdcard/amikom/"
+								+ mc.bytesToHex(mc.encrypt(cn.get_nid())));
 			else
 				map.put("icon", R.drawable.none);
-			
-			String msg = cn.get_msg().replaceAll("(\\@[a-z0-9_]+)", " <font color='#FF8800'>$1</font> ");
-			String fmsg = msg.replaceAll("(\\#[a-z0-9_]+)", " <font color='#53B949'>$1</font> ");
-			String imsg = fmsg.replaceAll("(\\*[a-z0-9]+)", "<font color='#D3D3D3'>$1</font>");
-						
+
+			String msg = cn.get_msg().replaceAll("(\\@[a-z0-9_]+)",
+					" <font color='#FF8800'>$1</font> ");
+			String fmsg = msg.replaceAll("(\\#[a-z0-9_]+)",
+					" <font color='#53B949'>$1</font> ");
+			String imsg = fmsg.replaceAll("(\\*[a-z0-9]+)",
+					"<font color='#D3D3D3'>$1</font>");
+
 			map.put("msg", imsg);
 			map.put("via", "from " + cn.get_via() + ", " + dp.parseString());
 
@@ -134,7 +141,7 @@ public class MeActivity extends ListActivity {
 		setListAdapter(adapter);
 		registerForContextMenu(getListView());
 	}
-	
+
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		DbHelper db = new DbHelper(this);
@@ -148,10 +155,13 @@ public class MeActivity extends ListActivity {
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 
-		menu.setHeaderTitle("Shout Option");
-		menu.add(Menu.NONE, 0, Menu.NONE, "Re-Shout");
-		menu.add(Menu.NONE, 1, Menu.NONE, "Reply");
-		menu.add(Menu.NONE, 2, Menu.NONE, "Profile");
+		DbHelper db = new DbHelper(this);
+		if (db.isLogin()) {
+			menu.setHeaderTitle("Shout Option");
+			menu.add(Menu.NONE, 0, Menu.NONE, "Re-Shout");
+			menu.add(Menu.NONE, 1, Menu.NONE, "Reply");
+			menu.add(Menu.NONE, 2, Menu.NONE, "Profile");
+		}
 
 	}
 
@@ -159,15 +169,16 @@ public class MeActivity extends ListActivity {
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
 				.getMenuInfo();
-		
-		Shout shout = shoutList.get(info.position-1);
-		
+
+		Shout shout = shoutList.get(info.position - 1);
+
 		String name;
 		if (shout.get_alias().equals("null")) {
 			String[] nm = shout.get_name().split("\\s+");
 			name = nm[0].toLowerCase();
-		}else name = shout.get_alias();
-		
+		} else
+			name = shout.get_alias();
+
 		String nid = shout.get_nid();
 		String postAlias = "@" + name;
 		String postMsg = ":O " + postAlias + " " + shout.get_msg();

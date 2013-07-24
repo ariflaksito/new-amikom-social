@@ -93,8 +93,12 @@ public class PostActivity extends Activity implements LocationListener {
 			String msg = extras.getString("msg");
 
 			if (!msg.equals("null")) {
-				reviewEdit.setText(msg);
-				countInfo.setText("Character Remain " + (160 - msg.length()));
+				
+				String fmsg = msg.replaceAll("(\\*facebook+)", "");
+				String imsg = fmsg.replaceAll("(\\*twitter+)", "");
+								
+				reviewEdit.setText(imsg);
+				countInfo.setText("Character Remain " + (140 - imsg.length()));
 			}
 
 		} catch (NullPointerException e) {
@@ -323,8 +327,8 @@ public class PostActivity extends Activity implements LocationListener {
 			Login login = db.getLogin();
 			
 			String share = "";
-			if(mFacebookCb.isChecked()) share += "*facebook ";
-			if(mTwitterCb.isChecked()) share += "*twitter";
+			if(mFacebookCb.isChecked()) share += " *facebook";
+			if(mTwitterCb.isChecked()) share += " *twitter";
 			
 			srv.postShout(login.get_usr(), msg + share, address);
 
