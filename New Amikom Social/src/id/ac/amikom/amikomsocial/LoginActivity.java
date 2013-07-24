@@ -40,7 +40,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends Activity  {
 
 	private static final int RESULT_LOAD_IMAGE = 1;
 	private Button btnLogin, btnProfile;
