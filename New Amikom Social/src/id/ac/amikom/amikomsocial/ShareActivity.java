@@ -80,7 +80,7 @@ public class ShareActivity extends Activity {
 		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar_post);
 		actionBar.setTitle(R.string.app_setting_title);
 
-		actionBar.setHomeAction(new IntentAction(this, PostActivity
+		actionBar.setHomeAction(new IntentAction(this, MainActivity
 				.createIntent(this), R.drawable.ic_action_back));
 
 		try {
