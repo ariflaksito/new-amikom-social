@@ -24,6 +24,7 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.provider.CalendarContract;
 import android.text.format.DateUtils;
 import android.widget.Toast;
 
@@ -169,35 +170,51 @@ public class SettingActivity extends PreferenceActivity {
 		} else {
 			calUriString = "content://calendar/calendars";
 		}
+		
+		String[] projection = new String[] {
+				CalendarContract.Calendars._ID,
+			    CalendarContract.Calendars.ACCOUNT_NAME,
+			    CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,
+			    CalendarContract.Calendars.NAME,
+			    CalendarContract.Calendars.CALENDAR_COLOR
+		};
 
 		Uri uri = Uri.parse(calUriString);
-		Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+		Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
 
+		
 		if (cursor != null && cursor.getCount() > 0) {
 			cursor.moveToFirst();
 
 			CharSequence[] list = new String[cursor.getCount()];
 			CharSequence[] valueList = new String[cursor.getCount()];
 
+			
+			
 			int i = 0;
 			do {
-				list[i] = cursor.getString(0);
-
+				//list[i] = cursor.getString(0);
+				
+				/*
 				if (Build.VERSION.SDK_INT >= 14) {
 					valueList[i] = cursor.getString(2);
 				} else {
 					valueList[i] = cursor.getString(cursor
 							.getColumnIndex("displayName"));
 				}
+				*/
+				list[i] = cursor.getString(cursor.getColumnIndex(CalendarContract.Calendars._ID));
+				valueList[i] = cursor.getString(cursor.getColumnIndex(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME));
 
 				i++;
 			} while (cursor.moveToNext());
 
 			listPreferenceCategory.setEntries(valueList);
 			listPreferenceCategory.setEntryValues(list);
-
+			
 		}
-
+		
+		
 		listPreferenceCategory
 				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 					public boolean onPreferenceChange(Preference preference,
