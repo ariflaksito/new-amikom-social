@@ -105,15 +105,13 @@ public class ShoutActivity extends ListActivity {
 								+ mc.bytesToHex(mc.encrypt(cn.get_nid())));
 			else
 				map.put("icon", R.drawable.none);
+			
+			String msg = cn.get_msg().replaceAll("(\\@[a-z0-9_]+)", " <font color='#FF8800'>$1</font> ");
+			String fmsg = msg.replaceAll("(\\#[a-z0-9_]+)", " <font color='#53B949'>$1</font> ");
+			String imsg = fmsg.replaceAll("(\\*[a-z0-9]+)", " <font color='#D3D3D3'>$1</font>");
+						
+			map.put("msg",imsg);
 
-			String msg = cn.get_msg().replaceAll("(\\@[a-z0-9_]+)",
-					" <font color='#FF8800'>$1</font> ");
-			String fmsg = msg.replaceAll("(\\#[a-z0-9_]+)",
-					" <font color='#53B949'>$1</font> ");
-			String imsg = fmsg.replaceAll("(\\*[a-z0-9]+)",
-					"<font color='#D3D3D3'>$1</font>");
-
-			map.put("msg", imsg);
 			map.put("via", "from " + cn.get_via() + ", " + dp.parseString());
 
 			list.add(map);
@@ -167,7 +165,11 @@ public class ShoutActivity extends ListActivity {
 
 		String nid = shout.get_nid();
 		String postAlias = "@" + name;
-		String postMsg = ":O " + postAlias + " " + shout.get_msg();
+		
+		String sh = shout.get_msg().replace("*facebook", "");
+		sh = sh.replace("*twitter", "");
+		
+		String postMsg = ":O " + postAlias + " " + sh;
 		Intent i = new Intent(ShoutActivity.this, PostActivity.class);
 
 		switch (item.getItemId()) {

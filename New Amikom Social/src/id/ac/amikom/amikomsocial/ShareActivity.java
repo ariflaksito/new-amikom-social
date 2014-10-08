@@ -61,6 +61,7 @@ public class ShareActivity extends Activity {
 	static final String PREF_KEY_USER = "username";
 
 	static final String TWITTER_CALLBACK_URL = "oauth://amsos";
+	static final int WEBVIEW_REQUEST_CODE = 100;
 
 	// Twitter oauth urls
 	static final String URL_TWITTER_AUTH = "auth_url";
@@ -415,9 +416,17 @@ public class ShareActivity extends Activity {
 						try {
 							requestToken = twitter
 									.getOAuthRequestToken(TWITTER_CALLBACK_URL);
+							
+							
+//							final Intent intent = new Intent(ShareActivity.this, WebViewActivity.class);
+//							intent.putExtra(WebViewActivity.EXTRA_URL, requestToken.getAuthenticationURL());
+//							startActivityForResult(intent, WEBVIEW_REQUEST_CODE);
+							
 							ShareActivity.this.startActivity(new Intent(
 									Intent.ACTION_VIEW, Uri.parse(requestToken
 											.getAuthenticationURL())));
+							finish();
+							
 						} catch (TwitterException e) {
 							e.printStackTrace();
 						}

@@ -57,7 +57,7 @@ public class PostActivity extends Activity implements LocationListener {
 	private CheckBox mFacebookCb;
 	private CheckBox mTwitterCb;
 	private ProgressDialog mProgress;
-	
+
 	static String TWITTER_CONSUMER_KEY = "cpZmKRjZ31DPWOJ81Gjazw";
 	static String TWITTER_CONSUMER_SECRET = "XMYSsvwiv7w0IVbtk9dhTQaApnqrzGSyN19749J4OE";
 
@@ -88,22 +88,31 @@ public class PostActivity extends Activity implements LocationListener {
 		reviewEdit = (EditText) findViewById(R.id.post_txt);
 		countInfo = (TextView) findViewById(R.id.count_id);
 
-		try {
-			Bundle extras = getIntent().getExtras();
-			String msg = extras.getString("msg");
-
-			if (!msg.equals("null")) {
-				
-				String fmsg = msg.replaceAll("(\\*facebook+)", "");
-				String imsg = fmsg.replaceAll("(\\*twitter+)", "");
-								
-				reviewEdit.setText(imsg);
-				countInfo.setText("Character Remain " + (140 - imsg.length()));
-			}
-
-		} catch (NullPointerException e) {
-			e.printStackTrace();
+		String msg = "";
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			msg = extras.getString("msg");
 		}
+
+
+		if (!msg.equals("null")) {
+			reviewEdit.setText(msg);			
+
+//			if (!msg.equals("null")) {
+//				
+//				String fmsg = msg.replaceAll("(\\*facebook+)", "");
+//				String imsg = fmsg.replaceAll("(\\*twitter+)", "");
+//								
+//				reviewEdit.setText(imsg);
+//				countInfo.setText("Character Remain " + (140 - imsg.length()));
+//			}
+//
+//		} catch (NullPointerException e) {
+//			e.printStackTrace();
+
+		}
+		
+		countInfo.setText("Characters Remain " + (160 - msg.length()));
 
 		final TextWatcher mTextEditorWatcher = new TextWatcher() {
 			public void beforeTextChanged(CharSequence s, int start, int count,
@@ -165,7 +174,7 @@ public class PostActivity extends Activity implements LocationListener {
 
 		((CheckBox) findViewById(R.id.cb_twitter))
 				.setOnClickListener(new OnClickListener() {
-					public void onClick(View v) {						
+					public void onClick(View v) {
 						if (!isTwitterLoggedInAlready()) {
 							mTwitterCb.setChecked(false);
 						}
@@ -185,8 +194,8 @@ public class PostActivity extends Activity implements LocationListener {
 	}
 
 	private void postToFacebook(String review) {
-		mProgress.setMessage("Posting to Facebook...");
-		mProgress.show();
+		//mProgress.setMessage("Posting to Facebook...");
+		//mProgress.show();
 
 		AsyncFacebookRunner mAsyncFbRunner = new AsyncFacebookRunner(mFacebook);
 		Bundle params = new Bundle();
@@ -195,8 +204,8 @@ public class PostActivity extends Activity implements LocationListener {
 		mAsyncFbRunner.request("me/feed", params, "POST",
 				new WallPostListener());
 	}
-	
-	private void postToTwitter(String post){
+
+	private void postToTwitter(String post) {
 		try {
 			ConfigurationBuilder builder = new ConfigurationBuilder();
 			builder.setOAuthConsumerKey(TWITTER_CONSUMER_KEY);
@@ -312,9 +321,9 @@ public class PostActivity extends Activity implements LocationListener {
 			if (mFacebookCb.isChecked() && mFacebook.isSessionValid())
 				postToFacebook(msg);
 
-			if(isTwitterLoggedInAlready() && mTwitterCb.isChecked())
+			if (isTwitterLoggedInAlready() && mTwitterCb.isChecked())
 				postToTwitter(msg);
-			
+
 			finish();
 		}
 
@@ -325,11 +334,14 @@ public class PostActivity extends Activity implements LocationListener {
 			ServiceHelper srv = new ServiceHelper();
 			DbHelper db = new DbHelper(PostActivity.this);
 			Login login = db.getLogin();
-			
+
 			String share = "";
-			if(mFacebookCb.isChecked()) share += " *facebook";
-			if(mTwitterCb.isChecked()) share += " *twitter";
-			
+
+			if (mFacebookCb.isChecked())
+				share += " *facebook";
+			if (mTwitterCb.isChecked())
+				share += " *twitter";
+
 			srv.postShout(login.get_usr(), msg + share, address);
 
 			return true;

@@ -6,7 +6,8 @@
     <string name="app_post_title">Posting Shout</string>
     <string name="app_setting_title">Sharing Post</string>
     <string name="app_user_title">User Info</string>
-    <string name="app_vesion">Stable 4.6</string>
+    <string name="app_version">Stable 4.7</string>
+
     <string name="app_team">Arif Laksito (Project Leader, Webservice and Code)\nFarizal Tri Anugrah, Rakhmad Ikhsanudin, Rizky Tanjung (Code)\nDoni Prabowo, Purwaji Santoso (Design and Layout)\n\nhttp://www.facebook.com/groups/adem.android\n\nhttp://www.amikomsocial.com</string>
     
     <string name="post_title">Write your Shout here</string>
@@ -36,5 +37,8 @@
     <string name="dialog_usr_txt">Use alphanumeric, underscore, lowercase and character count(5&#8211;15)</string>
     
 	<string name="actionbar_activity_not_found">Failed to open intent</string>
+	
+	<string name="twitter_callback">http://amikomsocial.com</string>
+	<string name="twitter_oauth_verifier">oauth_verifier</string>
 	
 </resources>

@@ -132,6 +132,7 @@ public class MainActivity extends TabActivity {
 
 	public static Intent createIntent(Context context) {
 		Intent i = new Intent(context, MainActivity.class);
+		i.putExtra("msg", "null");
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		return i;
 	}
